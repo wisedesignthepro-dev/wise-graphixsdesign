@@ -1,0 +1,63 @@
+/* Brand colors: Cream, White, Red */
+:root{--bg:#f5e6d3;--panel:#ffffff;--ink:#9e1018;--muted:#7c3d3f;--gold:#c9171d;--line:#e7c9bf}
+body{background:var(--bg);color:var(--ink)}
+.site-header{background:rgba(255,255,255,.93);border-bottom-color:var(--line)}
+.logo span{color:var(--ink)!important}
+nav a,button{color:var(--ink)}
+button{border-color:var(--line);background:#fff}
+.lang #lb{color:var(--ink)}
+.lang-menu{background:#fff;border-color:var(--line);box-shadow:0 12px 30px #9e101826}
+.lang-menu button:hover{background:var(--bg);color:var(--ink)}
+.hero{background:radial-gradient(circle at 72% 35%,#c9171d32,transparent 36%),var(--bg)}
+.hero p,.asset-intro,.portfolio-card p{color:var(--muted)}
+.hero-image{border-color:#c9171d;box-shadow:20px 24px 55px #9e101838}
+.gold,.buy:hover,.download:hover{background:#c9171d;color:#fff;border-color:#c9171d}
+.btn{border-color:#c9171d;color:var(--ink);background:#fff}
+.btn.gold{background:#c9171d;color:#fff}
+.ticker{background:#fff;border-color:var(--line);color:var(--ink)}
+.filters .active,.asset-types .active{color:#fff;background:#c9171d;border-color:#c9171d}
+.portfolio-card img,.store-card img,.asset-card img{background:#fff}
+.dark{background:#fff}
+.store-card,.asset-card{background:#fff;border-color:var(--line)}
+.store-card strong,.note b{color:#c9171d}
+.note,.services{border-color:var(--line);color:var(--muted)}
+.services p{border-color:var(--line);color:var(--ink)}
+.whatsapp{background:#25d366;color:#062e16;box-shadow:0 10px 28px #0008}
+footer{background:#fff;border-color:var(--line);color:var(--muted)}
+
+/* Efè zoom dous sou imaj yo lè sourit la pase sou yo. */
+.portfolio-card,.store-card,.asset-card{overflow:hidden}
+.hero-image img,.portfolio-card img,.store-card img,.asset-card img{transition:transform .45s cubic-bezier(.2,.8,.2,1),filter .45s ease}
+.hero-image:hover img,.portfolio-card:hover img,.store-card:hover img,.asset-card:hover img{transform:scale(1.07);filter:saturate(1.08)}
+
+/* Mesaj apre telechajman */
+.download-modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:20px;background:#9e1018a8;backdrop-filter:blur(5px)}
+.download-modal[hidden]{display:none}
+.download-modal-card{width:min(440px,100%);padding:40px 30px;text-align:center;background:#fff;border:2px solid #c9171d;box-shadow:0 24px 65px #50000066;animation:modal-in .35s cubic-bezier(.2,.8,.2,1)}
+.download-check{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 18px;border-radius:50%;background:#c9171d;color:#fff;font:700 32px Arial}
+.download-kicker{margin:0;color:#c9171d;font-size:10px;font-weight:bold;letter-spacing:.17em}
+.download-modal h2{margin:12px 0;color:#9e1018;font-size:clamp(30px,7vw,45px);line-height:.95}
+.download-modal p:not(.download-kicker){margin:0 auto;color:#7c3d3f;line-height:1.65;max-width:330px}
+.modal-close{margin-top:25px;padding:13px 19px;background:#c9171d;border-color:#c9171d;color:#fff;font-weight:bold}
+.modal-close:hover{background:#9e1018}
+@keyframes modal-in{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+
+/* Bouton telechajman Asset Gratis */
+.asset-card .download{display:flex;align-items:center;justify-content:center;gap:8px;width:max-content;margin:17px auto 4px;padding:12px 18px;border:1px solid #c9171d;border-radius:999px;background:#c9171d;color:#fff;font-weight:bold;letter-spacing:.04em}
+.asset-card .download::before{content:'↓';display:grid;place-items:center;width:18px;height:18px;border:1px solid #fff;border-radius:50%;font-size:15px;line-height:1}
+.asset-card .download:hover{background:#9e1018;border-color:#9e1018;color:#fff;transform:translateY(-2px)}
+
+/* Imaj Asset Gratis yo pi piti pou kat yo rete balanse. */
+.asset-card img{height:180px;aspect-ratio:auto;object-fit:contain;background:#f5e6d3}
+
+/* Vrè ikon SVG pou bouton telechajman an. */
+.asset-card .download::before{display:none}
+.download-icon{width:19px;height:19px;flex:none}
+
+/* Kat Asset Gratis yo retounen jan yo te ye a; ikon download la retire. */
+.asset-card{background:#fff;border-color:var(--line)}
+.asset-card img{background:#f5e6d3}
+.download-icon{display:block}
+
+/* Portfolio: rektang pi piti; imaj la parèt antye san koupe. */
+.portfolio-card img{height:250px;aspect-ratio:auto;object-fit:contain;object-position:center;background:transparent}
