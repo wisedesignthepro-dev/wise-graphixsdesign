@@ -9,40 +9,28 @@ const translations = {
 };
 
 const assets = {
-  png:[
-    ['images/gato00.png','assetCake','assetCakeDesc'],
-    ['images/balonFet00.png','assetBalloons','assetBalloonsDesc'],
-    ['images/star00.png','assetStars','assetStarsDesc'],
-    ['images/asset4.png','asset4','asset4Desc'],
-    ['images/asset5.png','asset5','asset5Desc'],
-    ['images/asset6.png','asset6','asset6Desc']
+  png: [
+    ['images/gato00.png', 'assetCake', 'assetCakeDesc'],
+    ['images/balonFet00.png', 'assetBalloons', 'assetBalloonsDesc'],
+    ['images/star00.png', 'assetStars', 'assetStarsDesc']
   ],
 
-  background:[
-    ['images/MEN STANDARD.png','assetBackground1','assetBackground1Desc'],
-    ['images/background2.jpg','assetBackground2','assetBackground2Desc'],
-    ['images/background3.jpg','assetBackground3','assetBackground3Desc'],
-    ['images/background4.jpg','assetBackground4','assetBackground4Desc'],
-    ['images/background5.jpg','assetBackground5','assetBackground5Desc'],
-    ['images/background6.jpg','assetBackground6','assetBackground6Desc']
+  background: [
+    ['images/MEN STANDARD.png', 'assetBackground1', 'assetBackground1Desc'],
+    ['images/STREET SHUTDOWN.png', 'assetBackground2', 'assetBackground2Desc'],
+    ["images/BIRTHDAY BASH MAKYL'A 2....png", 'assetBackground3', 'assetBackground3Desc']
   ],
 
   texture: [
-    ['images/texture-grain.png', 'assetGrain', 'assetGrainDesc'],
-    ['images/texture-paper.png', 'assetPaper', 'assetPaperDesc'],
-    ['images/texture-gold.png', 'assetGold', 'assetGoldDesc'],
-    ['images/texture-04.png', 'assetTexture4', 'assetTexture4Desc'],
-    ['images/texture-05.png', 'assetTexture5', 'assetTexture5Desc'],
-    ['images/texture-06.png', 'assetTexture6', 'assetTexture6Desc']
+    ['images/FRITZ HERBY SHOT IT.png', 'assetTexture4', 'assetTexture4Desc'],
+    ['images/cover00.png', 'assetTexture5', 'assetTexture5Desc'],
+    ['images/flyer-event.png', 'assetTexture6', 'assetTexture6Desc']
   ],
 
   mockup: [
-    ['images/mockup-card.png', 'assetCard', 'assetCardDesc'],
-    ['images/mockup-phone.png', 'assetPhone', 'assetPhoneDesc'],
-    ['images/mockup-poster.png', 'assetPoster', 'assetPosterDesc'],
-    ['images/mockup-04.png', 'assetMockup4', 'assetMockup4Desc'],
-    ['images/mockup-05.png', 'assetMockup5', 'assetMockup5Desc'],
-    ['images/mockup-06.png', 'assetMockup6', 'assetMockup6Desc']
+    ['images/CHANPYON MASTER02.jpg', 'assetMockup4', 'assetMockup4Desc'],
+    ['images/flyer00.png', 'assetMockup5', 'assetMockup5Desc'],
+    ['images/LOGO 2026.png', 'assetMockup6', 'assetMockup6Desc']
   ]
 };
 
