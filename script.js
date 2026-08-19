@@ -9,31 +9,144 @@ const translations = {
 };
 
 const assets = {
-  png: [
-    ['images/gato00.png', 'assetCake', 'assetCakeDesc'],
-    ['images/balonFet00.png', 'assetBalloons', 'assetBalloonsDesc'],
-    ['images/star00.png', 'assetStars', 'assetStarsDesc']
+  png:[
+    ['images/gato00.png','assetCake','assetCakeDesc'],
+    ['images/balonFet00.png','assetBalloons','assetBalloonsDesc'],
+    ['images/star00.png','assetStars','assetStarsDesc'],
+    ['images/asset4.png','asset4','asset4Desc'],
+    ['images/asset5.png','asset5','asset5Desc'],
+    ['images/asset6.png','asset6','asset6Desc']
   ],
 
-  background: [
-    ['images/MEN STANDARD.png', 'assetBackground1', 'assetBackground1Desc'],
-    ['images/STREET SHUTDOWN.png', 'assetBackground2', 'assetBackground2Desc'],
-    ["images/BIRTHDAY BASH MAKYL'A 2....png", 'assetBackground3', 'assetBackground3Desc']
+  background:[
+    ['images/MEN STANDARD.png','assetBackground1','assetBackground1Desc'],
+    ['images/background2.jpg','assetBackground2','assetBackground2Desc'],
+    ['images/background3.jpg','assetBackground3','assetBackground3Desc'],
+    ['images/background4.jpg','assetBackground4','assetBackground4Desc'],
+    ['images/background5.jpg','assetBackground5','assetBackground5Desc'],
+    ['images/background6.jpg','assetBackground6','assetBackground6Desc']
   ],
 
   texture: [
-    ['images/FRITZ HERBY SHOT IT.png', 'assetTexture4', 'assetTexture4Desc'],
-    ['images/cover00.png', 'assetTexture5', 'assetTexture5Desc'],
-    ['images/flyer-event.png', 'assetTexture6', 'assetTexture6Desc']
+    ['images/texture-grain.png', 'assetGrain', 'assetGrainDesc'],
+    ['images/texture-paper.png', 'assetPaper', 'assetPaperDesc'],
+    ['images/texture-gold.png', 'assetGold', 'assetGoldDesc'],
+    ['images/texture-04.png', 'assetTexture4', 'assetTexture4Desc'],
+    ['images/texture-05.png', 'assetTexture5', 'assetTexture5Desc'],
+    ['images/texture-06.png', 'assetTexture6', 'assetTexture6Desc']
   ],
 
   mockup: [
-    ['images/CHANPYON MASTER02.jpg', 'assetMockup4', 'assetMockup4Desc'],
-    ['images/flyer00.png', 'assetMockup5', 'assetMockup5Desc'],
-    ['images/LOGO 2026.png', 'assetMockup6', 'assetMockup6Desc']
+    ['images/mockup-card.png', 'assetCard', 'assetCardDesc'],
+    ['images/mockup-phone.png', 'assetPhone', 'assetPhoneDesc'],
+    ['images/mockup-poster.png', 'assetPoster', 'assetPosterDesc'],
+    ['images/mockup-04.png', 'assetMockup4', 'assetMockup4Desc'],
+    ['images/mockup-05.png', 'assetMockup5', 'assetMockup5Desc'],
+    ['images/mockup-06.png', 'assetMockup6', 'assetMockup6Desc']
   ]
 };
 
+const psdProducts = {
+  free: [
+    {
+      image: "images/free-psd-01.jpg",
+      title: "Free Flyer PSD",
+      description: "PSD editab gratis",
+      file: "files/free-flyer-01.psd"
+    },
+
+    {
+      image: "images/free-psd-02.jpg",
+      title: "Free Social Media PSD",
+      description: "PSD editab gratis",
+      file: "files/free-social-02.psd"
+    }
+  ],
+
+  paid: [
+    {
+      image: "images/paid-psd-01.jpg",
+      title: "Luxury Flyer PSD",
+      description: "PSD premium editab",
+      price: "500 HTG"
+    },
+
+    {
+      image: "images/paid-psd-02.jpg",
+      title: "Premium Social Pack",
+      description: "Pack PSD premium",
+      price: "750 HTG"
+    },
+
+    {
+      image: "images/paid-psd-03.jpg",
+      title: "Premium Label PSD",
+      description: "PSD label premium",
+      price: "600 HTG"
+    }
+  ]
+};
+function renderPSDProducts() {
+  const freeGrid = $('#free-psd-grid');
+  const paidGrid = $('#paid-psd-grid');
+
+  if (freeGrid) {
+    freeGrid.innerHTML = psdProducts.free.map(product => `
+      <article class="store-card reveal visible">
+        <img src="${product.image}" alt="${product.title}">
+
+        <h3>${product.title}</h3>
+
+        <p>${product.description}</p>
+
+        <a
+          class="download"
+          href="${product.file}"
+          download
+        >
+          <svg class="download-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 3v10m0 0 4-4m-4 4-4-4M5 15v4h14v-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+
+          ${translations[currentLanguage].download}
+        </a>
+      </article>
+    `).join('');
+  }
+
+  if (paidGrid) {
+    paidGrid.innerHTML = psdProducts.paid.map(product => `
+      <article class="store-card reveal visible">
+        <img src="${product.image}" alt="${product.title}">
+
+        <h3>${product.title}</h3>
+
+        <strong>${product.price}</strong>
+
+        <button
+          class="buy"
+          type="button"
+          data-product="${product.title}"
+        >
+          ${translations[currentLanguage].buy}
+        </button>
+      </article>
+    `).join('');
+  }
+
+  $$('.buy').forEach(button => {
+    button.addEventListener('click', () => {
+      alert(translations[currentLanguage].checkoutMessage);
+    });
+  });
+}
 Object.values(translations).forEach(t => Object.assign(t, {
   assetCake:'Gato fèt', assetCakeDesc:'PNG gratis',
   assetBalloons:'Balon fèt', assetBalloonsDesc:'PNG gratis',
@@ -44,7 +157,8 @@ let currentLanguage = localStorage.getItem('wise-language') || 'ht';
 let currentAssetType = 'png';
 
 function renderAssets(){ const t=translations[currentLanguage]; const downloadLabel=t.download.replace(/\s*↓/g,''); $('#asset-grid').innerHTML=assets[currentAssetType].map(([file,titleKey,descriptionKey])=>`<article class="asset-card reveal visible"><img src="${file}" alt="${t[titleKey]}"><h3>${t[titleKey]}</h3><p>${t[descriptionKey]}</p><a class="download" href="${file}" download><svg class="download-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10m0 0 4-4m-4 4-4-4M5 15v4h14v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>${downloadLabel}</a></article>`).join(''); }
-function setLanguage(language){ currentLanguage=language; const t=translations[language]; document.documentElement.lang=language; document.title='WISE.GRAPHIXDESIGN'; $$('[data-i18n]').forEach(el=>{el.textContent=t[el.dataset.i18n] ?? el.textContent}); $$('[data-i18n-html]').forEach(el=>{el.innerHTML=t[el.dataset.i18nHtml] ?? el.innerHTML}); $('#lb').innerHTML=`🌐 ${t.name} <span aria-hidden="true">▾</span>`; localStorage.setItem('wise-language',language); renderAssets(); }
+function setLanguage(language){ currentLanguage=language; const t=translations[language]; document.documentElement.lang=language; document.title='WISE.GRAPHIXDESIGN'; $$('[data-i18n]').forEach(el=>{el.textContent=t[el.dataset.i18n] ?? el.textContent}); $$('[data-i18n-html]').forEach(el=>{el.innerHTML=t[el.dataset.i18nHtml] ?? el.innerHTML}); $('#lb').innerHTML=`🌐 ${t.name} <span aria-hidden="true">▾</span>`; localStorage.setItem('wise-language',language); renderAssets();
+renderPSDProducts(); }
 
 $('#lb').addEventListener('click',()=>{ const menu=$('#lm'); menu.classList.toggle('open'); $('#lb').setAttribute('aria-expanded',menu.classList.contains('open')); });
 $$('[data-lang]').forEach(button=>button.addEventListener('click',()=>{setLanguage(button.dataset.lang);$('#lm').classList.remove('open');$('#lb').setAttribute('aria-expanded','false');}));
@@ -56,3 +170,37 @@ $('#mb').addEventListener('click',()=>{const nav=$('#main-nav');nav.classList.to
 $$('#main-nav a').forEach(link=>link.addEventListener('click',()=>$('#main-nav').classList.remove('open')));
 const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}}),{threshold:.12});$$('.reveal').forEach(el=>observer.observe(el));
 setLanguage(currentLanguage);
+/* =========================
+   HERO SLIDESHOW
+========================= */
+
+const heroSlides = document.querySelectorAll(".hero-slideshow .slide");
+const heroDots = document.querySelectorAll(".slide-dots .dot");
+
+if (heroSlides.length > 1) {
+  let currentSlide = 0;
+
+  heroSlides[0].classList.add("active");
+
+  setInterval(() => {
+    const oldSlide = heroSlides[currentSlide];
+
+    currentSlide = (currentSlide + 1) % heroSlides.length;
+
+    const newSlide = heroSlides[currentSlide];
+
+    newSlide.classList.remove("prev");
+    newSlide.classList.add("active");
+
+    oldSlide.classList.remove("active");
+    oldSlide.classList.add("prev");
+
+    heroDots.forEach(dot => dot.classList.remove("active"));
+    heroDots[currentSlide].classList.add("active");
+
+    setTimeout(() => {
+      oldSlide.classList.remove("prev");
+    }, 1500);
+
+  }, 6000);
+}
