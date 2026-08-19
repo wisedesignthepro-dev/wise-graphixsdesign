@@ -1111,3 +1111,80 @@ body.lightbox-open {
     height: 40px;
   }
 }
+
+/* =========================
+   LIGHTBOX ARROWS
+========================= */
+
+.lightbox-arrow {
+  position: fixed;
+
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 52px;
+  height: 52px;
+
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 50%;
+
+  background: rgba(0,0,0,.65);
+  color: #f5f0e7;
+
+  font-size: 30px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  z-index: 100001;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    background .2s ease,
+    transform .2s ease;
+}
+
+.lightbox-prev {
+  left: 25px;
+}
+
+.lightbox-next {
+  right: 25px;
+}
+
+.lightbox-arrow:hover {
+  background: #d8b36a;
+  color: #090909;
+}
+
+.lightbox-prev:hover {
+  transform: translateY(-50%) translateX(-3px);
+}
+
+.lightbox-next:hover {
+  transform: translateY(-50%) translateX(3px);
+}
+
+
+/* MOBIL */
+
+@media (max-width: 600px) {
+
+  .lightbox-arrow {
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+  }
+
+  .lightbox-prev {
+    left: 10px;
+  }
+
+  .lightbox-next {
+    right: 10px;
+  }
+
+}
