@@ -762,3 +762,119 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 
 });
+
+/* =========================
+   LIGHTBOX ARROWS
+========================= */
+
+const lightboxPrev = document.getElementById("lightbox-prev");
+const lightboxNext = document.getElementById("lightbox-next");
+
+let lightboxImages = [];
+let currentLightboxIndex = 0;
+
+function getLightboxImages() {
+  return [
+    ...document.querySelectorAll(
+      ".portfolio-card img, .store-card img, .asset-card img, .hero-slideshow img"
+    )
+  ].filter(img => {
+    const card = img.closest("article");
+
+    if (card && card.hidden) {
+      return false;
+    }
+
+    return img.src;
+  });
+}
+
+function showLightboxImage() {
+
+  const image = lightboxImages[currentLightboxIndex];
+
+  if (!image) return;
+
+  lightboxImage.src = image.src;
+  lightboxImage.alt = image.alt || "";
+
+  zoomLevel = 1;
+  imageX = 0;
+  imageY = 0;
+
+  updateZoom();
+}
+
+function openLightboxWithNavigation(image) {
+
+  lightboxImages = getLightboxImages();
+
+  currentLightboxIndex = lightboxImages.indexOf(image);
+
+  if (currentLightboxIndex < 0) {
+    currentLightboxIndex = 0;
+  }
+
+  showLightboxImage();
+
+  lightbox.hidden = false;
+  document.body.classList.add("lightbox-open");
+}
+
+
+/* ← IMAG ANVAN */
+
+function showPreviousImage() {
+
+  if (lightboxImages.length <= 1) return;
+
+  currentLightboxIndex--;
+
+  if (currentLightboxIndex < 0) {
+    currentLightboxIndex = lightboxImages.length - 1;
+  }
+
+  showLightboxImage();
+}
+
+
+/* → IMAG SWIVAN */
+
+function showNextImage() {
+
+  if (lightboxImages.length <= 1) return;
+
+  currentLightboxIndex++;
+
+  if (currentLightboxIndex >= lightboxImages.length) {
+    currentLightboxIndex = 0;
+  }
+
+  showLightboxImage();
+}
+
+
+/* BOUTON ← */
+
+if (lightboxPrev) {
+  lightboxPrev.addEventListener("click", function (event) {
+
+    event.stopPropagation();
+
+    showPreviousImage();
+
+  });
+}
+
+
+/* BOUTON → */
+
+if (lightboxNext) {
+  lightboxNext.addEventListener("click", function (event) {
+
+    event.stopPropagation();
+
+    showNextImage();
+
+  });
+}
