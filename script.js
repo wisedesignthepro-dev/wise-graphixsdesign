@@ -257,3 +257,508 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+/* ==================================================
+   IMAGE LIGHTBOX + ZOOM
+================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const lightbox = document.getElementById("image-lightbox");
+  const lightboxImage = document.getElementById("lightbox-image");
+  const lightboxContent = document.getElementById("lightbox-content");
+
+  const closeButton = document.getElementById("lightbox-close");
+
+  const zoomInButton = document.getElementById("lightbox-zoom-in");
+  const zoomOutButton = document.getElementById("lightbox-zoom-out");
+  const resetButton = document.getElementById("lightbox-reset");
+
+  if (
+    !lightbox ||
+    !lightboxImage ||
+    !lightboxContent ||
+    !closeButton
+  ) {
+    return;
+  }
+
+
+  /* =========================
+     ZOOM SETTINGS
+  ========================= */
+
+  let scale = 1;
+
+  const MIN_ZOOM = 1;
+  const MAX_ZOOM = 5;
+  const ZOOM_STEP = 0.25;
+
+  let positionX = 0;
+  let positionY = 0;
+
+  let isDragging = false;
+
+  let startX = 0;
+  let startY = 0;
+
+  let startPositionX = 0;
+  let startPositionY = 0;
+
+
+  /* =========================
+     UPDATE IMAGE
+  ========================= */
+
+  function updateImage() {
+
+    lightboxImage.style.transform =
+      `translate(${positionX}px, ${positionY}px) scale(${scale})`;
+
+  }
+
+
+  /* =========================
+     RESET
+  ========================= */
+
+  function resetZoom() {
+
+    scale = 1;
+
+    positionX = 0;
+    positionY = 0;
+
+    updateImage();
+
+  }
+
+
+  /* =========================
+     ZOOM IN
+  ========================= */
+
+  function zoomIn() {
+
+    scale += ZOOM_STEP;
+
+    if (scale > MAX_ZOOM) {
+      scale = MAX_ZOOM;
+    }
+
+    updateImage();
+
+  }
+
+
+  /* =========================
+     ZOOM OUT
+  ========================= */
+
+  function zoomOut() {
+
+    scale -= ZOOM_STEP;
+
+    if (scale < MIN_ZOOM) {
+      scale = MIN_ZOOM;
+    }
+
+    if (scale === 1) {
+      positionX = 0;
+      positionY = 0;
+    }
+
+    updateImage();
+
+  }
+
+
+  /* =========================
+     OPEN LIGHTBOX
+  ========================= */
+
+  function openLightbox(image) {
+
+    lightboxImage.src = image.currentSrc || image.src;
+
+    lightboxImage.alt = image.alt || "";
+
+    resetZoom();
+
+    lightbox.hidden = false;
+
+    document.body.classList.add("lightbox-open");
+
+  }
+
+
+  /* =========================
+     CLOSE LIGHTBOX
+  ========================= */
+
+  function closeLightbox() {
+
+    lightbox.hidden = true;
+
+    lightboxImage.src = "";
+
+    document.body.classList.remove("lightbox-open");
+
+    resetZoom();
+
+  }
+
+
+  /* =========================
+     CLICK ON WEBSITE IMAGES
+  ========================= */
+
+  document.addEventListener("click", function (event) {
+
+    const image = event.target.closest(
+      ".portfolio-card img, .store-grid img, .asset-grid img, .hero-slideshow img"
+    );
+
+    if (!image) {
+      return;
+    }
+
+    openLightbox(image);
+
+  });
+
+
+  /* =========================
+     CLOSE BUTTON
+  ========================= */
+
+  closeButton.addEventListener("click", function () {
+
+    closeLightbox();
+
+  });
+
+
+  /* =========================
+     CLICK OUTSIDE IMAGE
+  ========================= */
+
+  lightbox.addEventListener("click", function (event) {
+
+    if (event.target === lightbox) {
+
+      closeLightbox();
+
+    }
+
+  });
+
+
+  /* =========================
+     ZOOM BUTTONS
+  ========================= */
+
+  if (zoomInButton) {
+
+    zoomInButton.addEventListener("click", function () {
+
+      zoomIn();
+
+    });
+
+  }
+
+
+  if (zoomOutButton) {
+
+    zoomOutButton.addEventListener("click", function () {
+
+      zoomOut();
+
+    });
+
+  }
+
+
+  if (resetButton) {
+
+    resetButton.addEventListener("click", function () {
+
+      resetZoom();
+
+    });
+
+  }
+
+
+  /* =========================
+     MOUSE WHEEL ZOOM
+  ========================= */
+
+  lightboxContent.addEventListener(
+    "wheel",
+    function (event) {
+
+      event.preventDefault();
+
+      if (event.deltaY < 0) {
+
+        zoomIn();
+
+      } else {
+
+        zoomOut();
+
+      }
+
+    },
+    { passive: false }
+  );
+
+
+  /* =========================
+     MOUSE DRAG
+  ========================= */
+
+  lightboxContent.addEventListener(
+    "mousedown",
+    function (event) {
+
+      if (scale <= 1) {
+        return;
+      }
+
+      isDragging = true;
+
+      startX = event.clientX;
+      startY = event.clientY;
+
+      startPositionX = positionX;
+      startPositionY = positionY;
+
+    }
+  );
+
+
+  document.addEventListener(
+    "mousemove",
+    function (event) {
+
+      if (!isDragging) {
+        return;
+      }
+
+      positionX =
+        startPositionX + (event.clientX - startX);
+
+      positionY =
+        startPositionY + (event.clientY - startY);
+
+      updateImage();
+
+    }
+  );
+
+
+  document.addEventListener(
+    "mouseup",
+    function () {
+
+      isDragging = false;
+
+    }
+  );
+
+
+  /* =========================
+     TOUCH / PINCH ZOOM
+  ========================= */
+
+  let touchStartDistance = 0;
+
+  let touchStartScale = 1;
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  let touchStartPositionX = 0;
+  let touchStartPositionY = 0;
+
+
+  function getTouchDistance(touches) {
+
+    const dx =
+      touches[0].clientX -
+      touches[1].clientX;
+
+    const dy =
+      touches[0].clientY -
+      touches[1].clientY;
+
+    return Math.sqrt(
+      dx * dx + dy * dy
+    );
+
+  }
+
+
+  lightboxContent.addEventListener(
+    "touchstart",
+    function (event) {
+
+      if (event.touches.length === 2) {
+
+        touchStartDistance =
+          getTouchDistance(event.touches);
+
+        touchStartScale = scale;
+
+      }
+
+      else if (event.touches.length === 1) {
+
+        if (scale <= 1) {
+          return;
+        }
+
+        touchStartX =
+          event.touches[0].clientX;
+
+        touchStartY =
+          event.touches[0].clientY;
+
+        touchStartPositionX = positionX;
+
+        touchStartPositionY = positionY;
+
+      }
+
+    },
+    { passive: false }
+  );
+
+
+  lightboxContent.addEventListener(
+    "touchmove",
+    function (event) {
+
+      event.preventDefault();
+
+
+      /* PINCH */
+
+      if (event.touches.length === 2) {
+
+        const currentDistance =
+          getTouchDistance(event.touches);
+
+        if (touchStartDistance > 0) {
+
+          const ratio =
+            currentDistance /
+            touchStartDistance;
+
+          scale =
+            touchStartScale * ratio;
+
+          if (scale < MIN_ZOOM) {
+            scale = MIN_ZOOM;
+          }
+
+          if (scale > MAX_ZOOM) {
+            scale = MAX_ZOOM;
+          }
+
+          updateImage();
+
+        }
+
+      }
+
+
+      /* DRAG */
+
+      else if (
+        event.touches.length === 1 &&
+        scale > 1
+      ) {
+
+        const currentX =
+          event.touches[0].clientX;
+
+        const currentY =
+          event.touches[0].clientY;
+
+        positionX =
+          touchStartPositionX +
+          (currentX - touchStartX);
+
+        positionY =
+          touchStartPositionY +
+          (currentY - touchStartY);
+
+        updateImage();
+
+      }
+
+    },
+    { passive: false }
+  );
+
+
+  /* =========================
+     KEYBOARD
+  ========================= */
+
+  document.addEventListener(
+    "keydown",
+    function (event) {
+
+      if (lightbox.hidden) {
+        return;
+      }
+
+
+      /* ESC */
+
+      if (event.key === "Escape") {
+
+        closeLightbox();
+
+      }
+
+
+      /* + */
+
+      if (
+        event.key === "+" ||
+        event.key === "="
+      ) {
+
+        zoomIn();
+
+      }
+
+
+      /* - */
+
+      if (event.key === "-") {
+
+        zoomOut();
+
+      }
+
+
+      /* R */
+
+      if (
+        event.key.toLowerCase() === "r"
+      ) {
+
+        resetZoom();
+
+      }
+
+    }
+  );
+
+});
