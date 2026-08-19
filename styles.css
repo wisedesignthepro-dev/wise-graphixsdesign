@@ -3189,3 +3189,18 @@ footer {
     font-size: 9px;
   }
 }
+/* RETIRE ONB NWA SOU SEKSYON AKEY LA */
+
+.hero {
+  background: transparent !important;
+}
+
+.hero-image {
+  background: transparent !important;
+}
+
+.hero-image::before,
+.hero-image::after {
+  display: none !important;
+  content: none !important;
+}
