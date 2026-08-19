@@ -159,8 +159,12 @@
 
 <script src="download-modal.js"></script>
 
-<!-- LIGHTBOX -->
+<!-- =========================
+     IMAGE LIGHTBOX
+========================= -->
+
 <div id="image-lightbox" class="image-lightbox" hidden>
+
   <button
     class="lightbox-close"
     id="lightbox-close"
@@ -170,10 +174,43 @@
     ×
   </button>
 
-  <div class="lightbox-content">
-    <img id="lightbox-image" src="" alt="">
-  </div>
-</div>
+  <div class="lightbox-toolbar">
 
-</body>
-</html>
+    <button
+      id="lightbox-zoom-out"
+      type="button"
+      aria-label="Zoom out"
+    >
+      −
+    </button>
+
+    <button
+      id="lightbox-reset"
+      type="button"
+      aria-label="Retounen imaj la nòmal"
+    >
+      ⟳
+    </button>
+
+    <button
+      id="lightbox-zoom-in"
+      type="button"
+      aria-label="Zoom in"
+    >
+      +
+    </button>
+
+  </div>
+
+  <div class="lightbox-content" id="lightbox-content">
+
+    <img
+      id="lightbox-image"
+      src=""
+      alt=""
+      draggable="false"
+    >
+
+  </div>
+
+</div>
