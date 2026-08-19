@@ -1,3 +1,8 @@
+/* =========================================================
+   WISE.GRAPHIXDESIGN
+   MAIN SCRIPT
+========================================================= */
+
 const $ = (selector, parent = document) =>
   parent.querySelector(selector);
 
@@ -10,8 +15,10 @@ const $$ = (selector, parent = document) =>
 ========================================================= */
 
 const translations = {
+
   ht: {
     name: 'Kreyòl',
+
     navWork: 'Travay mwen yo',
     navStore: 'Boutik PSD',
     navFree: 'Asset gratis',
@@ -56,32 +63,14 @@ const translations = {
     assetIntro:
       'Klike sou yon kategori pou wè fichye yo, epi telechaje sa ou bezwen an.',
 
-    assetCake: 'Gato fèt',
-    assetCakeDesc: 'PNG gratis',
+    assetLight: 'Efè limyè PNG',
+    assetLightDesc: 'Efè limyè transparan',
 
-    assetBalloons: 'Balon fèt',
-    assetBalloonsDesc: 'PNG gratis',
+    assetSparkles: 'Paillettes lò PNG',
+    assetSparklesDesc: 'Paillettes transparan',
 
-    assetStars: 'Zetwal',
-    assetStarsDesc: 'PNG gratis',
-
-    assetBackground1: 'Background 1',
-    assetBackground1Desc: 'Background gratis',
-
-    assetBackground2: 'Background 2',
-    assetBackground2Desc: 'Background gratis',
-
-    assetBackground3: 'Background 3',
-    assetBackground3Desc: 'Background gratis',
-
-    assetBackground4: 'Background 4',
-    assetBackground4Desc: 'Background gratis',
-
-    assetBackground5: 'Background 5',
-    assetBackground5Desc: 'Background gratis',
-
-    assetBackground6: 'Background 6',
-    assetBackground6Desc: 'Background gratis',
+    assetShapes: 'Fòm abstrè PNG',
+    assetShapesDesc: 'Fòm transparan',
 
     assetGrain: 'Teksti grenn',
     assetGrainDesc: 'Teksti rezolisyon wo',
@@ -92,15 +81,6 @@ const translations = {
     assetGold: 'Teksti lò',
     assetGoldDesc: 'Teksti rezolisyon wo',
 
-    assetTexture4: 'Teksti 4',
-    assetTexture4Desc: 'Teksti rezolisyon wo',
-
-    assetTexture5: 'Teksti 5',
-    assetTexture5Desc: 'Teksti rezolisyon wo',
-
-    assetTexture6: 'Teksti 6',
-    assetTexture6Desc: 'Teksti rezolisyon wo',
-
     assetCard: 'Mockup kat',
     assetCardDesc: 'Mockup prezantasyon',
 
@@ -109,24 +89,6 @@ const translations = {
 
     assetPoster: 'Mockup afich',
     assetPosterDesc: 'Mockup prezantasyon',
-
-    assetMockup4: 'Mockup 4',
-    assetMockup4Desc: 'Mockup prezantasyon',
-
-    assetMockup5: 'Mockup 5',
-    assetMockup5Desc: 'Mockup prezantasyon',
-
-    assetMockup6: 'Mockup 6',
-    assetMockup6Desc: 'Mockup prezantasyon',
-
-    asset4: 'Asset 4',
-    asset4Desc: 'PNG gratis',
-
-    asset5: 'Asset 5',
-    asset5Desc: 'PNG gratis',
-
-    asset6: 'Asset 6',
-    asset6Desc: 'PNG gratis',
 
     download: 'TELECHAJE GRATIS ↓',
 
@@ -142,11 +104,14 @@ const translations = {
     service4: '04 — Motion Design',
 
     footer: 'Design grafik · PSD · Asset dijital',
+
     whatsapp: 'WhatsApp'
   },
 
+
   en: {
     name: 'English',
+
     navWork: 'My work',
     navStore: 'PSD store',
     navFree: 'Free assets',
@@ -178,6 +143,7 @@ const translations = {
     storeEyebrow: '02 / DIGITAL STORE',
     storeTitle: 'PSD <em>store.</em>',
     buy: 'BUY NOW ↗',
+
     storeNote:
       '— Checkout structure is ready for a backend connection.',
 
@@ -191,32 +157,14 @@ const translations = {
     assetIntro:
       'Choose a category to see its files, then download what you need.',
 
-    assetCake: 'Birthday Cake',
-    assetCakeDesc: 'Free PNG',
+    assetLight: 'Light Effects PNG',
+    assetLightDesc: 'Transparent light effect',
 
-    assetBalloons: 'Birthday Balloons',
-    assetBalloonsDesc: 'Free PNG',
+    assetSparkles: 'Gold Sparkles PNG',
+    assetSparklesDesc: 'Transparent sparkles',
 
-    assetStars: 'Stars',
-    assetStarsDesc: 'Free PNG',
-
-    assetBackground1: 'Background 1',
-    assetBackground1Desc: 'Free background',
-
-    assetBackground2: 'Background 2',
-    assetBackground2Desc: 'Free background',
-
-    assetBackground3: 'Background 3',
-    assetBackground3Desc: 'Free background',
-
-    assetBackground4: 'Background 4',
-    assetBackground4Desc: 'Free background',
-
-    assetBackground5: 'Background 5',
-    assetBackground5Desc: 'Free background',
-
-    assetBackground6: 'Background 6',
-    assetBackground6Desc: 'Free background',
+    assetShapes: 'Abstract Shapes PNG',
+    assetShapesDesc: 'Transparent shapes',
 
     assetGrain: 'Grain Texture',
     assetGrainDesc: 'High-resolution texture',
@@ -227,15 +175,6 @@ const translations = {
     assetGold: 'Gold Texture',
     assetGoldDesc: 'High-resolution texture',
 
-    assetTexture4: 'Texture 4',
-    assetTexture4Desc: 'High-resolution texture',
-
-    assetTexture5: 'Texture 5',
-    assetTexture5Desc: 'High-resolution texture',
-
-    assetTexture6: 'Texture 6',
-    assetTexture6Desc: 'High-resolution texture',
-
     assetCard: 'Card Mockup',
     assetCardDesc: 'Presentation mockup',
 
@@ -244,24 +183,6 @@ const translations = {
 
     assetPoster: 'Poster Mockup',
     assetPosterDesc: 'Presentation mockup',
-
-    assetMockup4: 'Mockup 4',
-    assetMockup4Desc: 'Presentation mockup',
-
-    assetMockup5: 'Mockup 5',
-    assetMockup5Desc: 'Presentation mockup',
-
-    assetMockup6: 'Mockup 6',
-    assetMockup6Desc: 'Presentation mockup',
-
-    asset4: 'Asset 4',
-    asset4Desc: 'Free PNG',
-
-    asset5: 'Asset 5',
-    asset5Desc: 'Free PNG',
-
-    asset6: 'Asset 6',
-    asset6Desc: 'Free PNG',
 
     download: 'FREE DOWNLOAD ↓',
 
@@ -277,11 +198,14 @@ const translations = {
     service4: '04 — Motion Design',
 
     footer: 'Graphic design · PSD · Digital assets',
+
     whatsapp: 'WhatsApp'
   },
 
+
   fr: {
     name: 'Français',
+
     navWork: 'Mes créations',
     navStore: 'Boutique PSD',
     navFree: 'Ressources gratuites',
@@ -312,7 +236,9 @@ const translations = {
 
     storeEyebrow: '02 / BOUTIQUE NUMÉRIQUE',
     storeTitle: 'Boutique <em>PSD.</em>',
+
     buy: 'ACHETER MAINTENANT ↗',
+
     storeNote:
       '— La structure de paiement est prête pour une connexion au backend.',
 
@@ -326,32 +252,14 @@ const translations = {
     assetIntro:
       'Choisissez une catégorie pour voir les fichiers, puis téléchargez ce dont vous avez besoin.',
 
-    assetCake: 'Gâteau',
-    assetCakeDesc: 'PNG gratuit',
+    assetLight: 'Effets lumineux PNG',
+    assetLightDesc: 'Effet lumineux transparent',
 
-    assetBalloons: 'Ballons',
-    assetBalloonsDesc: 'PNG gratuit',
+    assetSparkles: 'Paillettes dorées PNG',
+    assetSparklesDesc: 'Paillettes transparentes',
 
-    assetStars: 'Étoiles',
-    assetStarsDesc: 'PNG gratuit',
-
-    assetBackground1: 'Background 1',
-    assetBackground1Desc: 'Background gratuit',
-
-    assetBackground2: 'Background 2',
-    assetBackground2Desc: 'Background gratuit',
-
-    assetBackground3: 'Background 3',
-    assetBackground3Desc: 'Background gratuit',
-
-    assetBackground4: 'Background 4',
-    assetBackground4Desc: 'Background gratuit',
-
-    assetBackground5: 'Background 5',
-    assetBackground5Desc: 'Background gratuit',
-
-    assetBackground6: 'Background 6',
-    assetBackground6Desc: 'Background gratuit',
+    assetShapes: 'Formes abstraites PNG',
+    assetShapesDesc: 'Formes transparentes',
 
     assetGrain: 'Texture grain',
     assetGrainDesc: 'Texture haute résolution',
@@ -362,15 +270,6 @@ const translations = {
     assetGold: 'Texture dorée',
     assetGoldDesc: 'Texture haute résolution',
 
-    assetTexture4: 'Texture 4',
-    assetTexture4Desc: 'Texture haute résolution',
-
-    assetTexture5: 'Texture 5',
-    assetTexture5Desc: 'Texture haute résolution',
-
-    assetTexture6: 'Texture 6',
-    assetTexture6Desc: 'Texture haute résolution',
-
     assetCard: 'Mockup carte',
     assetCardDesc: 'Mockup de présentation',
 
@@ -379,24 +278,6 @@ const translations = {
 
     assetPoster: 'Mockup affiche',
     assetPosterDesc: 'Mockup de présentation',
-
-    assetMockup4: 'Mockup 4',
-    assetMockup4Desc: 'Mockup de présentation',
-
-    assetMockup5: 'Mockup 5',
-    assetMockup5Desc: 'Mockup de présentation',
-
-    assetMockup6: 'Mockup 6',
-    assetMockup6Desc: 'Mockup de présentation',
-
-    asset4: 'Asset 4',
-    asset4Desc: 'PNG gratuit',
-
-    asset5: 'Asset 5',
-    asset5Desc: 'PNG gratuit',
-
-    asset6: 'Asset 6',
-    asset6Desc: 'PNG gratuit',
 
     download: 'TÉLÉCHARGER GRATUITEMENT ↓',
 
@@ -412,11 +293,14 @@ const translations = {
     service4: '04 — Motion Design',
 
     footer: 'Design graphique · PSD · Ressources numériques',
+
     whatsapp: 'WhatsApp'
   },
 
+
   es: {
     name: 'Español',
+
     navWork: 'Mi trabajo',
     navStore: 'Tienda PSD',
     navFree: 'Recursos gratis',
@@ -447,7 +331,9 @@ const translations = {
 
     storeEyebrow: '02 / TIENDA DIGITAL',
     storeTitle: 'Tienda <em>PSD.</em>',
+
     buy: 'COMPRAR AHORA ↗',
+
     storeNote:
       '— La estructura de pago está lista para conectarse al backend.',
 
@@ -461,32 +347,14 @@ const translations = {
     assetIntro:
       'Elige una categoría para ver los archivos y descarga lo que necesitas.',
 
-    assetCake: 'Pastel',
-    assetCakeDesc: 'PNG gratis',
+    assetLight: 'Efectos de luz PNG',
+    assetLightDesc: 'Efecto de luz transparente',
 
-    assetBalloons: 'Globos',
-    assetBalloonsDesc: 'PNG gratis',
+    assetSparkles: 'Destellos dorados PNG',
+    assetSparklesDesc: 'Destellos transparentes',
 
-    assetStars: 'Estrellas',
-    assetStarsDesc: 'PNG gratis',
-
-    assetBackground1: 'Background 1',
-    assetBackground1Desc: 'Background gratis',
-
-    assetBackground2: 'Background 2',
-    assetBackground2Desc: 'Background gratis',
-
-    assetBackground3: 'Background 3',
-    assetBackground3Desc: 'Background gratis',
-
-    assetBackground4: 'Background 4',
-    assetBackground4Desc: 'Background gratis',
-
-    assetBackground5: 'Background 5',
-    assetBackground5Desc: 'Background gratis',
-
-    assetBackground6: 'Background 6',
-    assetBackground6Desc: 'Background gratis',
+    assetShapes: 'Formas abstractas PNG',
+    assetShapesDesc: 'Formas transparentes',
 
     assetGrain: 'Textura granulada',
     assetGrainDesc: 'Textura de alta resolución',
@@ -497,15 +365,6 @@ const translations = {
     assetGold: 'Textura dorada',
     assetGoldDesc: 'Textura de alta resolución',
 
-    assetTexture4: 'Textura 4',
-    assetTexture4Desc: 'Textura de alta resolución',
-
-    assetTexture5: 'Textura 5',
-    assetTexture5Desc: 'Textura de alta resolución',
-
-    assetTexture6: 'Textura 6',
-    assetTexture6Desc: 'Textura de alta resolución',
-
     assetCard: 'Mockup de tarjeta',
     assetCardDesc: 'Mockup de presentación',
 
@@ -514,24 +373,6 @@ const translations = {
 
     assetPoster: 'Mockup de póster',
     assetPosterDesc: 'Mockup de presentación',
-
-    assetMockup4: 'Mockup 4',
-    assetMockup4Desc: 'Mockup de presentación',
-
-    assetMockup5: 'Mockup 5',
-    assetMockup5Desc: 'Mockup de presentación',
-
-    assetMockup6: 'Mockup 6',
-    assetMockup6Desc: 'Mockup de presentación',
-
-    asset4: 'Asset 4',
-    asset4Desc: 'PNG gratis',
-
-    asset5: 'Asset 5',
-    asset5Desc: 'PNG gratis',
-
-    asset6: 'Asset 6',
-    asset6Desc: 'PNG gratis',
 
     download: 'DESCARGA GRATIS ↓',
 
@@ -547,52 +388,133 @@ const translations = {
     service4: '04 — Motion Design',
 
     footer: 'Diseño gráfico · PSD · Recursos digitales',
+
     whatsapp: 'WhatsApp'
   }
+
 };
 
 
 /* =========================================================
-   FREE ASSETS
+   ASSET TRANSLATION KEYS
+========================================================= */
+
+Object.values(translations).forEach(function (t) {
+
+  Object.assign(t, {
+
+    assetCake: 'Gato fèt',
+    assetCakeDesc: 'PNG gratis',
+
+    assetBalloons: 'Balon fèt',
+    assetBalloonsDesc: 'PNG gratis',
+
+    assetStars: 'Zetwal',
+    assetStarsDesc: 'PNG gratis',
+
+    asset4: 'Asset PNG 04',
+    asset4Desc: 'PNG gratis',
+
+    asset5: 'Asset PNG 05',
+    asset5Desc: 'PNG gratis',
+
+    asset6: 'Asset PNG 06',
+    asset6Desc: 'PNG gratis',
+
+    assetBackground1: 'Background 01',
+    assetBackground1Desc: 'Background gratis',
+
+    assetBackground2: 'Background 02',
+    assetBackground2Desc: 'Background gratis',
+
+    assetBackground3: 'Background 03',
+    assetBackground3Desc: 'Background gratis',
+
+    assetBackground4: 'Background 04',
+    assetBackground4Desc: 'Background gratis',
+
+    assetBackground5: 'Background 05',
+    assetBackground5Desc: 'Background gratis',
+
+    assetBackground6: 'Background 06',
+    assetBackground6Desc: 'Background gratis',
+
+    assetTexture4: 'Texture 04',
+    assetTexture4Desc: 'Texture rezolisyon wo',
+
+    assetTexture5: 'Texture 05',
+    assetTexture5Desc: 'Texture rezolisyon wo',
+
+    assetTexture6: 'Texture 06',
+    assetTexture6Desc: 'Texture rezolisyon wo',
+
+    assetMockup4: 'Mockup 04',
+    assetMockup4Desc: 'Mockup prezantasyon',
+
+    assetMockup5: 'Mockup 05',
+    assetMockup5Desc: 'Mockup prezantasyon',
+
+    assetMockup6: 'Mockup 06',
+    assetMockup6Desc: 'Mockup prezantasyon'
+
+  });
+
+});
+
+
+/* =========================================================
+   ASSETS
 ========================================================= */
 
 const assets = {
 
   png: [
+
     ['images/gato00.png', 'assetCake', 'assetCakeDesc'],
     ['images/balonFet00.png', 'assetBalloons', 'assetBalloonsDesc'],
     ['images/star00.png', 'assetStars', 'assetStarsDesc'],
     ['images/asset4.png', 'asset4', 'asset4Desc'],
     ['images/asset5.png', 'asset5', 'asset5Desc'],
     ['images/asset6.png', 'asset6', 'asset6Desc']
+
   ],
 
+
   background: [
+
     ['images/MEN STANDARD.png', 'assetBackground1', 'assetBackground1Desc'],
     ['images/background2.jpg', 'assetBackground2', 'assetBackground2Desc'],
     ['images/background3.jpg', 'assetBackground3', 'assetBackground3Desc'],
     ['images/background4.jpg', 'assetBackground4', 'assetBackground4Desc'],
     ['images/background5.jpg', 'assetBackground5', 'assetBackground5Desc'],
     ['images/background6.jpg', 'assetBackground6', 'assetBackground6Desc']
+
   ],
 
+
   texture: [
+
     ['images/texture-grain.png', 'assetGrain', 'assetGrainDesc'],
     ['images/texture-paper.png', 'assetPaper', 'assetPaperDesc'],
     ['images/texture-gold.png', 'assetGold', 'assetGoldDesc'],
     ['images/texture-04.png', 'assetTexture4', 'assetTexture4Desc'],
     ['images/texture-05.png', 'assetTexture5', 'assetTexture5Desc'],
     ['images/texture-06.png', 'assetTexture6', 'assetTexture6Desc']
+
   ],
 
+
   mockup: [
+
     ['images/mockup-card.png', 'assetCard', 'assetCardDesc'],
     ['images/mockup-phone.png', 'assetPhone', 'assetPhoneDesc'],
     ['images/mockup-poster.png', 'assetPoster', 'assetPosterDesc'],
     ['images/mockup-04.png', 'assetMockup4', 'assetMockup4Desc'],
     ['images/mockup-05.png', 'assetMockup5', 'assetMockup5Desc'],
     ['images/mockup-06.png', 'assetMockup6', 'assetMockup6Desc']
+
   ]
+
 };
 
 
@@ -603,6 +525,7 @@ const assets = {
 const psdProducts = {
 
   free: [
+
     {
       image: 'images/free-psd-01.jpg',
       title: 'Free Flyer PSD',
@@ -616,9 +539,12 @@ const psdProducts = {
       description: 'PSD editab gratis',
       file: 'files/free-social-02.psd'
     }
+
   ],
 
+
   paid: [
+
     {
       image: 'images/paid-psd-01.jpg',
       title: 'Luxury Flyer PSD',
@@ -639,79 +565,20 @@ const psdProducts = {
       description: 'PSD label premium',
       price: '600 HTG'
     }
+
   ]
+
 };
 
 
 /* =========================================================
-   LANGUAGE + STATE
+   GLOBAL STATE
 ========================================================= */
 
 let currentLanguage =
   localStorage.getItem('wise-language') || 'ht';
 
 let currentAssetType = 'png';
-
-
-/* =========================================================
-   RENDER FREE ASSETS
-========================================================= */
-
-function renderAssets() {
-
-  const grid = $('#asset-grid');
-
-  if (!grid) return;
-
-  const t = translations[currentLanguage];
-
-  const downloadLabel = t.download;
-
-  const list = assets[currentAssetType] || [];
-
-  grid.innerHTML = list.map(
-    ([file, titleKey, descriptionKey]) => `
-      <article class="asset-card reveal visible">
-
-        <img
-          src="${file}"
-          alt="${t[titleKey] || titleKey}"
-        >
-
-        <h3>${t[titleKey] || titleKey}</h3>
-
-        <p>${t[descriptionKey] || descriptionKey}</p>
-
-        <a
-          class="download"
-          href="${file}"
-          download
-        >
-          <svg
-            class="download-icon"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              d="M12 3v10m0 0 4-4m-4 4-4-4M5 15v4h14v-4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-
-          ${downloadLabel}
-
-        </a>
-
-      </article>
-    `
-  ).join('');
-
-  refreshLightboxImages();
-}
 
 
 /* =========================================================
@@ -725,104 +592,184 @@ function renderPSDProducts() {
 
   const t = translations[currentLanguage];
 
+
+  /* FREE PSD */
+
   if (freeGrid) {
 
-    freeGrid.innerHTML = psdProducts.free.map(product => `
-      <article class="store-card reveal visible">
+    freeGrid.innerHTML =
+      psdProducts.free.map(function (product) {
 
-        <img
-          src="${product.image}"
-          alt="${product.title}"
-        >
+        return `
+          <article class="store-card reveal visible">
 
-        <h3>${product.title}</h3>
+            <img
+              src="${product.image}"
+              alt="${product.title}"
+            >
 
-        <p>${product.description}</p>
+            <h3>${product.title}</h3>
 
-        <a
-          class="download"
-          href="${product.file}"
-          download
-        >
-          <svg
-            class="download-icon"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              d="M12 3v10m0 0 4-4m-4 4-4-4M5 15v4h14v-4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+            <p>${product.description}</p>
 
-          ${t.download}
+            <a
+              class="download"
+              href="${product.file}"
+              download
+            >
 
-        </a>
+              <svg
+                class="download-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 3v10m0 0 4-4m-4 4-4-4M5 15v4h14v-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
 
-      </article>
-    `).join('');
+              ${t.download}
+
+            </a>
+
+          </article>
+        `;
+
+      }).join('');
+
   }
 
+
+  /* PAID PSD */
 
   if (paidGrid) {
 
-    paidGrid.innerHTML = psdProducts.paid.map(product => `
-      <article class="store-card reveal visible">
+    paidGrid.innerHTML =
+      psdProducts.paid.map(function (product) {
 
-        <img
-          src="${product.image}"
-          alt="${product.title}"
-        >
+        return `
+          <article class="store-card reveal visible">
 
-        <h3>${product.title}</h3>
+            <img
+              src="${product.image}"
+              alt="${product.title}"
+            >
 
-        <p>${product.description}</p>
+            <h3>${product.title}</h3>
 
-        <strong>${product.price}</strong>
+            <p>${product.description}</p>
 
-        <button
-          class="buy"
-          type="button"
-          data-product="${product.title}"
-        >
-          ${t.buy}
-        </button>
+            <strong>${product.price}</strong>
 
-      </article>
-    `).join('');
+            <button
+              class="buy"
+              type="button"
+              data-product="${product.title}"
+            >
+              ${t.buy}
+            </button>
+
+          </article>
+        `;
+
+      }).join('');
+
   }
 
-  attachBuyButtons();
 
-  refreshLightboxImages();
+  /* BUY BUTTONS */
+
+  $$('.buy').forEach(function (button) {
+
+    button.addEventListener('click', function () {
+
+      alert(
+        translations[currentLanguage].checkoutMessage
+      );
+
+    });
+
+  });
+
 }
 
 
 /* =========================================================
-   BUY BUTTONS
+   RENDER ASSETS
 ========================================================= */
 
-function attachBuyButtons() {
+function renderAssets() {
 
-  $$('.buy').forEach(button => {
+  const grid = $('#asset-grid');
 
-    button.onclick = function () {
+  if (!grid) {
+    return;
+  }
 
-      const product =
-        button.dataset.product || 'PSD';
+  const t =
+    translations[currentLanguage];
 
-      alert(
-        `${product}\n\n` +
-        translations[currentLanguage].checkoutMessage
-      );
+  const downloadLabel =
+    t.download.replace(/\s*↓/g, '');
 
-    };
 
-  });
+  grid.innerHTML =
+    assets[currentAssetType].map(
+      function ([file, titleKey, descriptionKey]) {
+
+        return `
+          <article class="asset-card reveal visible">
+
+            <img
+              src="${file}"
+              alt="${t[titleKey] || titleKey}"
+            >
+
+            <h3>
+              ${t[titleKey] || titleKey}
+            </h3>
+
+            <p>
+              ${t[descriptionKey] || descriptionKey}
+            </p>
+
+            <a
+              class="download"
+              href="${file}"
+              download
+            >
+
+              <svg
+                class="download-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+
+                <path
+                  d="M12 3v10m0 0 4-4m-4 4-4-4M5 15v4h14v-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+
+              </svg>
+
+              ${downloadLabel}
+
+            </a>
+
+          </article>
+        `;
+
+      }
+    ).join('');
 
 }
 
@@ -833,48 +780,67 @@ function attachBuyButtons() {
 
 function setLanguage(language) {
 
-  if (!translations[language]) return;
+  if (!translations[language]) {
+    language = 'ht';
+  }
 
   currentLanguage = language;
 
-  const t = translations[language];
+  const t =
+    translations[language];
 
-  document.documentElement.lang = language;
+  document.documentElement.lang =
+    language;
 
-  document.title = 'WISE.GRAPHIXDESIGN';
+  document.title =
+    'WISE.GRAPHIXDESIGN';
 
-  $$('[data-i18n]').forEach(el => {
 
-    const key = el.dataset.i18n;
+  /* TEXT */
+
+  $$('[data-i18n]').forEach(function (el) {
+
+    const key =
+      el.dataset.i18n;
 
     if (t[key] !== undefined) {
 
-      el.textContent = t[key];
+      el.textContent =
+        t[key];
 
     }
 
   });
 
 
-  $$('[data-i18n-html]').forEach(el => {
+  /* HTML */
 
-    const key = el.dataset.i18nHtml;
+  $$('[data-i18n-html]').forEach(function (el) {
+
+    const key =
+      el.dataset.i18nHtml;
 
     if (t[key] !== undefined) {
 
-      el.innerHTML = t[key];
+      el.innerHTML =
+        t[key];
 
     }
 
   });
 
 
-  const languageButton = $('#lb');
+  /* LANGUAGE BUTTON */
+
+  const languageButton =
+    $('#lb');
 
   if (languageButton) {
 
-    languageButton.innerHTML =
-      `🌐 ${t.name} <span aria-hidden="true">▾</span>`;
+    languageButton.innerHTML = `
+      🌐 ${t.name}
+      <span aria-hidden="true">▾</span>
+    `;
 
   }
 
@@ -884,11 +850,10 @@ function setLanguage(language) {
     language
   );
 
-  renderAssets();
 
+  renderAssets();
   renderPSDProducts();
 
-  refreshLightboxImages();
 }
 
 
@@ -896,17 +861,21 @@ function setLanguage(language) {
    LANGUAGE MENU
 ========================================================= */
 
-const languageButton = $('#lb');
+const languageButton =
+  $('#lb');
 
 if (languageButton) {
 
   languageButton.addEventListener(
     'click',
-    () => {
+    function () {
 
-      const menu = $('#lm');
+      const menu =
+        $('#lm');
 
-      if (!menu) return;
+      if (!menu) {
+        return;
+      }
 
       menu.classList.toggle('open');
 
@@ -921,42 +890,52 @@ if (languageButton) {
 }
 
 
-$$('[data-lang]').forEach(button => {
+$$('[data-lang]').forEach(
+  function (button) {
 
-  button.addEventListener(
-    'click',
-    () => {
+    button.addEventListener(
+      'click',
+      function () {
 
-      setLanguage(button.dataset.lang);
-
-      const menu = $('#lm');
-
-      if (menu) {
-        menu.classList.remove('open');
-      }
-
-      if (languageButton) {
-
-        languageButton.setAttribute(
-          'aria-expanded',
-          'false'
+        setLanguage(
+          button.dataset.lang
         );
 
+        const menu =
+          $('#lm');
+
+        if (menu) {
+          menu.classList.remove('open');
+        }
+
+        if (languageButton) {
+
+          languageButton.setAttribute(
+            'aria-expanded',
+            'false'
+          );
+
+        }
+
       }
+    );
 
-    }
-  );
+  }
+);
 
-});
 
+/* CLOSE LANGUAGE MENU */
 
 document.addEventListener(
   'click',
-  event => {
+  function (event) {
 
-    if (!event.target.closest('.lang')) {
+    if (
+      !event.target.closest('.lang')
+    ) {
 
-      const menu = $('#lm');
+      const menu =
+        $('#lm');
 
       if (menu) {
         menu.classList.remove('open');
@@ -972,94 +951,109 @@ document.addEventListener(
    PORTFOLIO FILTERS
 ========================================================= */
 
-$$('[data-filter]').forEach(button => {
+$$('[data-filter]').forEach(
+  function (button) {
 
-  button.addEventListener(
-    'click',
-    () => {
+    button.addEventListener(
+      'click',
+      function () {
 
-      const filter =
-        button.dataset.filter;
+        const filter =
+          button.dataset.filter;
 
-      $$('[data-filter]').forEach(item => {
 
-        item.classList.toggle(
-          'active',
-          item === button
+        $$('[data-filter]').forEach(
+          function (item) {
+
+            item.classList.toggle(
+              'active',
+              item === button
+            );
+
+          }
         );
 
-      });
 
+        $$('.portfolio-card').forEach(
+          function (card) {
 
-      $$('.portfolio-card').forEach(card => {
+            card.hidden =
+              filter !== 'all' &&
+              card.dataset.category !== filter;
 
-        card.hidden =
-          filter !== 'all' &&
-          card.dataset.category !== filter;
+          }
+        );
 
-      });
+      }
+    );
 
-      refreshLightboxImages();
-
-    }
-  );
-
-});
+  }
+);
 
 
 /* =========================================================
-   ASSET CATEGORY BUTTONS
+   ASSET FILTER
 ========================================================= */
 
-$$('[data-asset-type]').forEach(button => {
+$$('[data-asset-type]').forEach(
+  function (button) {
 
-  button.addEventListener(
-    'click',
-    () => {
+    button.addEventListener(
+      'click',
+      function () {
 
-      currentAssetType =
-        button.dataset.assetType;
+        currentAssetType =
+          button.dataset.assetType;
 
-      $$('[data-asset-type]').forEach(item => {
 
-        const active =
-          item === button;
+        $$('[data-asset-type]').forEach(
+          function (item) {
 
-        item.classList.toggle(
-          'active',
-          active
+            const active =
+              item === button;
+
+            item.classList.toggle(
+              'active',
+              active
+            );
+
+            item.setAttribute(
+              'aria-selected',
+              active
+            );
+
+          }
         );
 
-        item.setAttribute(
-          'aria-selected',
-          active
-        );
 
-      });
+        renderAssets();
 
-      renderAssets();
+      }
+    );
 
-    }
-  );
-
-});
+  }
+);
 
 
 /* =========================================================
    MOBILE MENU
 ========================================================= */
 
-const mobileButton = $('#mb');
+const mobileButton =
+  $('#mb');
 
 if (mobileButton) {
 
   mobileButton.addEventListener(
     'click',
-    () => {
+    function () {
 
-      const nav = $('#main-nav');
+      const nav =
+        $('#main-nav');
 
-      if (!nav) return;
+      if (!nav) {
+        return;
+      }
 
       nav.classList.toggle('open');
 
@@ -1074,47 +1068,54 @@ if (mobileButton) {
 }
 
 
-$$('#main-nav a').forEach(link => {
+$$('#main-nav a').forEach(
+  function (link) {
 
-  link.addEventListener(
-    'click',
-    () => {
+    link.addEventListener(
+      'click',
+      function () {
 
-      const nav = $('#main-nav');
+        const nav =
+          $('#main-nav');
 
-      if (nav) {
-        nav.classList.remove('open');
+        if (nav) {
+          nav.classList.remove('open');
+        }
+
       }
+    );
 
-    }
-  );
-
-});
+  }
+);
 
 
 /* =========================================================
-   REVEAL ANIMATION
+   SCROLL REVEAL
 ========================================================= */
 
 const observer =
   new IntersectionObserver(
-    entries => {
+    function (entries) {
 
-      entries.forEach(entry => {
+      entries.forEach(
+        function (entry) {
 
-        if (entry.isIntersecting) {
+          if (
+            entry.isIntersecting
+          ) {
 
-          entry.target.classList.add(
-            'visible'
-          );
+            entry.target.classList.add(
+              'visible'
+            );
 
-          observer.unobserve(
-            entry.target
-          );
+            observer.unobserve(
+              entry.target
+            );
+
+          }
 
         }
-
-      });
+      );
 
     },
     {
@@ -1124,7 +1125,11 @@ const observer =
 
 
 $$('.reveal').forEach(
-  el => observer.observe(el)
+  function (el) {
+
+    observer.observe(el);
+
+  }
 );
 
 
@@ -1133,963 +1138,1097 @@ $$('.reveal').forEach(
 ========================================================= */
 
 const heroSlides =
-  $$('.hero-slideshow .slide');
+  document.querySelectorAll(
+    '.hero-slideshow .slide'
+  );
 
 const heroDots =
-  $$('.slide-dots .dot');
+  document.querySelectorAll(
+    '.slide-dots .dot'
+  );
 
 
-if (heroSlides.length > 1) {
+if (heroSlides.length > 0) {
 
   let currentSlide = 0;
 
-  heroSlides.forEach(
-    slide => slide.classList.remove('active')
+  heroSlides[0].classList.add(
+    'active'
   );
 
-  heroSlides[0].classList.add('active');
 
-  heroDots.forEach(
-    dot => dot.classList.remove('active')
-  );
+  if (heroDots.length > 0) {
 
-  if (heroDots[0]) {
-    heroDots[0].classList.add('active');
-  }
-
-
-  setInterval(() => {
-
-    const oldSlide =
-      heroSlides[currentSlide];
-
-    currentSlide =
-      (currentSlide + 1) %
-      heroSlides.length;
-
-    const newSlide =
-      heroSlides[currentSlide];
-
-
-    newSlide.classList.remove('prev');
-
-    newSlide.classList.add('active');
-
-    oldSlide.classList.remove('active');
-
-    oldSlide.classList.add('prev');
-
-
-    heroDots.forEach(
-      dot => dot.classList.remove('active')
+    heroDots[0].classList.add(
+      'active'
     );
 
-    if (heroDots[currentSlide]) {
-
-      heroDots[currentSlide]
-        .classList.add('active');
-
-    }
-
-
-    setTimeout(() => {
-
-      oldSlide.classList.remove('prev');
-
-    }, 1500);
-
-  }, 6000);
-
-}
-
-
-/* =========================================================
-   LIGHTBOX
-   ZOOM + DRAG + ARROWS
-========================================================= */
-
-let lightbox = null;
-let lightboxImage = null;
-let lightboxContent = null;
-
-let lightboxPrev = null;
-let lightboxNext = null;
-let lightboxClose = null;
-
-let lightboxImages = [];
-let currentLightboxIndex = 0;
-
-let scale = 1;
-
-const MIN_ZOOM = 1;
-const MAX_ZOOM = 5;
-const ZOOM_STEP = 0.25;
-
-let positionX = 0;
-let positionY = 0;
-
-let isDragging = false;
-
-let startX = 0;
-let startY = 0;
-
-let startPositionX = 0;
-let startPositionY = 0;
-
-
-/* =========================================================
-   GET LIGHTBOX ELEMENTS
-========================================================= */
-
-function setupLightbox() {
-
-  lightbox =
-    document.getElementById(
-      'image-lightbox'
-    );
-
-  lightboxImage =
-    document.getElementById(
-      'lightbox-image'
-    );
-
-  lightboxContent =
-    document.querySelector(
-      '#image-lightbox .lightbox-content'
-    );
-
-  lightboxPrev =
-    document.getElementById(
-      'lightbox-prev'
-    );
-
-  lightboxNext =
-    document.getElementById(
-      'lightbox-next'
-    );
-
-  lightboxClose =
-    document.getElementById(
-      'lightbox-close'
-    );
-
-  if (
-    !lightbox ||
-    !lightboxImage ||
-    !lightboxContent ||
-    !lightboxClose
-  ) {
-    return false;
-  }
-
-  return true;
-}
-
-
-/* =========================================================
-   UPDATE IMAGE
-========================================================= */
-
-function updateImage() {
-
-  if (!lightboxImage) return;
-
-  lightboxImage.style.transform =
-    `translate(${positionX}px, ${positionY}px) scale(${scale})`;
-
-}
-
-
-/* =========================================================
-   RESET ZOOM
-========================================================= */
-
-function resetZoom() {
-
-  scale = 1;
-
-  positionX = 0;
-
-  positionY = 0;
-
-  updateImage();
-
-}
-
-
-/* =========================================================
-   ZOOM IN
-========================================================= */
-
-function zoomIn() {
-
-  scale += ZOOM_STEP;
-
-  if (scale > MAX_ZOOM) {
-
-    scale = MAX_ZOOM;
-
-  }
-
-  updateImage();
-
-}
-
-
-/* =========================================================
-   ZOOM OUT
-========================================================= */
-
-function zoomOut() {
-
-  scale -= ZOOM_STEP;
-
-  if (scale < MIN_ZOOM) {
-
-    scale = MIN_ZOOM;
-
-  }
-
-  if (scale === 1) {
-
-    positionX = 0;
-
-    positionY = 0;
-
-  }
-
-  updateImage();
-
-}
-
-
-/* =========================================================
-   GET ALL VISIBLE IMAGES
-========================================================= */
-
-function getLightboxImages() {
-
-  return [
-    ...document.querySelectorAll(
-      `
-      .portfolio-card img,
-      .store-card img,
-      .asset-card img,
-      .hero-slideshow img
-      `
-    )
-  ].filter(img => {
-
-    const card =
-      img.closest('article');
-
-    if (
-      card &&
-      card.hidden
-    ) {
-
-      return false;
-
-    }
-
-    return (
-      img.offsetParent !== null &&
-      img.src
-    );
-
-  });
-
-}
-
-
-/* =========================================================
-   REFRESH LIGHTBOX IMAGES
-========================================================= */
-
-function refreshLightboxImages() {
-
-  lightboxImages =
-    getLightboxImages();
-
-}
-
-
-/* =========================================================
-   SHOW CURRENT IMAGE
-========================================================= */
-
-function showLightboxImage() {
-
-  if (
-    !lightboxImages.length ||
-    !lightboxImage
-  ) {
-
-    return;
-
-  }
-
-  const image =
-    lightboxImages[
-      currentLightboxIndex
-    ];
-
-  if (!image) return;
-
-  lightboxImage.src =
-    image.currentSrc ||
-    image.src;
-
-  lightboxImage.alt =
-    image.alt || '';
-
-  resetZoom();
-
-  updateArrowVisibility();
-
-}
-
-
-/* =========================================================
-   OPEN LIGHTBOX
-========================================================= */
-
-function openLightbox(image) {
-
-  refreshLightboxImages();
-
-  currentLightboxIndex =
-    lightboxImages.indexOf(image);
-
-  if (
-    currentLightboxIndex < 0
-  ) {
-
-    currentLightboxIndex = 0;
-
-  }
-
-  showLightboxImage();
-
-  lightbox.hidden = false;
-
-  document.body.classList.add(
-    'lightbox-open'
-  );
-
-}
-
-
-/* =========================================================
-   CLOSE LIGHTBOX
-========================================================= */
-
-function closeLightbox() {
-
-  if (!lightbox) return;
-
-  lightbox.hidden = true;
-
-  lightboxImage.src = '';
-
-  document.body.classList.remove(
-    'lightbox-open'
-  );
-
-  resetZoom();
-
-}
-
-
-/* =========================================================
-   PREVIOUS IMAGE
-========================================================= */
-
-function showPreviousImage() {
-
-  if (
-    lightboxImages.length <= 1
-  ) {
-
-    return;
-
-  }
-
-  currentLightboxIndex--;
-
-  if (
-    currentLightboxIndex < 0
-  ) {
-
-    currentLightboxIndex =
-      lightboxImages.length - 1;
-
-  }
-
-  showLightboxImage();
-
-}
-
-
-/* =========================================================
-   NEXT IMAGE
-========================================================= */
-
-function showNextImage() {
-
-  if (
-    lightboxImages.length <= 1
-  ) {
-
-    return;
-
-  }
-
-  currentLightboxIndex++;
-
-  if (
-    currentLightboxIndex >=
-    lightboxImages.length
-  ) {
-
-    currentLightboxIndex = 0;
-
-  }
-
-  showLightboxImage();
-
-}
-
-
-/* =========================================================
-   ARROW VISIBILITY
-========================================================= */
-
-function updateArrowVisibility() {
-
-  if (lightboxPrev) {
-
-    lightboxPrev.style.display =
-      lightboxImages.length > 1
-        ? 'flex'
-        : 'none';
-
-  }
-
-  if (lightboxNext) {
-
-    lightboxNext.style.display =
-      lightboxImages.length > 1
-        ? 'flex'
-        : 'none';
-
-  }
-
-}
-
-
-/* =========================================================
-   LIGHTBOX CLICK
-========================================================= */
-
-function setupLightboxEvents() {
-
-  if (!setupLightbox()) {
-
-    return;
-
   }
 
 
-  /* IMAGE CLICK */
+  if (heroSlides.length > 1) {
 
-  document.addEventListener(
-    'click',
-    event => {
+    setInterval(
+      function () {
 
-      const image =
-        event.target.closest(
-          `
-          .portfolio-card img,
-          .store-card img,
-          .asset-card img,
-          .hero-slideshow img
-          `
+        const oldSlide =
+          heroSlides[currentSlide];
+
+
+        currentSlide =
+          (currentSlide + 1) %
+          heroSlides.length;
+
+
+        const newSlide =
+          heroSlides[currentSlide];
+
+
+        newSlide.classList.remove(
+          'prev'
         );
 
-      if (!image) return;
-
-      event.preventDefault();
-
-      openLightbox(image);
-
-    }
-  );
-
-
-  /* CLOSE */
-
-  lightboxClose.addEventListener(
-    'click',
-    event => {
-
-      event.stopPropagation();
-
-      closeLightbox();
-
-    }
-  );
-
-
-  /* CLICK OUTSIDE */
-
-  lightbox.addEventListener(
-    'click',
-    event => {
-
-      if (
-        event.target === lightbox
-      ) {
-
-        closeLightbox();
-
-      }
-
-    }
-  );
-
-
-  /* PREVIOUS */
-
-  if (lightboxPrev) {
-
-    lightboxPrev.addEventListener(
-      'click',
-      event => {
-
-        event.stopPropagation();
-
-        showPreviousImage();
-
-      }
-    );
-
-  }
-
-
-  /* NEXT */
-
-  if (lightboxNext) {
-
-    lightboxNext.addEventListener(
-      'click',
-      event => {
-
-        event.stopPropagation();
-
-        showNextImage();
-
-      }
-    );
-
-  }
-
-
-  /* =====================================================
-     MOUSE WHEEL ZOOM
-  ===================================================== */
-
-  lightboxContent.addEventListener(
-    'wheel',
-    event => {
-
-      event.preventDefault();
-
-      if (
-        event.deltaY < 0
-      ) {
-
-        zoomIn();
-
-      } else {
-
-        zoomOut();
-
-      }
-
-    },
-    {
-      passive: false
-    }
-  );
-
-
-  /* =====================================================
-     MOUSE DRAG
-  ===================================================== */
-
-  lightboxContent.addEventListener(
-    'mousedown',
-    event => {
-
-      if (scale <= 1) {
-
-        return;
-
-      }
-
-      isDragging = true;
-
-      startX =
-        event.clientX;
-
-      startY =
-        event.clientY;
-
-      startPositionX =
-        positionX;
-
-      startPositionY =
-        positionY;
-
-      lightboxContent.classList.add(
-        'dragging'
-      );
-
-    }
-  );
-
-
-  document.addEventListener(
-    'mousemove',
-    event => {
-
-      if (!isDragging) {
-
-        return;
-
-      }
-
-      positionX =
-        startPositionX +
-        (
-          event.clientX -
-          startX
+        newSlide.classList.add(
+          'active'
         );
 
-      positionY =
-        startPositionY +
-        (
-          event.clientY -
-          startY
+
+        oldSlide.classList.remove(
+          'active'
         );
 
-      updateImage();
-
-    }
-  );
-
-
-  document.addEventListener(
-    'mouseup',
-    () => {
-
-      isDragging = false;
-
-      if (lightboxContent) {
-
-        lightboxContent.classList.remove(
-          'dragging'
+        oldSlide.classList.add(
+          'prev'
         );
 
-      }
 
-    }
-  );
+        heroDots.forEach(
+          function (dot) {
 
-
-  /* =====================================================
-     KEYBOARD
-  ===================================================== */
-
-  document.addEventListener(
-    'keydown',
-    event => {
-
-      if (
-        !lightbox ||
-        lightbox.hidden
-      ) {
-
-        return;
-
-      }
-
-
-      /* ESC */
-
-      if (
-        event.key === 'Escape'
-      ) {
-
-        closeLightbox();
-
-      }
-
-
-      /* LEFT */
-
-      if (
-        event.key === 'ArrowLeft'
-      ) {
-
-        showPreviousImage();
-
-      }
-
-
-      /* RIGHT */
-
-      if (
-        event.key === 'ArrowRight'
-      ) {
-
-        showNextImage();
-
-      }
-
-
-      /* PLUS */
-
-      if (
-        event.key === '+' ||
-        event.key === '='
-      ) {
-
-        zoomIn();
-
-      }
-
-
-      /* MINUS */
-
-      if (
-        event.key === '-'
-      ) {
-
-        zoomOut();
-
-      }
-
-
-      /* RESET */
-
-      if (
-        event.key.toLowerCase() === 'r'
-      ) {
-
-        resetZoom();
-
-      }
-
-    }
-  );
-
-
-  /* =====================================================
-     TOUCH / PINCH
-  ===================================================== */
-
-  let touchStartDistance = 0;
-
-  let touchStartScale = 1;
-
-  let touchStartX = 0;
-
-  let touchStartY = 0;
-
-  let touchStartPositionX = 0;
-
-  let touchStartPositionY = 0;
-
-
-  function getTouchDistance(
-    touches
-  ) {
-
-    const dx =
-      touches[0].clientX -
-      touches[1].clientX;
-
-    const dy =
-      touches[0].clientY -
-      touches[1].clientY;
-
-    return Math.sqrt(
-      dx * dx +
-      dy * dy
-    );
-
-  }
-
-
-  lightboxContent.addEventListener(
-    'touchstart',
-    event => {
-
-      if (
-        event.touches.length === 2
-      ) {
-
-        touchStartDistance =
-          getTouchDistance(
-            event.touches
-          );
-
-        touchStartScale =
-          scale;
-
-      }
-
-      else if (
-        event.touches.length === 1 &&
-        scale > 1
-      ) {
-
-        touchStartX =
-          event.touches[0].clientX;
-
-        touchStartY =
-          event.touches[0].clientY;
-
-        touchStartPositionX =
-          positionX;
-
-        touchStartPositionY =
-          positionY;
-
-      }
-
-    },
-    {
-      passive: false
-    }
-  );
-
-
-  lightboxContent.addEventListener(
-    'touchmove',
-    event => {
-
-      event.preventDefault();
-
-
-      /* PINCH ZOOM */
-
-      if (
-        event.touches.length === 2
-      ) {
-
-        const currentDistance =
-          getTouchDistance(
-            event.touches
-          );
-
-        if (
-          touchStartDistance > 0
-        ) {
-
-          const ratio =
-            currentDistance /
-            touchStartDistance;
-
-          scale =
-            touchStartScale *
-            ratio;
-
-          if (
-            scale < MIN_ZOOM
-          ) {
-
-            scale =
-              MIN_ZOOM;
+            dot.classList.remove(
+              'active'
+            );
 
           }
+        );
 
-          if (
-            scale > MAX_ZOOM
-          ) {
 
-            scale =
-              MAX_ZOOM;
+        if (heroDots[currentSlide]) {
 
-          }
-
-          updateImage();
+          heroDots[currentSlide]
+            .classList.add('active');
 
         }
 
-      }
 
+        setTimeout(
+          function () {
 
-      /* TOUCH DRAG */
+            oldSlide.classList.remove(
+              'prev'
+            );
 
-      else if (
-        event.touches.length === 1 &&
-        scale > 1
-      ) {
+          },
+          1500
+        );
 
-        const currentX =
-          event.touches[0].clientX;
+      },
+      6000
+    );
 
-        const currentY =
-          event.touches[0].clientY;
-
-        positionX =
-          touchStartPositionX +
-          (
-            currentX -
-            touchStartX
-          );
-
-        positionY =
-          touchStartPositionY +
-          (
-            currentY -
-            touchStartY
-          );
-
-        updateImage();
-
-      }
-
-    },
-    {
-      passive: false
-    }
-  );
+  }
 
 }
 
 
 /* =========================================================
-   INITIALIZE LIGHTBOX
-========================================================= */
-
-document.addEventListener(
-  'DOMContentLoaded',
-  () => {
-
-    setupLightboxEvents();
-
-  }
-);
-
-
-/* =========================================================
-   INITIAL RENDER
+   INITIAL LANGUAGE
 ========================================================= */
 
 setLanguage(
   currentLanguage
+);
+
+
+/* =========================================================
+   PROFESSIONAL IMAGE LIGHTBOX
+========================================================= */
+
+document.addEventListener(
+  'DOMContentLoaded',
+  function () {
+
+    const lightbox =
+      document.getElementById(
+        'image-lightbox'
+      );
+
+    const lightboxContent =
+      document.getElementById(
+        'lightbox-content'
+      );
+
+    const lightboxImage =
+      document.getElementById(
+        'lightbox-image'
+      );
+
+    const closeButton =
+      document.getElementById(
+        'lightbox-close'
+      );
+
+    const prevButton =
+      document.getElementById(
+        'lightbox-prev'
+      );
+
+    const nextButton =
+      document.getElementById(
+        'lightbox-next'
+      );
+
+    const zoomInButton =
+      document.getElementById(
+        'lightbox-zoom-in'
+      );
+
+    const zoomOutButton =
+      document.getElementById(
+        'lightbox-zoom-out'
+      );
+
+    const resetButton =
+      document.getElementById(
+        'lightbox-reset'
+      );
+
+
+    if (
+      !lightbox ||
+      !lightboxContent ||
+      !lightboxImage
+    ) {
+
+      return;
+
+    }
+
+
+    /* =====================================================
+       ZOOM SETTINGS
+    ===================================================== */
+
+    const MIN_ZOOM = 1;
+    const MAX_ZOOM = 5;
+    const ZOOM_STEP = 0.25;
+
+
+    let zoomLevel = 1;
+
+    let imageX = 0;
+    let imageY = 0;
+
+
+    /* =====================================================
+       DRAG
+    ===================================================== */
+
+    let isDragging = false;
+
+    let dragStartX = 0;
+    let dragStartY = 0;
+
+    let dragStartImageX = 0;
+    let dragStartImageY = 0;
+
+
+    /* =====================================================
+       IMAGE LIST
+    ===================================================== */
+
+    let lightboxImages = [];
+
+    let currentImageIndex = 0;
+
+
+    /* =====================================================
+       GET IMAGES
+    ===================================================== */
+
+    function getLightboxImages() {
+
+      return [
+        ...document.querySelectorAll(
+          '.portfolio-card img, .store-card img, .asset-card img, .hero-slideshow img'
+        )
+      ].filter(
+        function (img) {
+
+          const card =
+            img.closest('article');
+
+
+          if (
+            card &&
+            card.hidden
+          ) {
+
+            return false;
+
+          }
+
+
+          return img.src;
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       UPDATE ZOOM
+    ===================================================== */
+
+    function updateZoom() {
+
+      lightboxImage.style.transform =
+        `translate3d(${imageX}px, ${imageY}px, 0) scale(${zoomLevel})`;
+
+
+      lightboxImage.style.cursor =
+        zoomLevel > 1
+          ? 'grab'
+          : 'zoom-in';
+
+
+      if (resetButton) {
+
+        resetButton.innerHTML = `
+          <span class="zoom-percent">
+            ${Math.round(zoomLevel * 100)}%
+          </span>
+        `;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       RESET
+    ===================================================== */
+
+    function resetZoom() {
+
+      zoomLevel = 1;
+
+      imageX = 0;
+      imageY = 0;
+
+      updateZoom();
+
+    }
+
+
+    /* =====================================================
+       ZOOM IN
+    ===================================================== */
+
+    function zoomIn() {
+
+      zoomLevel +=
+        ZOOM_STEP;
+
+
+      if (
+        zoomLevel > MAX_ZOOM
+      ) {
+
+        zoomLevel =
+          MAX_ZOOM;
+
+      }
+
+
+      updateZoom();
+
+    }
+
+
+    /* =====================================================
+       ZOOM OUT
+    ===================================================== */
+
+    function zoomOut() {
+
+      zoomLevel -=
+        ZOOM_STEP;
+
+
+      if (
+        zoomLevel < MIN_ZOOM
+      ) {
+
+        zoomLevel =
+          MIN_ZOOM;
+
+      }
+
+
+      if (
+        zoomLevel === 1
+      ) {
+
+        imageX = 0;
+        imageY = 0;
+
+      }
+
+
+      updateZoom();
+
+    }
+
+
+    /* =====================================================
+       SHOW CURRENT IMAGE
+    ===================================================== */
+
+    function showLightboxImage() {
+
+      const image =
+        lightboxImages[
+          currentImageIndex
+        ];
+
+
+      if (!image) {
+        return;
+      }
+
+
+      lightboxImage.src =
+        image.currentSrc ||
+        image.src;
+
+
+      lightboxImage.alt =
+        image.alt || '';
+
+
+      resetZoom();
+
+    }
+
+
+    /* =====================================================
+       OPEN
+    ===================================================== */
+
+    function openLightbox(image) {
+
+      lightboxImages =
+        getLightboxImages();
+
+
+      currentImageIndex =
+        lightboxImages.indexOf(
+          image
+        );
+
+
+      if (
+        currentImageIndex < 0
+      ) {
+
+        currentImageIndex = 0;
+
+      }
+
+
+      showLightboxImage();
+
+
+      lightbox.hidden = false;
+
+      lightbox.setAttribute(
+        'aria-hidden',
+        'false'
+      );
+
+
+      document.body.classList.add(
+        'lightbox-open'
+      );
+
+    }
+
+
+    /* =====================================================
+       CLOSE
+    ===================================================== */
+
+    function closeLightbox() {
+
+      lightbox.hidden = true;
+
+      lightbox.setAttribute(
+        'aria-hidden',
+        'true'
+      );
+
+
+      lightboxImage.src = '';
+
+
+      document.body.classList.remove(
+        'lightbox-open'
+      );
+
+
+      resetZoom();
+
+    }
+
+
+    /* =====================================================
+       PREVIOUS
+    ===================================================== */
+
+    function showPreviousImage() {
+
+      if (
+        lightboxImages.length <= 1
+      ) {
+
+        return;
+
+      }
+
+
+      currentImageIndex--;
+
+
+      if (
+        currentImageIndex < 0
+      ) {
+
+        currentImageIndex =
+          lightboxImages.length - 1;
+
+      }
+
+
+      showLightboxImage();
+
+    }
+
+
+    /* =====================================================
+       NEXT
+    ===================================================== */
+
+    function showNextImage() {
+
+      if (
+        lightboxImages.length <= 1
+      ) {
+
+        return;
+
+      }
+
+
+      currentImageIndex++;
+
+
+      if (
+        currentImageIndex >=
+        lightboxImages.length
+      ) {
+
+        currentImageIndex = 0;
+
+      }
+
+
+      showLightboxImage();
+
+    }
+
+
+    /* =====================================================
+       CLICK WEBSITE IMAGES
+    ===================================================== */
+
+    document.addEventListener(
+      'click',
+      function (event) {
+
+        const image =
+          event.target.closest(
+            '.portfolio-card img, .store-card img, .asset-card img, .hero-slideshow img'
+          );
+
+
+        if (!image) {
+          return;
+        }
+
+
+        openLightbox(image);
+
+      }
+    );
+
+
+    /* =====================================================
+       CLOSE
+    ===================================================== */
+
+    if (closeButton) {
+
+      closeButton.addEventListener(
+        'click',
+        function (event) {
+
+          event.stopPropagation();
+
+          closeLightbox();
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       PREVIOUS
+    ===================================================== */
+
+    if (prevButton) {
+
+      prevButton.addEventListener(
+        'click',
+        function (event) {
+
+          event.stopPropagation();
+
+          showPreviousImage();
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       NEXT
+    ===================================================== */
+
+    if (nextButton) {
+
+      nextButton.addEventListener(
+        'click',
+        function (event) {
+
+          event.stopPropagation();
+
+          showNextImage();
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       ZOOM IN
+    ===================================================== */
+
+    if (zoomInButton) {
+
+      zoomInButton.addEventListener(
+        'click',
+        function (event) {
+
+          event.stopPropagation();
+
+          zoomIn();
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       ZOOM OUT
+    ===================================================== */
+
+    if (zoomOutButton) {
+
+      zoomOutButton.addEventListener(
+        'click',
+        function (event) {
+
+          event.stopPropagation();
+
+          zoomOut();
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       RESET
+    ===================================================== */
+
+    if (resetButton) {
+
+      resetButton.addEventListener(
+        'click',
+        function (event) {
+
+          event.stopPropagation();
+
+          resetZoom();
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       CLICK OUTSIDE IMAGE
+    ===================================================== */
+
+    lightbox.addEventListener(
+      'click',
+      function (event) {
+
+        if (
+          event.target === lightbox ||
+          event.target === lightboxContent
+        ) {
+
+          closeLightbox();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       MOUSE WHEEL ZOOM
+    ===================================================== */
+
+    lightboxContent.addEventListener(
+      'wheel',
+      function (event) {
+
+        event.preventDefault();
+
+
+        if (
+          event.deltaY < 0
+        ) {
+
+          zoomIn();
+
+        } else {
+
+          zoomOut();
+
+        }
+
+      },
+      {
+        passive: false
+      }
+    );
+
+
+    /* =====================================================
+       MOUSE DRAG
+    ===================================================== */
+
+    lightboxContent.addEventListener(
+      'mousedown',
+      function (event) {
+
+        if (
+          zoomLevel <= 1
+        ) {
+
+          return;
+
+        }
+
+
+        isDragging = true;
+
+
+        dragStartX =
+          event.clientX;
+
+        dragStartY =
+          event.clientY;
+
+
+        dragStartImageX =
+          imageX;
+
+        dragStartImageY =
+          imageY;
+
+
+        lightboxImage.style.cursor =
+          'grabbing';
+
+      }
+    );
+
+
+    document.addEventListener(
+      'mousemove',
+      function (event) {
+
+        if (!isDragging) {
+          return;
+        }
+
+
+        imageX =
+          dragStartImageX +
+          (
+            event.clientX -
+            dragStartX
+          );
+
+
+        imageY =
+          dragStartImageY +
+          (
+            event.clientY -
+            dragStartY
+          );
+
+
+        updateZoom();
+
+
+        lightboxImage.style.cursor =
+          'grabbing';
+
+      }
+    );
+
+
+    document.addEventListener(
+      'mouseup',
+      function () {
+
+        if (!isDragging) {
+          return;
+        }
+
+
+        isDragging = false;
+
+
+        lightboxImage.style.cursor =
+          zoomLevel > 1
+            ? 'grab'
+            : 'zoom-in';
+
+      }
+    );
+
+
+    /* =====================================================
+       TOUCH / PINCH
+    ===================================================== */
+
+    let touchStartDistance = 0;
+
+    let touchStartZoom = 1;
+
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+
+    let touchStartImageX = 0;
+    let touchStartImageY = 0;
+
+
+    function getTouchDistance(
+      touches
+    ) {
+
+      const dx =
+        touches[0].clientX -
+        touches[1].clientX;
+
+
+      const dy =
+        touches[0].clientY -
+        touches[1].clientY;
+
+
+      return Math.sqrt(
+        dx * dx +
+        dy * dy
+      );
+
+    }
+
+
+    lightboxContent.addEventListener(
+      'touchstart',
+      function (event) {
+
+        if (
+          event.touches.length === 2
+        ) {
+
+          touchStartDistance =
+            getTouchDistance(
+              event.touches
+            );
+
+
+          touchStartZoom =
+            zoomLevel;
+
+        }
+
+
+        else if (
+          event.touches.length === 1 &&
+          zoomLevel > 1
+        ) {
+
+          touchStartX =
+            event.touches[0].clientX;
+
+
+          touchStartY =
+            event.touches[0].clientY;
+
+
+          touchStartImageX =
+            imageX;
+
+
+          touchStartImageY =
+            imageY;
+
+        }
+
+      },
+      {
+        passive: false
+      }
+    );
+
+
+    lightboxContent.addEventListener(
+      'touchmove',
+      function (event) {
+
+        event.preventDefault();
+
+
+        /* PINCH */
+
+        if (
+          event.touches.length === 2
+        ) {
+
+          const currentDistance =
+            getTouchDistance(
+              event.touches
+            );
+
+
+          if (
+            touchStartDistance > 0
+          ) {
+
+            const ratio =
+              currentDistance /
+              touchStartDistance;
+
+
+            zoomLevel =
+              touchStartZoom *
+              ratio;
+
+
+            if (
+              zoomLevel <
+              MIN_ZOOM
+            ) {
+
+              zoomLevel =
+                MIN_ZOOM;
+
+            }
+
+
+            if (
+              zoomLevel >
+              MAX_ZOOM
+            ) {
+
+              zoomLevel =
+                MAX_ZOOM;
+
+            }
+
+
+            updateZoom();
+
+          }
+
+        }
+
+
+        /* TOUCH DRAG */
+
+        else if (
+          event.touches.length === 1 &&
+          zoomLevel > 1
+        ) {
+
+          const currentX =
+            event.touches[0].clientX;
+
+
+          const currentY =
+            event.touches[0].clientY;
+
+
+          imageX =
+            touchStartImageX +
+            (
+              currentX -
+              touchStartX
+            );
+
+
+          imageY =
+            touchStartImageY +
+            (
+              currentY -
+              touchStartY
+            );
+
+
+          updateZoom();
+
+        }
+
+      },
+      {
+        passive: false
+      }
+    );
+
+
+    /* =====================================================
+       KEYBOARD
+    ===================================================== */
+
+    document.addEventListener(
+      'keydown',
+      function (event) {
+
+        if (
+          lightbox.hidden
+        ) {
+
+          return;
+
+        }
+
+
+        /* ESC */
+
+        if (
+          event.key === 'Escape'
+        ) {
+
+          closeLightbox();
+
+        }
+
+
+        /* LEFT */
+
+        else if (
+          event.key === 'ArrowLeft'
+        ) {
+
+          showPreviousImage();
+
+        }
+
+
+        /* RIGHT */
+
+        else if (
+          event.key === 'ArrowRight'
+        ) {
+
+          showNextImage();
+
+        }
+
+
+        /* PLUS */
+
+        else if (
+          event.key === '+' ||
+          event.key === '='
+        ) {
+
+          zoomIn();
+
+        }
+
+
+        /* MINUS */
+
+        else if (
+          event.key === '-'
+        ) {
+
+          zoomOut();
+
+        }
+
+
+        /* RESET */
+
+        else if (
+          event.key.toLowerCase() === 'r'
+        ) {
+
+          resetZoom();
+
+        }
+
+      }
+    );
+
+  }
 );
