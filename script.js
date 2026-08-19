@@ -204,3 +204,56 @@ if (heroSlides.length > 1) {
 
   }, 6000);
 }
+/* =========================
+   IMAGE LIGHTBOX
+========================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const lightbox = document.getElementById("image-lightbox");
+  const lightboxImage = document.getElementById("lightbox-image");
+  const lightboxClose = document.getElementById("lightbox-close");
+
+  if (!lightbox || !lightboxImage || !lightboxClose) return;
+
+  const images = document.querySelectorAll(
+    ".portfolio-card img, .store-grid img, .asset-grid img, .hero-slideshow img"
+  );
+
+  images.forEach(function (img) {
+
+    img.style.cursor = "zoom-in";
+
+    img.addEventListener("click", function () {
+
+      lightboxImage.src = img.src;
+      lightboxImage.alt = img.alt || "";
+
+      lightbox.hidden = false;
+      document.body.classList.add("lightbox-open");
+
+    });
+
+  });
+
+  function closeLightbox() {
+    lightbox.hidden = true;
+    lightboxImage.src = "";
+    document.body.classList.remove("lightbox-open");
+  }
+
+  lightboxClose.addEventListener("click", closeLightbox);
+
+  lightbox.addEventListener("click", function (e) {
+    if (e.target === lightbox) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !lightbox.hidden) {
+      closeLightbox();
+    }
+  });
+
+});
