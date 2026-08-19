@@ -1,7 +1,6 @@
 /* =========================================================
-   WISE.GRAPHIXDESIGN
-   MAIN SCRIPT
-========================================================= */
+   WISE.GRAPHIXDESIGN — FINAL SCRIPT
+   ========================================================= */
 
 const $ = (selector, parent = document) =>
   parent.querySelector(selector);
@@ -12,507 +11,607 @@ const $$ = (selector, parent = document) =>
 
 /* =========================================================
    TRANSLATIONS
-========================================================= */
+   ========================================================= */
 
 const translations = {
 
   ht: {
-    name: 'Kreyòl',
+    name: "Kreyòl",
+    navWork: "Travay mwen yo",
+    navStore: "Boutik PSD",
+    navFree: "Asset gratis",
+    navServices: "Sèvis",
 
-    navWork: 'Travay mwen yo',
-    navStore: 'Boutik PSD',
-    navFree: 'Asset gratis',
-    navServices: 'Sèvis',
-
-    heroEyebrow: 'STIDYO DESIGN KREYATIF',
-    heroTitle: 'Design ki<br><em>fè moun sonje w.</em>',
+    heroEyebrow: "STIDYO DESIGN KREYATIF",
+    heroTitle: "Design ki<br><em>fè moun sonje w.</em>",
     heroText:
-      'Kreyasyon grafik premium, PSD editab ak resous dijital pou mak ak biznis ki vle kanpe apa.',
-    heroPrimary: 'Gade travay mwen ↗',
-    heroSecondary: 'Achte PSD →',
+      "Kreyasyon grafik premium, PSD editab ak resous dijital pou mak ak biznis ki vle kanpe apa.",
+    heroPrimary: "Gade travay mwen ↗",
+    heroSecondary: "Achte PSD →",
 
-    workEyebrow: '01 / PORTFOLIO',
-    workTitle: 'Travay <em>mwen yo.</em>',
+    workEyebrow: "01 / PORTFOLIO",
+    workTitle: "Travay <em>mwen yo.</em>",
+    filterAll: "Tout",
+    filterFlyers: "Flyers",
+    filterCovers: "Covers",
+    filterLabels: "Étiquèt",
+    filterBranding: "Branding",
 
-    filterAll: 'Tout',
-    filterFlyers: 'Flyers',
-    filterCovers: 'Covers',
-    filterLabels: 'Étiquèt',
-    filterBranding: 'Branding',
+    portfolioFlyer: "Flyer Event",
+    portfolioCover: "Cover Design",
+    portfolioLabel: "Product Label",
+    portfolioBrand: "Brand Identity",
+    portfolioEditorial: "Editorial Cover",
 
-    portfolioFlyer: 'Flyer Campaign',
-    portfolioCover: 'Cover Design',
-    portfolioLabel: 'Product Label',
-    portfolioBrand: 'Brand Identity',
-    portfolioEvent: 'Event Flyer',
-    portfolioEditorial: 'Editorial Cover',
+    storeEyebrow: "02 / DIGITAL STORE",
+    storeTitle: "Boutik <em>PSD.</em>",
 
-    storeEyebrow: '02 / DIGITAL STORE',
-    storeTitle: 'Boutik <em>PSD.</em>',
-    buy: 'ACHTE KOUNYE A ↗',
+    buy: "ACHTE KOUNYE A ↗",
+
     storeNote:
-      '— Estrikti checkout la pare pou koneksyon backend.',
+      "— Estrikti checkout la pare pou koneksyon backend.",
 
-    freeEyebrow: '03 / RESOUS GRATIS',
-    freeTitle: 'Asset <em>gratis.</em>',
+    freeEyebrow: "03 / RESOUS GRATIS",
+    freeTitle: "Asset <em>gratis.</em>",
 
-    assetPNG: 'PNG',
-    assetTextures: 'Textures',
-    assetMockups: 'Mockups',
+    assetPNG: "PNG",
+    assetTextures: "Textures",
+    assetMockups: "Mockups",
 
     assetIntro:
-      'Klike sou yon kategori pou wè fichye yo, epi telechaje sa ou bezwen an.',
+      "Klike sou yon kategori pou wè fichye yo, epi telechaje sa ou bezwen an.",
 
-    assetLight: 'Efè limyè PNG',
-    assetLightDesc: 'Efè limyè transparan',
+    assetCake: "Gato fèt",
+    assetCakeDesc: "PNG gratis",
 
-    assetSparkles: 'Paillettes lò PNG',
-    assetSparklesDesc: 'Paillettes transparan',
+    assetBalloons: "Balon fèt",
+    assetBalloonsDesc: "PNG gratis",
 
-    assetShapes: 'Fòm abstrè PNG',
-    assetShapesDesc: 'Fòm transparan',
+    assetStars: "Zetwal",
+    assetStarsDesc: "PNG gratis",
 
-    assetGrain: 'Teksti grenn',
-    assetGrainDesc: 'Teksti rezolisyon wo',
+    asset4: "Asset PNG",
+    asset4Desc: "PNG gratis",
 
-    assetPaper: 'Teksti papye',
-    assetPaperDesc: 'Teksti rezolisyon wo',
+    asset5: "Asset PNG",
+    asset5Desc: "PNG gratis",
 
-    assetGold: 'Teksti lò',
-    assetGoldDesc: 'Teksti rezolisyon wo',
+    asset6: "Asset PNG",
+    asset6Desc: "PNG gratis",
 
-    assetCard: 'Mockup kat',
-    assetCardDesc: 'Mockup prezantasyon',
+    assetBackground1: "Background 01",
+    assetBackground1Desc: "Background gratis",
 
-    assetPhone: 'Mockup telefòn',
-    assetPhoneDesc: 'Mockup prezantasyon',
+    assetBackground2: "Background 02",
+    assetBackground2Desc: "Background gratis",
 
-    assetPoster: 'Mockup afich',
-    assetPosterDesc: 'Mockup prezantasyon',
+    assetBackground3: "Background 03",
+    assetBackground3Desc: "Background gratis",
 
-    download: 'TELECHAJE GRATIS ↓',
+    assetBackground4: "Background 04",
+    assetBackground4Desc: "Background gratis",
+
+    assetBackground5: "Background 05",
+    assetBackground5Desc: "Background gratis",
+
+    assetBackground6: "Background 06",
+    assetBackground6Desc: "Background gratis",
+
+    assetGrain: "Teksti grenn",
+    assetGrainDesc: "Teksti rezolisyon wo",
+
+    assetPaper: "Teksti papye",
+    assetPaperDesc: "Teksti rezolisyon wo",
+
+    assetGold: "Teksti lò",
+    assetGoldDesc: "Teksti rezolisyon wo",
+
+    assetTexture4: "Texture 04",
+    assetTexture4Desc: "Teksti rezolisyon wo",
+
+    assetTexture5: "Texture 05",
+    assetTexture5Desc: "Teksti rezolisyon wo",
+
+    assetTexture6: "Texture 06",
+    assetTexture6Desc: "Teksti rezolisyon wo",
+
+    assetCard: "Mockup kat",
+    assetCardDesc: "Mockup prezantasyon",
+
+    assetPhone: "Mockup telefòn",
+    assetPhoneDesc: "Mockup prezantasyon",
+
+    assetPoster: "Mockup afich",
+    assetPosterDesc: "Mockup prezantasyon",
+
+    assetMockup4: "Mockup 04",
+    assetMockup4Desc: "Mockup prezantasyon",
+
+    assetMockup5: "Mockup 05",
+    assetMockup5Desc: "Mockup prezantasyon",
+
+    assetMockup6: "Mockup 06",
+    assetMockup6Desc: "Mockup prezantasyon",
+
+    download: "TELECHAJE GRATIS ↓",
 
     checkoutMessage:
-      'MonCash / checkout backend ap konekte nan etap kap vini an.',
+      "MonCash / checkout backend ap konekte nan etap kap vini an.",
 
-    servicesEyebrow: '04 / SÈVIS',
-    servicesTitle: 'Sèvis pou <em>biznis.</em>',
+    servicesEyebrow: "04 / SERVICES",
+    servicesTitle: "Sèvis pou <em>biznis.</em>",
 
-    service1: '01 — Logo & Branding',
-    service2: '02 — Flyer & Social Media',
-    service3: '03 — Packaging & Étiquèt',
-    service4: '04 — Motion Design',
+    service1: "01 — Logo & Branding",
+    service2: "02 — Flyer & Social Media",
+    service3: "03 — Packaging & Étiquèt",
+    service4: "04 — Motion Design",
 
-    footer: 'Design grafik · PSD · Asset dijital',
+    footer:
+      "Design grafik · PSD · Asset dijital",
 
-    whatsapp: 'WhatsApp'
+    whatsapp: "WhatsApp"
   },
 
 
   en: {
-    name: 'English',
+    name: "English",
+    navWork: "My work",
+    navStore: "PSD store",
+    navFree: "Free assets",
+    navServices: "Services",
 
-    navWork: 'My work',
-    navStore: 'PSD store',
-    navFree: 'Free assets',
-    navServices: 'Services',
-
-    heroEyebrow: 'CREATIVE DESIGN STUDIO',
-    heroTitle: 'Design that<br><em>makes you memorable.</em>',
+    heroEyebrow: "CREATIVE DESIGN STUDIO",
+    heroTitle:
+      "Design that<br><em>makes you memorable.</em>",
     heroText:
-      'Premium graphic design, editable PSD files and digital resources for brands and businesses that want to stand out.',
-    heroPrimary: 'View my work ↗',
-    heroSecondary: 'Buy PSD →',
+      "Premium graphic design, editable PSD files and digital resources for brands and businesses that want to stand out.",
+    heroPrimary: "View my work ↗",
+    heroSecondary: "Buy PSD →",
 
-    workEyebrow: '01 / PORTFOLIO',
-    workTitle: 'My <em>work.</em>',
+    workEyebrow: "01 / PORTFOLIO",
+    workTitle: "My <em>work.</em>",
+    filterAll: "All",
+    filterFlyers: "Flyers",
+    filterCovers: "Covers",
+    filterLabels: "Labels",
+    filterBranding: "Branding",
 
-    filterAll: 'All',
-    filterFlyers: 'Flyers',
-    filterCovers: 'Covers',
-    filterLabels: 'Labels',
-    filterBranding: 'Branding',
+    portfolioFlyer: "Flyer Campaign",
+    portfolioCover: "Cover Design",
+    portfolioLabel: "Product Label",
+    portfolioBrand: "Brand Identity",
+    portfolioEditorial: "Editorial Cover",
 
-    portfolioFlyer: 'Flyer Campaign',
-    portfolioCover: 'Cover Design',
-    portfolioLabel: 'Product Label',
-    portfolioBrand: 'Brand Identity',
-    portfolioEvent: 'Event Flyer',
-    portfolioEditorial: 'Editorial Cover',
+    storeEyebrow: "02 / DIGITAL STORE",
+    storeTitle: "PSD <em>store.</em>",
 
-    storeEyebrow: '02 / DIGITAL STORE',
-    storeTitle: 'PSD <em>store.</em>',
-    buy: 'BUY NOW ↗',
+    buy: "BUY NOW ↗",
 
     storeNote:
-      '— Checkout structure is ready for a backend connection.',
+      "— Checkout structure is ready for a backend connection.",
 
-    freeEyebrow: '03 / FREE RESOURCES',
-    freeTitle: 'Free <em>assets.</em>',
+    freeEyebrow: "03 / FREE RESOURCES",
+    freeTitle: "Free <em>assets.</em>",
 
-    assetPNG: 'PNG',
-    assetTextures: 'Textures',
-    assetMockups: 'Mockups',
+    assetPNG: "PNG",
+    assetTextures: "Textures",
+    assetMockups: "Mockups",
 
     assetIntro:
-      'Choose a category to see its files, then download what you need.',
+      "Choose a category to see its files, then download what you need.",
 
-    assetLight: 'Light Effects PNG',
-    assetLightDesc: 'Transparent light effect',
+    assetCake: "Birthday Cake",
+    assetCakeDesc: "Free PNG",
 
-    assetSparkles: 'Gold Sparkles PNG',
-    assetSparklesDesc: 'Transparent sparkles',
+    assetBalloons: "Birthday Balloons",
+    assetBalloonsDesc: "Free PNG",
 
-    assetShapes: 'Abstract Shapes PNG',
-    assetShapesDesc: 'Transparent shapes',
+    assetStars: "Stars",
+    assetStarsDesc: "Free PNG",
 
-    assetGrain: 'Grain Texture',
-    assetGrainDesc: 'High-resolution texture',
+    asset4: "PNG Asset",
+    asset4Desc: "Free PNG",
 
-    assetPaper: 'Paper Texture',
-    assetPaperDesc: 'High-resolution texture',
+    asset5: "PNG Asset",
+    asset5Desc: "Free PNG",
 
-    assetGold: 'Gold Texture',
-    assetGoldDesc: 'High-resolution texture',
+    asset6: "PNG Asset",
+    asset6Desc: "Free PNG",
 
-    assetCard: 'Card Mockup',
-    assetCardDesc: 'Presentation mockup',
+    assetBackground1: "Background 01",
+    assetBackground1Desc: "Free background",
 
-    assetPhone: 'Phone Mockup',
-    assetPhoneDesc: 'Presentation mockup',
+    assetBackground2: "Background 02",
+    assetBackground2Desc: "Free background",
 
-    assetPoster: 'Poster Mockup',
-    assetPosterDesc: 'Presentation mockup',
+    assetBackground3: "Background 03",
+    assetBackground3Desc: "Free background",
 
-    download: 'FREE DOWNLOAD ↓',
+    assetBackground4: "Background 04",
+    assetBackground4Desc: "Free background",
+
+    assetBackground5: "Background 05",
+    assetBackground5Desc: "Free background",
+
+    assetBackground6: "Background 06",
+    assetBackground6Desc: "Free background",
+
+    assetGrain: "Grain Texture",
+    assetGrainDesc: "High-resolution texture",
+
+    assetPaper: "Paper Texture",
+    assetPaperDesc: "High-resolution texture",
+
+    assetGold: "Gold Texture",
+    assetGoldDesc: "High-resolution texture",
+
+    assetTexture4: "Texture 04",
+    assetTexture4Desc: "High-resolution texture",
+
+    assetTexture5: "Texture 05",
+    assetTexture5Desc: "High-resolution texture",
+
+    assetTexture6: "Texture 06",
+    assetTexture6Desc: "High-resolution texture",
+
+    assetCard: "Card Mockup",
+    assetCardDesc: "Presentation mockup",
+
+    assetPhone: "Phone Mockup",
+    assetPhoneDesc: "Presentation mockup",
+
+    assetPoster: "Poster Mockup",
+    assetPosterDesc: "Presentation mockup",
+
+    assetMockup4: "Mockup 04",
+    assetMockup4Desc: "Presentation mockup",
+
+    assetMockup5: "Mockup 05",
+    assetMockup5Desc: "Presentation mockup",
+
+    assetMockup6: "Mockup 06",
+    assetMockup6Desc: "Presentation mockup",
+
+    download: "FREE DOWNLOAD ↓",
 
     checkoutMessage:
-      'MonCash / checkout backend will be connected in the next step.',
+      "MonCash / checkout backend will be connected in the next step.",
 
-    servicesEyebrow: '04 / SERVICES',
-    servicesTitle: 'Services for <em>business.</em>',
+    servicesEyebrow: "04 / SERVICES",
+    servicesTitle: "Services for <em>business.</em>",
 
-    service1: '01 — Logo & Branding',
-    service2: '02 — Flyer & Social Media',
-    service3: '03 — Packaging & Labels',
-    service4: '04 — Motion Design',
+    service1: "01 — Logo & Branding",
+    service2: "02 — Flyer & Social Media",
+    service3: "03 — Packaging & Labels",
+    service4: "04 — Motion Design",
 
-    footer: 'Graphic design · PSD · Digital assets',
+    footer:
+      "Graphic design · PSD · Digital assets",
 
-    whatsapp: 'WhatsApp'
+    whatsapp: "WhatsApp"
   },
 
 
   fr: {
-    name: 'Français',
+    name: "Français",
+    navWork: "Mes créations",
+    navStore: "Boutique PSD",
+    navFree: "Ressources gratuites",
+    navServices: "Services",
 
-    navWork: 'Mes créations',
-    navStore: 'Boutique PSD',
-    navFree: 'Ressources gratuites',
-    navServices: 'Services',
-
-    heroEyebrow: 'STUDIO DE DESIGN CRÉATIF',
-    heroTitle: 'Un design qui<br><em>vous rend mémorable.</em>',
+    heroEyebrow: "STUDIO DE DESIGN CRÉATIF",
+    heroTitle:
+      "Un design qui<br><em>vous rend mémorable.</em>",
     heroText:
-      'Créations graphiques premium, PSD modifiables et ressources numériques pour les marques et entreprises qui veulent se démarquer.',
-    heroPrimary: 'Voir mes créations ↗',
-    heroSecondary: 'Acheter des PSD →',
+      "Créations graphiques premium, PSD modifiables et ressources numériques pour les marques et entreprises qui veulent se démarquer.",
+    heroPrimary: "Voir mes créations ↗",
+    heroSecondary: "Acheter des PSD →",
 
-    workEyebrow: '01 / PORTFOLIO',
-    workTitle: 'Mes <em>créations.</em>',
+    workEyebrow: "01 / PORTFOLIO",
+    workTitle: "Mes <em>créations.</em>",
+    filterAll: "Tout",
+    filterFlyers: "Flyers",
+    filterCovers: "Couvertures",
+    filterLabels: "Étiquettes",
+    filterBranding: "Identité de marque",
 
-    filterAll: 'Tout',
-    filterFlyers: 'Flyers',
-    filterCovers: 'Couvertures',
-    filterLabels: 'Étiquettes',
-    filterBranding: 'Identité de marque',
+    portfolioFlyer: "Campagne flyer",
+    portfolioCover: "Design de couverture",
+    portfolioLabel: "Étiquette produit",
+    portfolioBrand: "Identité de marque",
+    portfolioEditorial: "Couverture éditoriale",
 
-    portfolioFlyer: 'Campagne flyer',
-    portfolioCover: 'Design de couverture',
-    portfolioLabel: 'Étiquette produit',
-    portfolioBrand: 'Identité de marque',
-    portfolioEvent: 'Flyer événement',
-    portfolioEditorial: 'Couverture éditoriale',
+    storeEyebrow: "02 / BOUTIQUE NUMÉRIQUE",
+    storeTitle: "Boutique <em>PSD.</em>",
 
-    storeEyebrow: '02 / BOUTIQUE NUMÉRIQUE',
-    storeTitle: 'Boutique <em>PSD.</em>',
-
-    buy: 'ACHETER MAINTENANT ↗',
+    buy: "ACHETER MAINTENANT ↗",
 
     storeNote:
-      '— La structure de paiement est prête pour une connexion au backend.',
+      "— La structure de paiement est prête pour une connexion au backend.",
 
-    freeEyebrow: '03 / RESSOURCES GRATUITES',
-    freeTitle: 'Ressources <em>gratuites.</em>',
+    freeEyebrow: "03 / RESSOURCES GRATUITES",
+    freeTitle: "Ressources <em>gratuites.</em>",
 
-    assetPNG: 'PNG',
-    assetTextures: 'Textures',
-    assetMockups: 'Mockups',
+    assetPNG: "PNG",
+    assetTextures: "Textures",
+    assetMockups: "Mockups",
 
     assetIntro:
-      'Choisissez une catégorie pour voir les fichiers, puis téléchargez ce dont vous avez besoin.',
+      "Choisissez une catégorie pour voir les fichiers, puis téléchargez ce dont vous avez besoin.",
 
-    assetLight: 'Effets lumineux PNG',
-    assetLightDesc: 'Effet lumineux transparent',
+    assetCake: "Gâteau",
+    assetCakeDesc: "PNG gratuit",
 
-    assetSparkles: 'Paillettes dorées PNG',
-    assetSparklesDesc: 'Paillettes transparentes',
+    assetBalloons: "Ballons",
+    assetBalloonsDesc: "PNG gratuit",
 
-    assetShapes: 'Formes abstraites PNG',
-    assetShapesDesc: 'Formes transparentes',
+    assetStars: "Étoiles",
+    assetStarsDesc: "PNG gratuit",
 
-    assetGrain: 'Texture grain',
-    assetGrainDesc: 'Texture haute résolution',
+    asset4: "Asset PNG",
+    asset4Desc: "PNG gratuit",
 
-    assetPaper: 'Texture papier',
-    assetPaperDesc: 'Texture haute résolution',
+    asset5: "Asset PNG",
+    asset5Desc: "PNG gratuit",
 
-    assetGold: 'Texture dorée',
-    assetGoldDesc: 'Texture haute résolution',
+    asset6: "Asset PNG",
+    asset6Desc: "PNG gratuit",
 
-    assetCard: 'Mockup carte',
-    assetCardDesc: 'Mockup de présentation',
+    assetBackground1: "Background 01",
+    assetBackground1Desc: "Background gratuit",
 
-    assetPhone: 'Mockup téléphone',
-    assetPhoneDesc: 'Mockup de présentation',
+    assetBackground2: "Background 02",
+    assetBackground2Desc: "Background gratuit",
 
-    assetPoster: 'Mockup affiche',
-    assetPosterDesc: 'Mockup de présentation',
+    assetBackground3: "Background 03",
+    assetBackground3Desc: "Background gratuit",
 
-    download: 'TÉLÉCHARGER GRATUITEMENT ↓',
+    assetBackground4: "Background 04",
+    assetBackground4Desc: "Background gratuit",
+
+    assetBackground5: "Background 05",
+    assetBackground5Desc: "Background gratuit",
+
+    assetBackground6: "Background 06",
+    assetBackground6Desc: "Background gratuit",
+
+    assetGrain: "Texture grain",
+    assetGrainDesc: "Texture haute résolution",
+
+    assetPaper: "Texture papier",
+    assetPaperDesc: "Texture haute résolution",
+
+    assetGold: "Texture dorée",
+    assetGoldDesc: "Texture haute résolution",
+
+    assetTexture4: "Texture 04",
+    assetTexture4Desc: "Texture haute résolution",
+
+    assetTexture5: "Texture 05",
+    assetTexture5Desc: "Texture haute résolution",
+
+    assetTexture6: "Texture 06",
+    assetTexture6Desc: "Texture haute résolution",
+
+    assetCard: "Mockup carte",
+    assetCardDesc: "Mockup de présentation",
+
+    assetPhone: "Mockup téléphone",
+    assetPhoneDesc: "Mockup de présentation",
+
+    assetPoster: "Mockup affiche",
+    assetPosterDesc: "Mockup de présentation",
+
+    assetMockup4: "Mockup 04",
+    assetMockup4Desc: "Mockup de présentation",
+
+    assetMockup5: "Mockup 05",
+    assetMockup5Desc: "Mockup de présentation",
+
+    assetMockup6: "Mockup 06",
+    assetMockup6Desc: "Mockup de présentation",
+
+    download: "TÉLÉCHARGER GRATUITEMENT ↓",
 
     checkoutMessage:
-      'MonCash / le backend de paiement sera connecté à la prochaine étape.',
+      "MonCash / le backend de paiement sera connecté à la prochaine étape.",
 
-    servicesEyebrow: '04 / SERVICES',
-    servicesTitle: 'Services pour les <em>entreprises.</em>',
+    servicesEyebrow: "04 / SERVICES",
+    servicesTitle: "Services pour les <em>entreprises.</em>",
 
-    service1: '01 — Logo & Identité de marque',
-    service2: '02 — Flyer & Réseaux sociaux',
-    service3: '03 — Packaging & Étiquettes',
-    service4: '04 — Motion Design',
+    service1: "01 — Logo & Identité de marque",
+    service2: "02 — Flyer & Réseaux sociaux",
+    service3: "03 — Packaging & Étiquettes",
+    service4: "04 — Motion Design",
 
-    footer: 'Design graphique · PSD · Ressources numériques',
+    footer:
+      "Design graphique · PSD · Ressources numériques",
 
-    whatsapp: 'WhatsApp'
+    whatsapp: "WhatsApp"
   },
 
 
   es: {
-    name: 'Español',
+    name: "Español",
+    navWork: "Mi trabajo",
+    navStore: "Tienda PSD",
+    navFree: "Recursos gratis",
+    navServices: "Servicios",
 
-    navWork: 'Mi trabajo',
-    navStore: 'Tienda PSD',
-    navFree: 'Recursos gratis',
-    navServices: 'Servicios',
-
-    heroEyebrow: 'ESTUDIO CREATIVO DE DISEÑO',
-    heroTitle: 'Diseño que<br><em>te hace memorable.</em>',
+    heroEyebrow: "ESTUDIO CREATIVO DE DISEÑO",
+    heroTitle:
+      "Diseño que<br><em>te hace memorable.</em>",
     heroText:
-      'Diseño gráfico premium, PSD editables y recursos digitales para marcas y negocios que quieren destacar.',
-    heroPrimary: 'Ver mi trabajo ↗',
-    heroSecondary: 'Comprar PSD →',
+      "Diseño gráfico premium, PSD editables y recursos digitales para marcas y negocios que quieren destacar.",
+    heroPrimary: "Ver mi trabajo ↗",
+    heroSecondary: "Comprar PSD →",
 
-    workEyebrow: '01 / PORTAFOLIO',
-    workTitle: 'Mi <em>trabajo.</em>',
+    workEyebrow: "01 / PORTAFOLIO",
+    workTitle: "Mi <em>trabajo.</em>",
+    filterAll: "Todo",
+    filterFlyers: "Flyers",
+    filterCovers: "Portadas",
+    filterLabels: "Etiquetas",
+    filterBranding: "Branding",
 
-    filterAll: 'Todo',
-    filterFlyers: 'Flyers',
-    filterCovers: 'Portadas',
-    filterLabels: 'Etiquetas',
-    filterBranding: 'Branding',
+    portfolioFlyer: "Campaña de flyer",
+    portfolioCover: "Diseño de portada",
+    portfolioLabel: "Etiqueta de producto",
+    portfolioBrand: "Identidad de marca",
+    portfolioEditorial: "Portada editorial",
 
-    portfolioFlyer: 'Campaña de flyer',
-    portfolioCover: 'Diseño de portada',
-    portfolioLabel: 'Etiqueta de producto',
-    portfolioBrand: 'Identidad de marca',
-    portfolioEvent: 'Flyer de evento',
-    portfolioEditorial: 'Portada editorial',
+    storeEyebrow: "02 / TIENDA DIGITAL",
+    storeTitle: "Tienda <em>PSD.</em>",
 
-    storeEyebrow: '02 / TIENDA DIGITAL',
-    storeTitle: 'Tienda <em>PSD.</em>',
-
-    buy: 'COMPRAR AHORA ↗',
+    buy: "COMPRAR AHORA ↗",
 
     storeNote:
-      '— La estructura de pago está lista para conectarse al backend.',
+      "— La estructura de pago está lista para conectarse al backend.",
 
-    freeEyebrow: '03 / RECURSOS GRATUITOS',
-    freeTitle: 'Recursos <em>gratis.</em>',
+    freeEyebrow: "03 / RECURSOS GRATUITOS",
+    freeTitle: "Recursos <em>gratis.</em>",
 
-    assetPNG: 'PNG',
-    assetTextures: 'Texturas',
-    assetMockups: 'Mockups',
+    assetPNG: "PNG",
+    assetTextures: "Texturas",
+    assetMockups: "Mockups",
 
     assetIntro:
-      'Elige una categoría para ver los archivos y descarga lo que necesitas.',
+      "Elige una categoría para ver los archivos y descarga lo que necesitas.",
 
-    assetLight: 'Efectos de luz PNG',
-    assetLightDesc: 'Efecto de luz transparente',
+    assetCake: "Pastel",
+    assetCakeDesc: "PNG gratis",
 
-    assetSparkles: 'Destellos dorados PNG',
-    assetSparklesDesc: 'Destellos transparentes',
+    assetBalloons: "Globos",
+    assetBalloonsDesc: "PNG gratis",
 
-    assetShapes: 'Formas abstractas PNG',
-    assetShapesDesc: 'Formas transparentes',
+    assetStars: "Estrellas",
+    assetStarsDesc: "PNG gratis",
 
-    assetGrain: 'Textura granulada',
-    assetGrainDesc: 'Textura de alta resolución',
+    asset4: "Asset PNG",
+    asset4Desc: "PNG gratis",
 
-    assetPaper: 'Textura de papel',
-    assetPaperDesc: 'Textura de alta resolución',
+    asset5: "Asset PNG",
+    asset5Desc: "PNG gratis",
 
-    assetGold: 'Textura dorada',
-    assetGoldDesc: 'Textura de alta resolución',
+    asset6: "Asset PNG",
+    asset6Desc: "PNG gratis",
 
-    assetCard: 'Mockup de tarjeta',
-    assetCardDesc: 'Mockup de presentación',
+    assetBackground1: "Background 01",
+    assetBackground1Desc: "Background gratis",
 
-    assetPhone: 'Mockup de teléfono',
-    assetPhoneDesc: 'Mockup de presentación',
+    assetBackground2: "Background 02",
+    assetBackground2Desc: "Background gratis",
 
-    assetPoster: 'Mockup de póster',
-    assetPosterDesc: 'Mockup de presentación',
+    assetBackground3: "Background 03",
+    assetBackground3Desc: "Background gratis",
 
-    download: 'DESCARGA GRATIS ↓',
+    assetBackground4: "Background 04",
+    assetBackground4Desc: "Background gratis",
+
+    assetBackground5: "Background 05",
+    assetBackground5Desc: "Background gratis",
+
+    assetBackground6: "Background 06",
+    assetBackground6Desc: "Background gratis",
+
+    assetGrain: "Textura granulada",
+    assetGrainDesc: "Textura de alta resolución",
+
+    assetPaper: "Textura de papel",
+    assetPaperDesc: "Textura de alta resolución",
+
+    assetGold: "Textura dorada",
+    assetGoldDesc: "Textura de alta resolución",
+
+    assetTexture4: "Textura 04",
+    assetTexture4Desc: "Textura de alta resolución",
+
+    assetTexture5: "Textura 05",
+    assetTexture5Desc: "Textura de alta resolución",
+
+    assetTexture6: "Textura 06",
+    assetTexture6Desc: "Textura de alta resolución",
+
+    assetCard: "Mockup de tarjeta",
+    assetCardDesc: "Mockup de presentación",
+
+    assetPhone: "Mockup de teléfono",
+    assetPhoneDesc: "Mockup de presentación",
+
+    assetPoster: "Mockup de póster",
+    assetPosterDesc: "Mockup de presentación",
+
+    assetMockup4: "Mockup 04",
+    assetMockup4Desc: "Mockup de presentación",
+
+    assetMockup5: "Mockup 05",
+    assetMockup5Desc: "Mockup de presentación",
+
+    assetMockup6: "Mockup 06",
+    assetMockup6Desc: "Mockup de presentación",
+
+    download: "DESCARGA GRATIS ↓",
 
     checkoutMessage:
-      'El backend de pago MonCash se conectará en el próximo paso.',
+      "El backend de pago MonCash se conectará en el próximo paso.",
 
-    servicesEyebrow: '04 / SERVICIOS',
-    servicesTitle: 'Servicios para <em>negocios.</em>',
+    servicesEyebrow: "04 / SERVICIOS",
+    servicesTitle: "Servicios para <em>negocios.</em>",
 
-    service1: '01 — Logo & Branding',
-    service2: '02 — Flyer & Redes sociales',
-    service3: '03 — Packaging & Etiquetas',
-    service4: '04 — Motion Design',
+    service1: "01 — Logo & Branding",
+    service2: "02 — Flyer & Redes sociales",
+    service3: "03 — Packaging & Etiquetas",
+    service4: "04 — Motion Design",
 
-    footer: 'Diseño gráfico · PSD · Recursos digitales',
+    footer:
+      "Diseño gráfico · PSD · Recursos digitales",
 
-    whatsapp: 'WhatsApp'
+    whatsapp: "WhatsApp"
   }
 
 };
 
 
 /* =========================================================
-   ASSET TRANSLATION KEYS
-========================================================= */
-
-Object.values(translations).forEach(function (t) {
-
-  Object.assign(t, {
-
-    assetCake: 'Gato fèt',
-    assetCakeDesc: 'PNG gratis',
-
-    assetBalloons: 'Balon fèt',
-    assetBalloonsDesc: 'PNG gratis',
-
-    assetStars: 'Zetwal',
-    assetStarsDesc: 'PNG gratis',
-
-    asset4: 'Asset PNG 04',
-    asset4Desc: 'PNG gratis',
-
-    asset5: 'Asset PNG 05',
-    asset5Desc: 'PNG gratis',
-
-    asset6: 'Asset PNG 06',
-    asset6Desc: 'PNG gratis',
-
-    assetBackground1: 'Background 01',
-    assetBackground1Desc: 'Background gratis',
-
-    assetBackground2: 'Background 02',
-    assetBackground2Desc: 'Background gratis',
-
-    assetBackground3: 'Background 03',
-    assetBackground3Desc: 'Background gratis',
-
-    assetBackground4: 'Background 04',
-    assetBackground4Desc: 'Background gratis',
-
-    assetBackground5: 'Background 05',
-    assetBackground5Desc: 'Background gratis',
-
-    assetBackground6: 'Background 06',
-    assetBackground6Desc: 'Background gratis',
-
-    assetTexture4: 'Texture 04',
-    assetTexture4Desc: 'Texture rezolisyon wo',
-
-    assetTexture5: 'Texture 05',
-    assetTexture5Desc: 'Texture rezolisyon wo',
-
-    assetTexture6: 'Texture 06',
-    assetTexture6Desc: 'Texture rezolisyon wo',
-
-    assetMockup4: 'Mockup 04',
-    assetMockup4Desc: 'Mockup prezantasyon',
-
-    assetMockup5: 'Mockup 05',
-    assetMockup5Desc: 'Mockup prezantasyon',
-
-    assetMockup6: 'Mockup 06',
-    assetMockup6Desc: 'Mockup prezantasyon'
-
-  });
-
-});
-
-
-/* =========================================================
-   ASSETS
-========================================================= */
+   FREE ASSETS
+   ========================================================= */
 
 const assets = {
 
   png: [
-
-    ['images/gato00.png', 'assetCake', 'assetCakeDesc'],
-    ['images/balonFet00.png', 'assetBalloons', 'assetBalloonsDesc'],
-    ['images/star00.png', 'assetStars', 'assetStarsDesc'],
-    ['images/asset4.png', 'asset4', 'asset4Desc'],
-    ['images/asset5.png', 'asset5', 'asset5Desc'],
-    ['images/asset6.png', 'asset6', 'asset6Desc']
-
+    ["images/gato00.png", "assetCake", "assetCakeDesc"],
+    ["images/balonFet00.png", "assetBalloons", "assetBalloonsDesc"],
+    ["images/star00.png", "assetStars", "assetStarsDesc"],
+    ["images/asset4.png", "asset4", "asset4Desc"],
+    ["images/asset5.png", "asset5", "asset5Desc"],
+    ["images/asset6.png", "asset6", "asset6Desc"]
   ],
-
 
   background: [
-
-    ['images/MEN STANDARD.png', 'assetBackground1', 'assetBackground1Desc'],
-    ['images/background2.jpg', 'assetBackground2', 'assetBackground2Desc'],
-    ['images/background3.jpg', 'assetBackground3', 'assetBackground3Desc'],
-    ['images/background4.jpg', 'assetBackground4', 'assetBackground4Desc'],
-    ['images/background5.jpg', 'assetBackground5', 'assetBackground5Desc'],
-    ['images/background6.jpg', 'assetBackground6', 'assetBackground6Desc']
-
+    ["images/MEN STANDARD.png", "assetBackground1", "assetBackground1Desc"],
+    ["images/background2.jpg", "assetBackground2", "assetBackground2Desc"],
+    ["images/background3.jpg", "assetBackground3", "assetBackground3Desc"],
+    ["images/background4.jpg", "assetBackground4", "assetBackground4Desc"],
+    ["images/background5.jpg", "assetBackground5", "assetBackground5Desc"],
+    ["images/background6.jpg", "assetBackground6", "assetBackground6Desc"]
   ],
-
 
   texture: [
-
-    ['images/texture-grain.png', 'assetGrain', 'assetGrainDesc'],
-    ['images/texture-paper.png', 'assetPaper', 'assetPaperDesc'],
-    ['images/texture-gold.png', 'assetGold', 'assetGoldDesc'],
-    ['images/texture-04.png', 'assetTexture4', 'assetTexture4Desc'],
-    ['images/texture-05.png', 'assetTexture5', 'assetTexture5Desc'],
-    ['images/texture-06.png', 'assetTexture6', 'assetTexture6Desc']
-
+    ["images/texture-grain.png", "assetGrain", "assetGrainDesc"],
+    ["images/texture-paper.png", "assetPaper", "assetPaperDesc"],
+    ["images/texture-gold.png", "assetGold", "assetGoldDesc"],
+    ["images/texture-04.png", "assetTexture4", "assetTexture4Desc"],
+    ["images/texture-05.png", "assetTexture5", "assetTexture5Desc"],
+    ["images/texture-06.png", "assetTexture6", "assetTexture6Desc"]
   ],
 
-
   mockup: [
-
-    ['images/mockup-card.png', 'assetCard', 'assetCardDesc'],
-    ['images/mockup-phone.png', 'assetPhone', 'assetPhoneDesc'],
-    ['images/mockup-poster.png', 'assetPoster', 'assetPosterDesc'],
-    ['images/mockup-04.png', 'assetMockup4', 'assetMockup4Desc'],
-    ['images/mockup-05.png', 'assetMockup5', 'assetMockup5Desc'],
-    ['images/mockup-06.png', 'assetMockup6', 'assetMockup6Desc']
-
+    ["images/mockup-card.png", "assetCard", "assetCardDesc"],
+    ["images/mockup-phone.png", "assetPhone", "assetPhoneDesc"],
+    ["images/mockup-poster.png", "assetPoster", "assetPosterDesc"],
+    ["images/mockup-04.png", "assetMockup4", "assetMockup4Desc"],
+    ["images/mockup-05.png", "assetMockup5", "assetMockup5Desc"],
+    ["images/mockup-06.png", "assetMockup6", "assetMockup6Desc"]
   ]
 
 };
@@ -520,50 +619,49 @@ const assets = {
 
 /* =========================================================
    PSD PRODUCTS
-========================================================= */
+   ========================================================= */
 
 const psdProducts = {
 
   free: [
 
     {
-      image: 'images/free-psd-01.jpg',
-      title: 'Free Flyer PSD',
-      description: 'PSD editab gratis',
-      file: 'files/free-flyer-01.psd'
+      image: "images/free-psd-01.jpg",
+      title: "Free Flyer PSD",
+      description: "PSD editab gratis",
+      file: "files/free-flyer-01.psd"
     },
 
     {
-      image: 'images/free-psd-02.jpg',
-      title: 'Free Social Media PSD',
-      description: 'PSD editab gratis',
-      file: 'files/free-social-02.psd'
+      image: "images/free-psd-02.jpg",
+      title: "Free Social Media PSD",
+      description: "PSD editab gratis",
+      file: "files/free-social-02.psd"
     }
 
   ],
 
-
   paid: [
 
     {
-      image: 'images/paid-psd-01.jpg',
-      title: 'Luxury Flyer PSD',
-      description: 'PSD premium editab',
-      price: '500 HTG'
+      image: "images/paid-psd-01.jpg",
+      title: "Luxury Flyer PSD",
+      description: "PSD premium editab",
+      price: "500 HTG"
     },
 
     {
-      image: 'images/paid-psd-02.jpg',
-      title: 'Premium Social Pack',
-      description: 'Pack PSD premium',
-      price: '750 HTG'
+      image: "images/paid-psd-02.jpg",
+      title: "Premium Social Pack",
+      description: "Pack PSD premium",
+      price: "750 HTG"
     },
 
     {
-      image: 'images/paid-psd-03.jpg',
-      title: 'Premium Label PSD',
-      description: 'PSD label premium',
-      price: '600 HTG'
+      image: "images/paid-psd-03.jpg",
+      title: "Premium Label PSD",
+      description: "PSD label premium",
+      price: "600 HTG"
     }
 
   ]
@@ -573,120 +671,103 @@ const psdProducts = {
 
 /* =========================================================
    GLOBAL STATE
-========================================================= */
+   ========================================================= */
 
 let currentLanguage =
-  localStorage.getItem('wise-language') || 'ht';
+  localStorage.getItem("wise-language") || "ht";
 
-let currentAssetType = 'png';
+let currentAssetType = "png";
 
 
 /* =========================================================
    RENDER PSD PRODUCTS
-========================================================= */
+   ========================================================= */
 
 function renderPSDProducts() {
 
-  const freeGrid = $('#free-psd-grid');
-  const paidGrid = $('#paid-psd-grid');
+  const freeGrid = $("#free-psd-grid");
+  const paidGrid = $("#paid-psd-grid");
 
   const t = translations[currentLanguage];
 
-
-  /* FREE PSD */
-
   if (freeGrid) {
 
-    freeGrid.innerHTML =
-      psdProducts.free.map(function (product) {
+    freeGrid.innerHTML = psdProducts.free.map(product => `
 
-        return `
-          <article class="store-card reveal visible">
+      <article class="store-card reveal visible">
 
-            <img
-              src="${product.image}"
-              alt="${product.title}"
-            >
+        <img
+          src="${product.image}"
+          alt="${product.title}"
+        >
 
-            <h3>${product.title}</h3>
+        <h3>${product.title}</h3>
 
-            <p>${product.description}</p>
+        <p>${product.description}</p>
 
-            <a
-              class="download"
-              href="${product.file}"
-              download
-            >
+        <a
+          class="download"
+          href="${product.file}"
+          download
+        >
 
-              <svg
-                class="download-icon"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  d="M12 3v10m0 0 4-4m-4 4-4-4M5 15v4h14v-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+          <svg
+            class="download-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 3v10m0 0 4-4m-4 4-4-4M5 15v4h14v-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
 
-              ${t.download}
+          ${t.download}
 
-            </a>
+        </a>
 
-          </article>
-        `;
+      </article>
 
-      }).join('');
-
+    `).join("");
   }
 
-
-  /* PAID PSD */
 
   if (paidGrid) {
 
-    paidGrid.innerHTML =
-      psdProducts.paid.map(function (product) {
+    paidGrid.innerHTML = psdProducts.paid.map(product => `
 
-        return `
-          <article class="store-card reveal visible">
+      <article class="store-card reveal visible">
 
-            <img
-              src="${product.image}"
-              alt="${product.title}"
-            >
+        <img
+          src="${product.image}"
+          alt="${product.title}"
+        >
 
-            <h3>${product.title}</h3>
+        <h3>${product.title}</h3>
 
-            <p>${product.description}</p>
+        <strong>${product.price}</strong>
 
-            <strong>${product.price}</strong>
+        <button
+          class="buy"
+          type="button"
+          data-product="${product.title}"
+        >
+          ${t.buy}
+        </button>
 
-            <button
-              class="buy"
-              type="button"
-              data-product="${product.title}"
-            >
-              ${t.buy}
-            </button>
+      </article>
 
-          </article>
-        `;
-
-      }).join('');
-
+    `).join("");
   }
 
 
-  /* BUY BUTTONS */
+  $$(".buy").forEach(button => {
 
-  $$('.buy').forEach(function (button) {
-
-    button.addEventListener('click', function () {
+    button.addEventListener("click", () => {
 
       alert(
         translations[currentLanguage].checkoutMessage
@@ -700,158 +781,131 @@ function renderPSDProducts() {
 
 
 /* =========================================================
-   RENDER ASSETS
-========================================================= */
+   RENDER FREE ASSETS
+   ========================================================= */
 
 function renderAssets() {
 
-  const grid = $('#asset-grid');
+  const grid = $("#asset-grid");
 
-  if (!grid) {
-    return;
-  }
+  if (!grid) return;
 
-  const t =
-    translations[currentLanguage];
+  const t = translations[currentLanguage];
 
-  const downloadLabel =
-    t.download.replace(/\s*↓/g, '');
+  const list = assets[currentAssetType] || [];
 
+  const downloadLabel = t.download;
 
-  grid.innerHTML =
-    assets[currentAssetType].map(
-      function ([file, titleKey, descriptionKey]) {
+  grid.innerHTML = list.map(
+    ([file, titleKey, descriptionKey]) => `
 
-        return `
-          <article class="asset-card reveal visible">
+      <article class="asset-card reveal visible">
 
-            <img
-              src="${file}"
-              alt="${t[titleKey] || titleKey}"
-            >
+        <img
+          src="${file}"
+          alt="${t[titleKey] || titleKey}"
+        >
 
-            <h3>
-              ${t[titleKey] || titleKey}
-            </h3>
+        <h3>
+          ${t[titleKey] || titleKey}
+        </h3>
 
-            <p>
-              ${t[descriptionKey] || descriptionKey}
-            </p>
+        <p>
+          ${t[descriptionKey] || descriptionKey}
+        </p>
 
-            <a
-              class="download"
-              href="${file}"
-              download
-            >
+        <a
+          class="download"
+          href="${file}"
+          download
+        >
 
-              <svg
-                class="download-icon"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
+          <svg
+            class="download-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 3v10m0 0 4-4m-4 4-4-4M5 15v4h14v-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
 
-                <path
-                  d="M12 3v10m0 0 4-4m-4 4-4-4M5 15v4h14v-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+          ${downloadLabel}
 
-              </svg>
+        </a>
 
-              ${downloadLabel}
+      </article>
 
-            </a>
-
-          </article>
-        `;
-
-      }
-    ).join('');
+    `
+  ).join("");
 
 }
 
 
 /* =========================================================
    LANGUAGE
-========================================================= */
+   ========================================================= */
 
 function setLanguage(language) {
 
   if (!translations[language]) {
-    language = 'ht';
+    language = "ht";
   }
 
   currentLanguage = language;
 
-  const t =
-    translations[language];
+  const t = translations[language];
 
-  document.documentElement.lang =
-    language;
+  document.documentElement.lang = language;
 
-  document.title =
-    'WISE.GRAPHIXDESIGN';
+  document.title = "WISE.GRAPHIXDESIGN STORE";
 
 
-  /* TEXT */
+  $$("[data-i18n]").forEach(element => {
 
-  $$('[data-i18n]').forEach(function (el) {
-
-    const key =
-      el.dataset.i18n;
+    const key = element.dataset.i18n;
 
     if (t[key] !== undefined) {
-
-      el.textContent =
-        t[key];
-
+      element.textContent = t[key];
     }
 
   });
 
 
-  /* HTML */
+  $$("[data-i18n-html]").forEach(element => {
 
-  $$('[data-i18n-html]').forEach(function (el) {
-
-    const key =
-      el.dataset.i18nHtml;
+    const key = element.dataset.i18nHtml;
 
     if (t[key] !== undefined) {
-
-      el.innerHTML =
-        t[key];
-
+      element.innerHTML = t[key];
     }
 
   });
 
 
-  /* LANGUAGE BUTTON */
-
-  const languageButton =
-    $('#lb');
+  const languageButton = $("#lb");
 
   if (languageButton) {
 
-    languageButton.innerHTML = `
-      🌐 ${t.name}
-      <span aria-hidden="true">▾</span>
-    `;
+    languageButton.innerHTML =
+      `🌐 ${t.name} <span aria-hidden="true">▾</span>`;
 
   }
 
 
   localStorage.setItem(
-    'wise-language',
+    "wise-language",
     language
   );
 
 
   renderAssets();
+
   renderPSDProducts();
 
 }
@@ -859,253 +913,197 @@ function setLanguage(language) {
 
 /* =========================================================
    LANGUAGE MENU
-========================================================= */
+   ========================================================= */
 
-const languageButton =
-  $('#lb');
+const languageButton = $("#lb");
+const languageMenu = $("#lm");
 
-if (languageButton) {
+if (languageButton && languageMenu) {
 
-  languageButton.addEventListener(
-    'click',
-    function () {
+  languageButton.addEventListener("click", event => {
 
-      const menu =
-        $('#lm');
+    event.stopPropagation();
 
-      if (!menu) {
-        return;
-      }
+    const open =
+      languageMenu.classList.toggle("open");
 
-      menu.classList.toggle('open');
+    languageButton.setAttribute(
+      "aria-expanded",
+      open ? "true" : "false"
+    );
 
-      languageButton.setAttribute(
-        'aria-expanded',
-        menu.classList.contains('open')
-      );
-
-    }
-  );
+  });
 
 }
 
 
-$$('[data-lang]').forEach(
-  function (button) {
+$$("[data-lang]").forEach(button => {
 
-    button.addEventListener(
-      'click',
-      function () {
+  button.addEventListener("click", () => {
 
-        setLanguage(
-          button.dataset.lang
-        );
+    setLanguage(button.dataset.lang);
 
-        const menu =
-          $('#lm');
+    if (languageMenu) {
+      languageMenu.classList.remove("open");
+    }
 
-        if (menu) {
-          menu.classList.remove('open');
-        }
+    if (languageButton) {
+      languageButton.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+    }
 
-        if (languageButton) {
+  });
 
-          languageButton.setAttribute(
-            'aria-expanded',
-            'false'
-          );
-
-        }
-
-      }
-    );
-
-  }
-);
+});
 
 
-/* CLOSE LANGUAGE MENU */
+document.addEventListener("click", event => {
 
-document.addEventListener(
-  'click',
-  function (event) {
+  if (!event.target.closest(".lang")) {
 
-    if (
-      !event.target.closest('.lang')
-    ) {
+    if (languageMenu) {
+      languageMenu.classList.remove("open");
+    }
 
-      const menu =
-        $('#lm');
-
-      if (menu) {
-        menu.classList.remove('open');
-      }
-
+    if (languageButton) {
+      languageButton.setAttribute(
+        "aria-expanded",
+        "false"
+      );
     }
 
   }
-);
+
+});
 
 
 /* =========================================================
-   PORTFOLIO FILTERS
-========================================================= */
+   PORTFOLIO FILTER
+   ========================================================= */
 
-$$('[data-filter]').forEach(
-  function (button) {
+$$("[data-filter]").forEach(button => {
 
-    button.addEventListener(
-      'click',
-      function () {
+  button.addEventListener("click", () => {
 
-        const filter =
-          button.dataset.filter;
+    const filter = button.dataset.filter;
 
+    $$("[data-filter]").forEach(item => {
 
-        $$('[data-filter]').forEach(
-          function (item) {
+      item.classList.toggle(
+        "active",
+        item === button
+      );
 
-            item.classList.toggle(
-              'active',
-              item === button
-            );
-
-          }
-        );
+    });
 
 
-        $$('.portfolio-card').forEach(
-          function (card) {
+    $$(".portfolio-card").forEach(card => {
 
-            card.hidden =
-              filter !== 'all' &&
-              card.dataset.category !== filter;
+      const visible =
+        filter === "all" ||
+        card.dataset.category === filter;
 
-          }
-        );
+      card.hidden = !visible;
 
-      }
-    );
+    });
 
-  }
-);
+  });
+
+});
 
 
 /* =========================================================
-   ASSET FILTER
-========================================================= */
+   ASSET CATEGORY
+   ========================================================= */
 
-$$('[data-asset-type]').forEach(
-  function (button) {
+$$("[data-asset-type]").forEach(button => {
 
-    button.addEventListener(
-      'click',
-      function () {
+  button.addEventListener("click", () => {
 
-        currentAssetType =
-          button.dataset.assetType;
+    currentAssetType =
+      button.dataset.assetType;
 
 
-        $$('[data-asset-type]').forEach(
-          function (item) {
+    $$("[data-asset-type]").forEach(item => {
 
-            const active =
-              item === button;
+      const active =
+        item === button;
 
-            item.classList.toggle(
-              'active',
-              active
-            );
+      item.classList.toggle(
+        "active",
+        active
+      );
 
-            item.setAttribute(
-              'aria-selected',
-              active
-            );
+      item.setAttribute(
+        "aria-selected",
+        active ? "true" : "false"
+      );
 
-          }
-        );
+    });
 
 
-        renderAssets();
+    renderAssets();
 
-      }
-    );
+  });
 
-  }
-);
+});
 
 
 /* =========================================================
    MOBILE MENU
-========================================================= */
+   ========================================================= */
 
-const mobileButton =
-  $('#mb');
+const menuButton = $("#mb");
+const mainNav = $("#main-nav");
 
-if (mobileButton) {
+if (menuButton && mainNav) {
 
-  mobileButton.addEventListener(
-    'click',
-    function () {
+  menuButton.addEventListener("click", () => {
 
-      const nav =
-        $('#main-nav');
+    const open =
+      mainNav.classList.toggle("open");
 
-      if (!nav) {
-        return;
-      }
+    menuButton.setAttribute(
+      "aria-expanded",
+      open ? "true" : "false"
+    );
 
-      nav.classList.toggle('open');
-
-      mobileButton.setAttribute(
-        'aria-expanded',
-        nav.classList.contains('open')
-      );
-
-    }
-  );
+  });
 
 }
 
 
-$$('#main-nav a').forEach(
-  function (link) {
+$$("#main-nav a").forEach(link => {
 
-    link.addEventListener(
-      'click',
-      function () {
+  link.addEventListener("click", () => {
 
-        const nav =
-          $('#main-nav');
+    if (mainNav) {
+      mainNav.classList.remove("open");
+    }
 
-        if (nav) {
-          nav.classList.remove('open');
-        }
+  });
 
-      }
-    );
-
-  }
-);
+});
 
 
 /* =========================================================
-   SCROLL REVEAL
-========================================================= */
+   REVEAL ANIMATION
+   ========================================================= */
 
-const observer =
-  new IntersectionObserver(
-    function (entries) {
+if ("IntersectionObserver" in window) {
 
-      entries.forEach(
-        function (entry) {
+  const observer =
+    new IntersectionObserver(
+      entries => {
 
-          if (
-            entry.isIntersecting
-          ) {
+        entries.forEach(entry => {
+
+          if (entry.isIntersecting) {
 
             entry.target.classList.add(
-              'visible'
+              "visible"
             );
 
             observer.unobserve(
@@ -1114,127 +1112,99 @@ const observer =
 
           }
 
-        }
-      );
+        });
 
-    },
-    {
-      threshold: 0.12
-    }
-  );
+      },
+      {
+        threshold: 0.12
+      }
+    );
 
 
-$$('.reveal').forEach(
-  function (el) {
+  $$(".reveal").forEach(element => {
 
-    observer.observe(el);
+    observer.observe(element);
 
-  }
-);
+  });
+
+} else {
+
+  $$(".reveal").forEach(element => {
+
+    element.classList.add("visible");
+
+  });
+
+}
 
 
 /* =========================================================
    HERO SLIDESHOW
-========================================================= */
+   ========================================================= */
 
 const heroSlides =
-  document.querySelectorAll(
-    '.hero-slideshow .slide'
-  );
+  $$(".hero-slideshow .slide");
 
 const heroDots =
-  document.querySelectorAll(
-    '.slide-dots .dot'
-  );
+  $$(".slide-dots .dot");
 
+let currentSlide = 0;
 
 if (heroSlides.length > 0) {
 
-  let currentSlide = 0;
+  heroSlides.forEach((slide, index) => {
 
-  heroSlides[0].classList.add(
-    'active'
-  );
-
-
-  if (heroDots.length > 0) {
-
-    heroDots[0].classList.add(
-      'active'
+    slide.classList.toggle(
+      "active",
+      index === 0
     );
 
-  }
+  });
 
 
   if (heroSlides.length > 1) {
 
-    setInterval(
-      function () {
+    setInterval(() => {
 
-        const oldSlide =
-          heroSlides[currentSlide];
+      const oldSlide =
+        heroSlides[currentSlide];
 
+      currentSlide =
+        (currentSlide + 1) %
+        heroSlides.length;
 
-        currentSlide =
-          (currentSlide + 1) %
-          heroSlides.length;
-
-
-        const newSlide =
-          heroSlides[currentSlide];
+      const newSlide =
+        heroSlides[currentSlide];
 
 
-        newSlide.classList.remove(
-          'prev'
+      oldSlide.classList.remove("active");
+
+      oldSlide.classList.add("prev");
+
+
+      newSlide.classList.remove("prev");
+
+      newSlide.classList.add("active");
+
+
+      heroDots.forEach((dot, index) => {
+
+        dot.classList.toggle(
+          "active",
+          index === currentSlide
         );
 
-        newSlide.classList.add(
-          'active'
-        );
+      });
 
 
-        oldSlide.classList.remove(
-          'active'
-        );
+      setTimeout(() => {
 
-        oldSlide.classList.add(
-          'prev'
-        );
+        oldSlide.classList.remove("prev");
+
+      }, 1500);
 
 
-        heroDots.forEach(
-          function (dot) {
-
-            dot.classList.remove(
-              'active'
-            );
-
-          }
-        );
-
-
-        if (heroDots[currentSlide]) {
-
-          heroDots[currentSlide]
-            .classList.add('active');
-
-        }
-
-
-        setTimeout(
-          function () {
-
-            oldSlide.classList.remove(
-              'prev'
-            );
-
-          },
-          1500
-        );
-
-      },
-      6000
-    );
+    }, 6000);
 
   }
 
@@ -1242,97 +1212,68 @@ if (heroSlides.length > 0) {
 
 
 /* =========================================================
-   INITIAL LANGUAGE
-========================================================= */
-
-setLanguage(
-  currentLanguage
-);
-
-
-/* =========================================================
-   PROFESSIONAL IMAGE LIGHTBOX
-========================================================= */
+   LIGHTBOX
+   ========================================================= */
 
 document.addEventListener(
-  'DOMContentLoaded',
-  function () {
+  "DOMContentLoaded",
+  () => {
 
     const lightbox =
-      document.getElementById(
-        'image-lightbox'
-      );
-
-    const lightboxContent =
-      document.getElementById(
-        'lightbox-content'
-      );
+      $("#image-lightbox");
 
     const lightboxImage =
-      document.getElementById(
-        'lightbox-image'
-      );
+      $("#lightbox-image");
+
+    const lightboxContent =
+      $(".lightbox-content");
 
     const closeButton =
-      document.getElementById(
-        'lightbox-close'
-      );
+      $("#lightbox-close");
 
-    const prevButton =
-      document.getElementById(
-        'lightbox-prev'
-      );
+    const previousButton =
+      $("#lightbox-prev");
 
     const nextButton =
-      document.getElementById(
-        'lightbox-next'
-      );
+      $("#lightbox-next");
 
     const zoomInButton =
-      document.getElementById(
-        'lightbox-zoom-in'
-      );
+      $("#zoom-in");
 
     const zoomOutButton =
-      document.getElementById(
-        'lightbox-zoom-out'
-      );
+      $("#zoom-out");
 
-    const resetButton =
-      document.getElementById(
-        'lightbox-reset'
-      );
+    const zoomResetButton =
+      $("#zoom-reset");
 
 
     if (
       !lightbox ||
+      !lightboxImage ||
       !lightboxContent ||
-      !lightboxImage
+      !closeButton
     ) {
-
       return;
-
     }
 
 
     /* =====================================================
-       ZOOM SETTINGS
-    ===================================================== */
+       ZOOM VARIABLES
+       ===================================================== */
+
+    let zoomLevel = 1;
 
     const MIN_ZOOM = 1;
     const MAX_ZOOM = 5;
     const ZOOM_STEP = 0.25;
-
-
-    let zoomLevel = 1;
 
     let imageX = 0;
     let imageY = 0;
 
 
     /* =====================================================
-       DRAG
-    ===================================================== */
+       DRAG VARIABLES
+       ===================================================== */
 
     let isDragging = false;
 
@@ -1345,7 +1286,7 @@ document.addEventListener(
 
     /* =====================================================
        IMAGE LIST
-    ===================================================== */
+       ===================================================== */
 
     let lightboxImages = [];
 
@@ -1353,63 +1294,19 @@ document.addEventListener(
 
 
     /* =====================================================
-       GET IMAGES
-    ===================================================== */
-
-    function getLightboxImages() {
-
-      return [
-        ...document.querySelectorAll(
-          '.portfolio-card img, .store-card img, .asset-card img, .hero-slideshow img'
-        )
-      ].filter(
-        function (img) {
-
-          const card =
-            img.closest('article');
-
-
-          if (
-            card &&
-            card.hidden
-          ) {
-
-            return false;
-
-          }
-
-
-          return img.src;
-
-        }
-      );
-
-    }
-
-
-    /* =====================================================
        UPDATE ZOOM
-    ===================================================== */
+       ===================================================== */
 
     function updateZoom() {
 
       lightboxImage.style.transform =
-        `translate3d(${imageX}px, ${imageY}px, 0) scale(${zoomLevel})`;
+        `translate(${imageX}px, ${imageY}px) scale(${zoomLevel})`;
 
 
-      lightboxImage.style.cursor =
-        zoomLevel > 1
-          ? 'grab'
-          : 'zoom-in';
+      if (zoomResetButton) {
 
-
-      if (resetButton) {
-
-        resetButton.innerHTML = `
-          <span class="zoom-percent">
-            ${Math.round(zoomLevel * 100)}%
-          </span>
-        `;
+        zoomResetButton.textContent =
+          `${Math.round(zoomLevel * 100)}%`;
 
       }
 
@@ -1418,7 +1315,7 @@ document.addEventListener(
 
     /* =====================================================
        RESET
-    ===================================================== */
+       ===================================================== */
 
     function resetZoom() {
 
@@ -1434,23 +1331,15 @@ document.addEventListener(
 
     /* =====================================================
        ZOOM IN
-    ===================================================== */
+       ===================================================== */
 
     function zoomIn() {
 
-      zoomLevel +=
-        ZOOM_STEP;
+      zoomLevel += ZOOM_STEP;
 
-
-      if (
-        zoomLevel > MAX_ZOOM
-      ) {
-
-        zoomLevel =
-          MAX_ZOOM;
-
+      if (zoomLevel > MAX_ZOOM) {
+        zoomLevel = MAX_ZOOM;
       }
-
 
       updateZoom();
 
@@ -1459,33 +1348,22 @@ document.addEventListener(
 
     /* =====================================================
        ZOOM OUT
-    ===================================================== */
+       ===================================================== */
 
     function zoomOut() {
 
-      zoomLevel -=
-        ZOOM_STEP;
+      zoomLevel -= ZOOM_STEP;
 
-
-      if (
-        zoomLevel < MIN_ZOOM
-      ) {
-
-        zoomLevel =
-          MIN_ZOOM;
-
+      if (zoomLevel < MIN_ZOOM) {
+        zoomLevel = MIN_ZOOM;
       }
 
-
-      if (
-        zoomLevel === 1
-      ) {
+      if (zoomLevel === 1) {
 
         imageX = 0;
         imageY = 0;
 
       }
-
 
       updateZoom();
 
@@ -1493,39 +1371,83 @@ document.addEventListener(
 
 
     /* =====================================================
-       SHOW CURRENT IMAGE
-    ===================================================== */
+       GET AVAILABLE IMAGES
+       ===================================================== */
 
-    function showLightboxImage() {
+    function getLightboxImages() {
 
-      const image =
-        lightboxImages[
-          currentImageIndex
-        ];
+      return [
 
+        ...document.querySelectorAll(
+          ".portfolio-card img, " +
+          ".store-card img, " +
+          ".asset-card img, " +
+          ".hero-slideshow img"
+        )
 
-      if (!image) {
-        return;
-      }
+      ].filter(image => {
 
+        const card =
+          image.closest("article");
 
-      lightboxImage.src =
-        image.currentSrc ||
-        image.src;
+        if (card && card.hidden) {
+          return false;
+        }
 
+        return image.offsetParent !== null;
 
-      lightboxImage.alt =
-        image.alt || '';
-
-
-      resetZoom();
+      });
 
     }
 
 
     /* =====================================================
-       OPEN
-    ===================================================== */
+       SHOW IMAGE
+       ===================================================== */
+
+    function showCurrentImage() {
+
+      const image =
+        lightboxImages[currentImageIndex];
+
+      if (!image) return;
+
+
+      lightboxImage.src =
+        image.currentSrc || image.src;
+
+      lightboxImage.alt =
+        image.alt || "";
+
+
+      resetZoom();
+
+
+      if (previousButton) {
+
+        previousButton.style.display =
+          lightboxImages.length > 1
+            ? "grid"
+            : "none";
+
+      }
+
+
+      if (nextButton) {
+
+        nextButton.style.display =
+          lightboxImages.length > 1
+            ? "grid"
+            : "none";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       OPEN LIGHTBOX
+       ===================================================== */
 
     function openLightbox(image) {
 
@@ -1534,59 +1456,41 @@ document.addEventListener(
 
 
       currentImageIndex =
-        lightboxImages.indexOf(
-          image
-        );
+        lightboxImages.indexOf(image);
 
 
-      if (
-        currentImageIndex < 0
-      ) {
-
+      if (currentImageIndex < 0) {
         currentImageIndex = 0;
-
       }
 
 
-      showLightboxImage();
+      showCurrentImage();
 
 
       lightbox.hidden = false;
 
-      lightbox.setAttribute(
-        'aria-hidden',
-        'false'
-      );
-
-
       document.body.classList.add(
-        'lightbox-open'
+        "lightbox-open"
       );
 
     }
 
 
     /* =====================================================
-       CLOSE
-    ===================================================== */
+       CLOSE LIGHTBOX
+       ===================================================== */
 
     function closeLightbox() {
 
       lightbox.hidden = true;
 
-      lightbox.setAttribute(
-        'aria-hidden',
-        'true'
-      );
-
-
-      lightboxImage.src = '';
-
+      lightboxImage.src = "";
 
       document.body.classList.remove(
-        'lightbox-open'
+        "lightbox-open"
       );
 
+      isDragging = false;
 
       resetZoom();
 
@@ -1594,55 +1498,17 @@ document.addEventListener(
 
 
     /* =====================================================
-       PREVIOUS
-    ===================================================== */
-
-    function showPreviousImage() {
-
-      if (
-        lightboxImages.length <= 1
-      ) {
-
-        return;
-
-      }
-
-
-      currentImageIndex--;
-
-
-      if (
-        currentImageIndex < 0
-      ) {
-
-        currentImageIndex =
-          lightboxImages.length - 1;
-
-      }
-
-
-      showLightboxImage();
-
-    }
-
-
-    /* =====================================================
-       NEXT
-    ===================================================== */
+       NEXT IMAGE
+       ===================================================== */
 
     function showNextImage() {
 
-      if (
-        lightboxImages.length <= 1
-      ) {
-
+      if (lightboxImages.length <= 1) {
         return;
-
       }
 
 
       currentImageIndex++;
-
 
       if (
         currentImageIndex >=
@@ -1654,22 +1520,51 @@ document.addEventListener(
       }
 
 
-      showLightboxImage();
+      showCurrentImage();
+
+    }
+
+
+    /* =====================================================
+       PREVIOUS IMAGE
+       ===================================================== */
+
+    function showPreviousImage() {
+
+      if (lightboxImages.length <= 1) {
+        return;
+      }
+
+
+      currentImageIndex--;
+
+      if (currentImageIndex < 0) {
+
+        currentImageIndex =
+          lightboxImages.length - 1;
+
+      }
+
+
+      showCurrentImage();
 
     }
 
 
     /* =====================================================
        CLICK WEBSITE IMAGES
-    ===================================================== */
+       ===================================================== */
 
     document.addEventListener(
-      'click',
-      function (event) {
+      "click",
+      event => {
 
         const image =
           event.target.closest(
-            '.portfolio-card img, .store-card img, .asset-card img, .hero-slideshow img'
+            ".portfolio-card img, " +
+            ".store-card img, " +
+            ".asset-card img, " +
+            ".hero-slideshow img"
           );
 
 
@@ -1678,6 +1573,8 @@ document.addEventListener(
         }
 
 
+        event.preventDefault();
+
         openLightbox(image);
 
       }
@@ -1685,54 +1582,50 @@ document.addEventListener(
 
 
     /* =====================================================
-       CLOSE
-    ===================================================== */
+       CLOSE BUTTON
+       ===================================================== */
 
-    if (closeButton) {
+    closeButton.addEventListener(
+      "click",
+      event => {
 
-      closeButton.addEventListener(
-        'click',
-        function (event) {
+        event.stopPropagation();
 
-          event.stopPropagation();
+        closeLightbox();
+
+      }
+    );
+
+
+    /* =====================================================
+       OUTSIDE CLICK
+       ===================================================== */
+
+    lightbox.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target === lightbox
+        ) {
 
           closeLightbox();
 
         }
-      );
 
-    }
-
-
-    /* =====================================================
-       PREVIOUS
-    ===================================================== */
-
-    if (prevButton) {
-
-      prevButton.addEventListener(
-        'click',
-        function (event) {
-
-          event.stopPropagation();
-
-          showPreviousImage();
-
-        }
-      );
-
-    }
+      }
+    );
 
 
     /* =====================================================
-       NEXT
-    ===================================================== */
+       NEXT BUTTON
+       ===================================================== */
 
     if (nextButton) {
 
       nextButton.addEventListener(
-        'click',
-        function (event) {
+        "click",
+        event => {
 
           event.stopPropagation();
 
@@ -1745,14 +1638,34 @@ document.addEventListener(
 
 
     /* =====================================================
-       ZOOM IN
-    ===================================================== */
+       PREVIOUS BUTTON
+       ===================================================== */
+
+    if (previousButton) {
+
+      previousButton.addEventListener(
+        "click",
+        event => {
+
+          event.stopPropagation();
+
+          showPreviousImage();
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       ZOOM IN BUTTON
+       ===================================================== */
 
     if (zoomInButton) {
 
       zoomInButton.addEventListener(
-        'click',
-        function (event) {
+        "click",
+        event => {
 
           event.stopPropagation();
 
@@ -1765,14 +1678,14 @@ document.addEventListener(
 
 
     /* =====================================================
-       ZOOM OUT
-    ===================================================== */
+       ZOOM OUT BUTTON
+       ===================================================== */
 
     if (zoomOutButton) {
 
       zoomOutButton.addEventListener(
-        'click',
-        function (event) {
+        "click",
+        event => {
 
           event.stopPropagation();
 
@@ -1785,14 +1698,14 @@ document.addEventListener(
 
 
     /* =====================================================
-       RESET
-    ===================================================== */
+       RESET BUTTON
+       ===================================================== */
 
-    if (resetButton) {
+    if (zoomResetButton) {
 
-      resetButton.addEventListener(
-        'click',
-        function (event) {
+      zoomResetButton.addEventListener(
+        "click",
+        event => {
 
           event.stopPropagation();
 
@@ -1805,40 +1718,16 @@ document.addEventListener(
 
 
     /* =====================================================
-       CLICK OUTSIDE IMAGE
-    ===================================================== */
-
-    lightbox.addEventListener(
-      'click',
-      function (event) {
-
-        if (
-          event.target === lightbox ||
-          event.target === lightboxContent
-        ) {
-
-          closeLightbox();
-
-        }
-
-      }
-    );
-
-
-    /* =====================================================
        MOUSE WHEEL ZOOM
-    ===================================================== */
+       ===================================================== */
 
     lightboxContent.addEventListener(
-      'wheel',
-      function (event) {
+      "wheel",
+      event => {
 
         event.preventDefault();
 
-
-        if (
-          event.deltaY < 0
-        ) {
+        if (event.deltaY < 0) {
 
           zoomIn();
 
@@ -1856,31 +1745,33 @@ document.addEventListener(
 
 
     /* =====================================================
-       MOUSE DRAG
-    ===================================================== */
+       MOUSE DRAG START
+       ===================================================== */
 
     lightboxContent.addEventListener(
-      'mousedown',
-      function (event) {
+      "mousedown",
+      event => {
+
+        if (zoomLevel <= 1) {
+          return;
+        }
+
 
         if (
-          zoomLevel <= 1
+          event.target !==
+          lightboxImage
         ) {
-
           return;
-
         }
 
 
         isDragging = true;
-
 
         dragStartX =
           event.clientX;
 
         dragStartY =
           event.clientY;
-
 
         dragStartImageX =
           imageX;
@@ -1890,15 +1781,19 @@ document.addEventListener(
 
 
         lightboxImage.style.cursor =
-          'grabbing';
+          "grabbing";
 
       }
     );
 
 
+    /* =====================================================
+       MOUSE DRAG MOVE
+       ===================================================== */
+
     document.addEventListener(
-      'mousemove',
-      function (event) {
+      "mousemove",
+      event => {
 
         if (!isDragging) {
           return;
@@ -1907,33 +1802,27 @@ document.addEventListener(
 
         imageX =
           dragStartImageX +
-          (
-            event.clientX -
-            dragStartX
-          );
+          (event.clientX - dragStartX);
 
 
         imageY =
           dragStartImageY +
-          (
-            event.clientY -
-            dragStartY
-          );
+          (event.clientY - dragStartY);
 
 
         updateZoom();
-
-
-        lightboxImage.style.cursor =
-          'grabbing';
 
       }
     );
 
 
+    /* =====================================================
+       MOUSE DRAG END
+       ===================================================== */
+
     document.addEventListener(
-      'mouseup',
-      function () {
+      "mouseup",
+      () => {
 
         if (!isDragging) {
           return;
@@ -1942,11 +1831,8 @@ document.addEventListener(
 
         isDragging = false;
 
-
         lightboxImage.style.cursor =
-          zoomLevel > 1
-            ? 'grab'
-            : 'zoom-in';
+          "grab";
 
       }
     );
@@ -1954,46 +1840,39 @@ document.addEventListener(
 
     /* =====================================================
        TOUCH / PINCH
-    ===================================================== */
+       ===================================================== */
 
     let touchStartDistance = 0;
 
-    let touchStartZoom = 1;
-
+    let touchStartScale = 1;
 
     let touchStartX = 0;
     let touchStartY = 0;
-
 
     let touchStartImageX = 0;
     let touchStartImageY = 0;
 
 
-    function getTouchDistance(
-      touches
-    ) {
+    function getTouchDistance(touches) {
 
       const dx =
         touches[0].clientX -
         touches[1].clientX;
 
-
       const dy =
         touches[0].clientY -
         touches[1].clientY;
 
-
       return Math.sqrt(
-        dx * dx +
-        dy * dy
+        dx * dx + dy * dy
       );
 
     }
 
 
     lightboxContent.addEventListener(
-      'touchstart',
-      function (event) {
+      "touchstart",
+      event => {
 
         if (
           event.touches.length === 2
@@ -2004,12 +1883,10 @@ document.addEventListener(
               event.touches
             );
 
-
-          touchStartZoom =
+          touchStartScale =
             zoomLevel;
 
         }
-
 
         else if (
           event.touches.length === 1 &&
@@ -2019,14 +1896,11 @@ document.addEventListener(
           touchStartX =
             event.touches[0].clientX;
 
-
           touchStartY =
             event.touches[0].clientY;
 
-
           touchStartImageX =
             imageX;
-
 
           touchStartImageY =
             imageY;
@@ -2041,8 +1915,8 @@ document.addEventListener(
 
 
     lightboxContent.addEventListener(
-      'touchmove',
-      function (event) {
+      "touchmove",
+      event => {
 
         event.preventDefault();
 
@@ -2059,9 +1933,7 @@ document.addEventListener(
             );
 
 
-          if (
-            touchStartDistance > 0
-          ) {
+          if (touchStartDistance > 0) {
 
             const ratio =
               currentDistance /
@@ -2069,7 +1941,7 @@ document.addEventListener(
 
 
             zoomLevel =
-              touchStartZoom *
+              touchStartScale *
               ratio;
 
 
@@ -2102,7 +1974,7 @@ document.addEventListener(
         }
 
 
-        /* TOUCH DRAG */
+        /* DRAG */
 
         else if (
           event.touches.length === 1 &&
@@ -2111,7 +1983,6 @@ document.addEventListener(
 
           const currentX =
             event.touches[0].clientX;
-
 
           const currentY =
             event.touches[0].clientY;
@@ -2146,25 +2017,21 @@ document.addEventListener(
 
     /* =====================================================
        KEYBOARD
-    ===================================================== */
+       ===================================================== */
 
     document.addEventListener(
-      'keydown',
-      function (event) {
+      "keydown",
+      event => {
 
-        if (
-          lightbox.hidden
-        ) {
-
+        if (lightbox.hidden) {
           return;
-
         }
 
 
         /* ESC */
 
         if (
-          event.key === 'Escape'
+          event.key === "Escape"
         ) {
 
           closeLightbox();
@@ -2174,8 +2041,8 @@ document.addEventListener(
 
         /* LEFT */
 
-        else if (
-          event.key === 'ArrowLeft'
+        if (
+          event.key === "ArrowLeft"
         ) {
 
           showPreviousImage();
@@ -2185,8 +2052,8 @@ document.addEventListener(
 
         /* RIGHT */
 
-        else if (
-          event.key === 'ArrowRight'
+        if (
+          event.key === "ArrowRight"
         ) {
 
           showNextImage();
@@ -2196,9 +2063,9 @@ document.addEventListener(
 
         /* PLUS */
 
-        else if (
-          event.key === '+' ||
-          event.key === '='
+        if (
+          event.key === "+" ||
+          event.key === "="
         ) {
 
           zoomIn();
@@ -2208,8 +2075,8 @@ document.addEventListener(
 
         /* MINUS */
 
-        else if (
-          event.key === '-'
+        if (
+          event.key === "-"
         ) {
 
           zoomOut();
@@ -2219,8 +2086,8 @@ document.addEventListener(
 
         /* RESET */
 
-        else if (
-          event.key.toLowerCase() === 'r'
+        if (
+          event.key.toLowerCase() === "r"
         ) {
 
           resetZoom();
@@ -2230,5 +2097,13 @@ document.addEventListener(
       }
     );
 
+
   }
 );
+
+
+/* =========================================================
+   INITIALIZE WEBSITE
+   ========================================================= */
+
+setLanguage(currentLanguage);
