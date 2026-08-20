@@ -37,37 +37,46 @@ document.addEventListener("DOMContentLoaded", () => {
   const languageButton = document.getElementById("lb");
   const languageMenu = document.getElementById("lm");
 
+
   if (languageButton && languageMenu) {
 
     languageButton.addEventListener("click", event => {
+
       event.stopPropagation();
 
-      const open = languageMenu.classList.toggle("open");
+      const open =
+        languageMenu.classList.toggle("open");
 
       languageButton.setAttribute(
         "aria-expanded",
         String(open)
       );
+
     });
 
-    languageMenu.querySelectorAll("[data-lang]").forEach(button => {
 
-      button.addEventListener("click", () => {
+    languageMenu
+      .querySelectorAll("[data-lang]")
+      .forEach(button => {
 
-        const language = button.dataset.lang;
+        button.addEventListener("click", () => {
 
-        setLanguage(language);
+          const language =
+            button.dataset.lang;
 
-        languageMenu.classList.remove("open");
+          setLanguage(language);
 
-        languageButton.setAttribute(
-          "aria-expanded",
-          "false"
-        );
+          languageMenu.classList.remove("open");
+
+          languageButton.setAttribute(
+            "aria-expanded",
+            "false"
+          );
+
+        });
 
       });
 
-    });
 
     document.addEventListener("click", event => {
 
@@ -75,15 +84,18 @@ document.addEventListener("DOMContentLoaded", () => {
         !languageMenu.contains(event.target) &&
         !languageButton.contains(event.target)
       ) {
+
         languageMenu.classList.remove("open");
 
         languageButton.setAttribute(
           "aria-expanded",
           "false"
         );
+
       }
 
     });
+
   }
 
 
@@ -150,6 +162,9 @@ document.addEventListener("DOMContentLoaded", () => {
       assetPNG:
         "PNG",
 
+      assetBackground:
+        "Background",
+
       assetTextures:
         "Textures",
 
@@ -196,7 +211,22 @@ document.addEventListener("DOMContentLoaded", () => {
         "Design grafik · PSD · Asset dijital",
 
       whatsapp:
-        "WhatsApp"
+        "WhatsApp",
+
+      downloadFree:
+        "Telechaje gratis",
+
+      buyNow:
+        "Achte kounye a →",
+
+      paymentNotConnected:
+        "Sistèm peman an poko konekte.",
+
+      addDownload:
+        "Ajoute chemen fichye download la nan script.js.",
+
+      paid:
+        "PAID"
 
     },
 
@@ -266,6 +296,9 @@ document.addEventListener("DOMContentLoaded", () => {
       assetPNG:
         "PNG",
 
+      assetBackground:
+        "Backgrounds",
+
       assetTextures:
         "Textures",
 
@@ -312,7 +345,22 @@ document.addEventListener("DOMContentLoaded", () => {
         "Graphic Design · PSD · Digital Assets",
 
       whatsapp:
-        "WhatsApp"
+        "WhatsApp",
+
+      downloadFree:
+        "Download free",
+
+      buyNow:
+        "Buy now →",
+
+      paymentNotConnected:
+        "Payment system is not connected yet.",
+
+      addDownload:
+        "Add the download file path in script.js.",
+
+      paid:
+        "PAID"
 
     },
 
@@ -382,6 +430,9 @@ document.addEventListener("DOMContentLoaded", () => {
       assetPNG:
         "PNG",
 
+      assetBackground:
+        "Arrière-plans",
+
       assetTextures:
         "Textures",
 
@@ -428,7 +479,22 @@ document.addEventListener("DOMContentLoaded", () => {
         "Design graphique · PSD · Assets digitaux",
 
       whatsapp:
-        "WhatsApp"
+        "WhatsApp",
+
+      downloadFree:
+        "Télécharger gratuitement",
+
+      buyNow:
+        "Acheter maintenant →",
+
+      paymentNotConnected:
+        "Le système de paiement n'est pas encore connecté.",
+
+      addDownload:
+        "Ajoutez le chemin du fichier dans script.js.",
+
+      paid:
+        "PAYANT"
 
     },
 
@@ -498,6 +564,9 @@ document.addEventListener("DOMContentLoaded", () => {
       assetPNG:
         "PNG",
 
+      assetBackground:
+        "Fondos",
+
       assetTextures:
         "Texturas",
 
@@ -544,11 +613,34 @@ document.addEventListener("DOMContentLoaded", () => {
         "Diseño gráfico · PSD · Assets digitales",
 
       whatsapp:
-        "WhatsApp"
+        "WhatsApp",
+
+      downloadFree:
+        "Descargar gratis",
+
+      buyNow:
+        "Comprar ahora →",
+
+      paymentNotConnected:
+        "El sistema de pago aún no está conectado.",
+
+      addDownload:
+        "Añade la ruta del archivo en script.js.",
+
+      paid:
+        "PAGO"
 
     }
 
   };
+
+
+  /* =======================================================
+     CURRENT LANGUAGE
+  ======================================================= */
+
+  let currentLanguage =
+    localStorage.getItem("wiseLanguage") || "ht";
 
 
   /* =======================================================
@@ -560,40 +652,69 @@ document.addEventListener("DOMContentLoaded", () => {
     const dictionary =
       translations[language] || translations.ht;
 
-    document.documentElement.lang = language;
+    currentLanguage =
+      translations[language]
+        ? language
+        : "ht";
 
-    document.querySelectorAll("[data-i18n]").forEach(element => {
-
-      const key = element.dataset.i18n;
-
-      if (
-        Object.prototype.hasOwnProperty.call(dictionary, key)
-      ) {
-        element.textContent = dictionary[key];
-      }
-
-    });
+    document.documentElement.lang =
+      currentLanguage;
 
 
-    document.querySelectorAll("[data-i18n-html]").forEach(element => {
+    document
+      .querySelectorAll("[data-i18n]")
+      .forEach(element => {
 
-      const key = element.dataset.i18nHtml;
+        const key =
+          element.dataset.i18n;
 
-      if (
-        Object.prototype.hasOwnProperty.call(dictionary, key)
-      ) {
-        element.innerHTML = dictionary[key];
-      }
+        if (
+          Object.prototype.hasOwnProperty.call(
+            dictionary,
+            key
+          )
+        ) {
 
-    });
+          element.textContent =
+            dictionary[key];
+
+        }
+
+      });
+
+
+    document
+      .querySelectorAll("[data-i18n-html]")
+      .forEach(element => {
+
+        const key =
+          element.dataset.i18nHtml;
+
+        if (
+          Object.prototype.hasOwnProperty.call(
+            dictionary,
+            key
+          )
+        ) {
+
+          element.innerHTML =
+            dictionary[key];
+
+        }
+
+      });
 
 
     const selectedLanguage =
       document.querySelector(
-        `[data-lang="${language}"]`
+        `[data-lang="${currentLanguage}"]`
       );
 
-    if (selectedLanguage && languageButton) {
+
+    if (
+      selectedLanguage &&
+      languageButton
+    ) {
 
       languageButton.innerHTML =
         selectedLanguage.innerHTML +
@@ -601,17 +722,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+
     localStorage.setItem(
       "wiseLanguage",
-      language
+      currentLanguage
     );
+
+
+    /*
+      Si asset cards yo deja sou paj la,
+      mete lang aktyèl la sou bouton yo.
+    */
+
+    updateAssetButtonLanguages();
+
   }
-
-
-  const savedLanguage =
-    localStorage.getItem("wiseLanguage") || "ht";
-
-  setLanguage(savedLanguage);
 
 
   /* =======================================================
@@ -620,37 +745,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const slides =
     Array.from(
-      document.querySelectorAll(".hero-slideshow .slide")
+      document.querySelectorAll(
+        ".hero-slideshow .slide"
+      )
     );
+
 
   const dots =
     Array.from(
-      document.querySelectorAll(".slide-dots .dot")
+      document.querySelectorAll(
+        ".slide-dots .dot"
+      )
     );
+
 
   let currentSlide = 0;
   let slideshowTimer = null;
+
 
   function showSlide(index) {
 
     if (!slides.length) return;
 
     currentSlide =
-      (index + slides.length) % slides.length;
+      (index + slides.length) %
+      slides.length;
+
 
     slides.forEach((slide, i) => {
+
       slide.classList.toggle(
         "active",
         i === currentSlide
       );
+
     });
 
+
     dots.forEach((dot, i) => {
+
       dot.classList.toggle(
         "active",
         i === currentSlide
       );
+
     });
+
   }
 
 
@@ -660,24 +800,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     clearInterval(slideshowTimer);
 
-    slideshowTimer = setInterval(() => {
 
-      showSlide(currentSlide + 1);
+    slideshowTimer =
+      setInterval(() => {
 
-    }, 5000);
+        showSlide(
+          currentSlide + 1
+        );
+
+      }, 5000);
+
   }
 
 
   dots.forEach((dot, index) => {
 
-    dot.addEventListener("click", () => {
+    dot.addEventListener(
+      "click",
+      () => {
 
-      showSlide(index);
-      startSlideshow();
+        showSlide(index);
+        startSlideshow();
 
-    });
+      }
+    );
 
   });
+
 
   showSlide(0);
   startSlideshow();
@@ -692,6 +841,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ".filters [data-filter]"
     );
 
+
   const portfolioCards =
     document.querySelectorAll(
       "#work .portfolio-card"
@@ -700,51 +850,58 @@ document.addEventListener("DOMContentLoaded", () => {
 
   filterButtons.forEach(button => {
 
-    button.addEventListener("click", () => {
+    button.addEventListener(
+      "click",
+      () => {
 
-      const filter =
-        button.dataset.filter;
-
-      filterButtons.forEach(btn => {
-        btn.classList.remove("active");
-      });
-
-      button.classList.add("active");
+        const filter =
+          button.dataset.filter;
 
 
-      portfolioCards.forEach(card => {
+        filterButtons.forEach(btn => {
 
-        const category =
-          card.dataset.category;
+          btn.classList.remove(
+            "active"
+          );
 
-        if (
-          filter === "all" ||
-          category === filter
-        ) {
-          card.hidden = false;
-        } else {
-          card.hidden = true;
-        }
+        });
 
-      });
 
-    });
+        button.classList.add(
+          "active"
+        );
+
+
+        portfolioCards.forEach(card => {
+
+          const category =
+            card.dataset.category;
+
+
+          if (
+            filter === "all" ||
+            category === filter
+          ) {
+
+            card.hidden = false;
+
+          } else {
+
+            card.hidden = true;
+
+          }
+
+        });
+
+      }
+    );
 
   });
 
 
   /* =======================================================
      FREE + PAID ASSET SYSTEM
-     
-     Ou ka ajoute kantite imaj ou vle isit la.
-     
-     TYPE:
-     png
-     background
-     texture
-     mockup
   ======================================================= */
-
 
   const freeAssets = [
 
@@ -828,82 +985,124 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
 
-  /*
-    ---------------------------------------------------------
-    Si HTML ou itilize ID sa yo:
-
-    free-assets-grid
-    paid-assets-grid
-
-    script la ap ranpli yo otomatikman.
-
-    Si li itilize:
-
-    asset-grid
-
-    li kapab toujou montre FREE assets yo.
-    ---------------------------------------------------------
-  */
-
-
   const freeAssetGrid =
-    document.getElementById("free-assets-grid");
+    document.getElementById(
+      "free-assets-grid"
+    );
+
 
   const paidAssetGrid =
-    document.getElementById("paid-assets-grid");
+    document.getElementById(
+      "paid-assets-grid"
+    );
+
 
   const oldAssetGrid =
-    document.getElementById("asset-grid");
+    document.getElementById(
+      "asset-grid"
+    );
 
 
-  let currentAssetType = "png";
+  let currentAssetType =
+    "png";
 
 
   function assetTypeName(type) {
 
     const names = {
+
       png: "PNG",
-      background: "BACKGROUND",
-      texture: "TEXTURE",
-      mockup: "MOCKUP"
+
+      background:
+        translations[currentLanguage]
+          ?.assetBackground ||
+        "BACKGROUND",
+
+      texture:
+        translations[currentLanguage]
+          ?.assetTextures ||
+        "TEXTURE",
+
+      mockup:
+        translations[currentLanguage]
+          ?.assetMockups ||
+        "MOCKUP"
+
     };
 
+
     return names[type] || type;
+
   }
 
 
-  function createAssetCard(asset, paid = false) {
+  /* =======================================================
+     CREATE ASSET CARD
+  ======================================================= */
+
+  function createAssetCard(
+    asset,
+    paid = false
+  ) {
 
     const card =
-      document.createElement("article");
+      document.createElement(
+        "article"
+      );
 
-    card.className = "asset-card";
+
+    card.className =
+      "asset-card";
+
 
     card.dataset.assetType =
       asset.type || "png";
 
 
     const image =
-      document.createElement("img");
+      document.createElement(
+        "img"
+      );
+
 
     image.src =
       asset.image || "";
 
-    image.alt =
-      asset.name || assetTypeName(asset.type);
 
-    image.loading = "lazy";
+    image.alt =
+      asset.name ||
+      assetTypeName(asset.type);
+
+
+    image.loading =
+      "lazy";
+
+
+    /*
+      CLASS espesyal pou imaj asset yo.
+      Li pèmèt CSS kontwole yo pi byen.
+    */
+
+    image.className =
+      "asset-image";
 
 
     const title =
-      document.createElement("h3");
+      document.createElement(
+        "h3"
+      );
+
 
     title.textContent =
-      asset.name || "Digital Asset";
+      asset.name ||
+      "Digital Asset";
 
 
     const description =
-      document.createElement("p");
+      document.createElement(
+        "p"
+      );
+
 
     description.textContent =
       asset.description ||
@@ -911,61 +1110,127 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     card.appendChild(image);
+
     card.appendChild(title);
+
     card.appendChild(description);
 
+
+    /* =====================================================
+       PAID ASSET
+    ===================================================== */
 
     if (paid) {
 
       const price =
-        document.createElement("strong");
+        document.createElement(
+          "strong"
+        );
+
+
+      price.className =
+        "asset-price";
+
 
       price.textContent =
-        asset.price || "PAID";
+        asset.price ||
+        translations[currentLanguage].paid;
 
-      card.appendChild(price);
+
+      card.appendChild(
+        price
+      );
 
 
       const buy =
-        document.createElement("button");
+        document.createElement(
+          "button"
+        );
 
-      buy.type = "button";
-      buy.className = "buy";
-      buy.textContent = "Achte kounye a →";
 
-      if (asset.buy && asset.buy !== "#") {
+      buy.type =
+        "button";
 
-        buy.addEventListener("click", () => {
 
-          window.location.href =
-            asset.buy;
+      buy.className =
+        "buy";
 
-        });
+
+      buy.dataset.assetButton =
+        "buy";
+
+
+      buy.textContent =
+        translations[currentLanguage].buyNow;
+
+
+      if (
+        asset.buy &&
+        asset.buy !== "#"
+      ) {
+
+        buy.addEventListener(
+          "click",
+          () => {
+
+            window.location.href =
+              asset.buy;
+
+          }
+        );
 
       } else {
 
-        buy.addEventListener("click", () => {
+        buy.addEventListener(
+          "click",
+          () => {
 
-          alert(
-            "Sistèm peman an poko konekte."
-          );
+            alert(
+              translations[
+                currentLanguage
+              ].paymentNotConnected
+            );
 
-        });
+          }
+        );
 
       }
 
-      card.appendChild(buy);
+
+      card.appendChild(
+        buy
+      );
+
 
     } else {
 
-      const download =
-        document.createElement("button");
+      /* ===================================================
+         FREE ASSET
+      =================================================== */
 
-      download.type = "button";
-      download.className = "download";
+      const download =
+        document.createElement(
+          "button"
+        );
+
+
+      download.type =
+        "button";
+
+
+      download.className =
+        "download";
+
+
+      download.dataset.assetButton =
+        "download";
+
 
       download.textContent =
-        "Telechaje gratis";
+        translations[
+          currentLanguage
+        ].downloadFree;
+
 
       download.addEventListener(
         "click",
@@ -977,25 +1242,38 @@ document.addEventListener("DOMContentLoaded", () => {
           ) {
 
             const link =
-              document.createElement("a");
+              document.createElement(
+                "a"
+              );
+
 
             link.href =
               asset.download;
 
-            link.download = "";
 
-            document.body.appendChild(link);
+            link.download =
+              "";
+
+
+            document.body.appendChild(
+              link
+            );
+
 
             link.click();
 
+
             link.remove();
+
 
             showDownloadModal();
 
           } else {
 
             alert(
-              "Ajoute chemen fichye download la nan script.js."
+              translations[
+                currentLanguage
+              ].addDownload
             );
 
           }
@@ -1003,14 +1281,59 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       );
 
-      card.appendChild(download);
+
+      card.appendChild(
+        download
+      );
 
     }
 
 
     return card;
+
   }
 
+
+  /* =======================================================
+     UPDATE ASSET BUTTON LANGUAGES
+  ======================================================= */
+
+  function updateAssetButtonLanguages() {
+
+    const dictionary =
+      translations[currentLanguage] ||
+      translations.ht;
+
+
+    document
+      .querySelectorAll(
+        '[data-asset-button="download"]'
+      )
+      .forEach(button => {
+
+        button.textContent =
+          dictionary.downloadFree;
+
+      });
+
+
+    document
+      .querySelectorAll(
+        '[data-asset-button="buy"]'
+      )
+      .forEach(button => {
+
+        button.textContent =
+          dictionary.buyNow;
+
+      });
+
+  }
+
+
+  /* =======================================================
+     RENDER ASSETS
+  ======================================================= */
 
   function renderAssets(
     assets,
@@ -1021,7 +1344,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!grid) return;
 
-    grid.innerHTML = "";
+
+    grid.innerHTML =
+      "";
+
 
     const filtered =
       assets.filter(asset => {
@@ -1048,6 +1374,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  /* =======================================================
+     RENDER ALL ASSETS
+  ======================================================= */
+
   function renderAllAssets() {
 
     renderAssets(
@@ -1057,6 +1387,7 @@ document.addEventListener("DOMContentLoaded", () => {
       currentAssetType
     );
 
+
     renderAssets(
       paidAssets,
       paidAssetGrid,
@@ -1064,10 +1395,6 @@ document.addEventListener("DOMContentLoaded", () => {
       currentAssetType
     );
 
-
-    /*
-      Compatibilite ak ansyen #asset-grid
-    */
 
     if (oldAssetGrid) {
 
@@ -1079,6 +1406,15 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
     }
+
+
+    /*
+      CORRECTION:
+      prepareImages() fèt touswit apre
+      assets yo fin kreye.
+    */
+
+    prepareImages();
 
   }
 
@@ -1095,39 +1431,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
   assetButtons.forEach(button => {
 
-    button.addEventListener("click", () => {
+    button.addEventListener(
+      "click",
+      () => {
 
-      currentAssetType =
-        button.dataset.assetType;
+        currentAssetType =
+          button.dataset.assetType;
 
-      assetButtons.forEach(btn => {
 
-        btn.classList.remove("active");
+        assetButtons.forEach(btn => {
 
-        btn.setAttribute(
-          "aria-selected",
-          "false"
+          btn.classList.remove(
+            "active"
+          );
+
+
+          btn.setAttribute(
+            "aria-selected",
+            "false"
+          );
+
+        });
+
+
+        button.classList.add(
+          "active"
         );
 
-      });
+
+        button.setAttribute(
+          "aria-selected",
+          "true"
+        );
 
 
-      button.classList.add("active");
+        renderAllAssets();
 
-      button.setAttribute(
-        "aria-selected",
-        "true"
-      );
-
-
-      renderAllAssets();
-
-    });
+      }
+    );
 
   });
-
-
-  renderAllAssets();
 
 
   /* =======================================================
@@ -1139,6 +1482,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "download-modal"
     );
 
+
   const modalClose =
     document.getElementById(
       "modal-close"
@@ -1149,7 +1493,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!downloadModal) return;
 
-    downloadModal.hidden = false;
+
+    downloadModal.hidden =
+      false;
+
 
     document.body.classList.add(
       "lightbox-open"
@@ -1162,7 +1509,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!downloadModal) return;
 
-    downloadModal.hidden = true;
+
+    downloadModal.hidden =
+      true;
+
 
     document.body.classList.remove(
       "lightbox-open"
@@ -1191,7 +1541,9 @@ document.addEventListener("DOMContentLoaded", () => {
           event.target ===
           downloadModal
         ) {
+
           hideDownloadModal();
+
         }
 
       }
@@ -1209,35 +1561,42 @@ document.addEventListener("DOMContentLoaded", () => {
       "image-lightbox"
     );
 
+
   const lightboxImage =
     document.getElementById(
       "lightbox-image"
     );
+
 
   const lightboxClose =
     document.getElementById(
       "lightbox-close"
     );
 
+
   const lightboxPrev =
     document.getElementById(
       "lightbox-prev"
     );
+
 
   const lightboxNext =
     document.getElementById(
       "lightbox-next"
     );
 
+
   const zoomIn =
     document.getElementById(
       "zoom-in"
     );
 
+
   const zoomOut =
     document.getElementById(
       "zoom-out"
     );
+
 
   const zoomReset =
     document.getElementById(
@@ -1245,9 +1604,16 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-  let lightboxImages = [];
-  let lightboxIndex = 0;
-  let zoomLevel = 1;
+  let lightboxImages =
+    [];
+
+
+  let lightboxIndex =
+    0;
+
+
+  let zoomLevel =
+    1;
 
 
   function collectLightboxImages() {
@@ -1261,7 +1627,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return (
           image.src &&
-          !image.closest(".lang-menu")
+          !image.closest(
+            ".lang-menu"
+          )
         );
 
       });
@@ -1273,13 +1641,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!lightboxImage) return;
 
+
     lightboxImage.style.transform =
-      `scale(${zoomLevel})`;
+      `translate(${moveX}px, ${moveY}px) scale(${zoomLevel})`;
+
 
     if (zoomReset) {
 
       zoomReset.textContent =
-        `${Math.round(zoomLevel * 100)}%`;
+        `${Math.round(
+          zoomLevel * 100
+        )}%`;
 
     }
 
@@ -1293,33 +1665,53 @@ document.addEventListener("DOMContentLoaded", () => {
       !lightboxImage ||
       !lightboxImages.length
     ) {
+
       return;
+
     }
 
 
     lightboxIndex =
-      (index + lightboxImages.length) %
+      (
+        index +
+        lightboxImages.length
+      ) %
       lightboxImages.length;
 
 
     const source =
-      lightboxImages[lightboxIndex];
+      lightboxImages[
+        lightboxIndex
+      ];
 
 
     lightboxImage.src =
       source.currentSrc ||
       source.src;
 
+
     lightboxImage.alt =
       source.alt || "";
 
 
-    zoomLevel = 1;
+    zoomLevel =
+      1;
+
+
+    moveX =
+      0;
+
+
+    moveY =
+      0;
+
 
     updateZoom();
 
 
-    lightbox.hidden = false;
+    lightbox.hidden =
+      false;
+
 
     document.body.classList.add(
       "lightbox-open"
@@ -1332,15 +1724,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!lightbox) return;
 
-    lightbox.hidden = true;
+
+    lightbox.hidden =
+      true;
+
 
     document.body.classList.remove(
       "lightbox-open"
     );
 
+
     if (lightboxImage) {
 
-      lightboxImage.src = "";
+      lightboxImage.src =
+        "";
 
     }
 
@@ -1369,9 +1766,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     zoomLevel =
       Math.min(
-        zoomLevel + .25,
+        zoomLevel + 0.25,
         4
       );
+
 
     updateZoom();
 
@@ -1382,9 +1780,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     zoomLevel =
       Math.max(
-        zoomLevel - .25,
-        .5
+        zoomLevel - 0.25,
+        0.5
       );
+
 
     updateZoom();
 
@@ -1393,22 +1792,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function resetZoom() {
 
-    zoomLevel = 1;
+    zoomLevel =
+      1;
+
+
+    moveX =
+      0;
+
+
+    moveY =
+      0;
+
 
     updateZoom();
 
   }
 
 
-  /*
-     IMPORTANT:
-     Re-collect images after dynamic
-     Asset cards are created.
-  */
+  /* =======================================================
+     PREPARE IMAGES
+  ======================================================= */
 
   function prepareImages() {
 
     collectLightboxImages();
+
 
     lightboxImages.forEach(
       (image, index) => {
@@ -1416,11 +1824,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (
           image.dataset.lightboxReady
         ) {
+
           return;
+
         }
+
 
         image.dataset.lightboxReady =
           "true";
+
 
         image.addEventListener(
           "click",
@@ -1428,10 +1840,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             collectLightboxImages();
 
+
             const newIndex =
               lightboxImages.indexOf(
                 image
               );
+
 
             openLightbox(
               newIndex >= 0
@@ -1448,8 +1862,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  /*
+    Initialisation.
+    Li fèt apre fonksyon yo fin defini.
+  */
+
+  renderAllAssets();
+
   prepareImages();
 
+
+  /* =======================================================
+     LIGHTBOX BUTTONS
+  ======================================================= */
 
   if (lightboxClose) {
 
@@ -1521,7 +1946,9 @@ document.addEventListener("DOMContentLoaded", () => {
           event.target ===
           lightbox
         ) {
+
           closeLightbox();
+
         }
 
       }
@@ -1529,6 +1956,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
+
+  /* =======================================================
+     KEYBOARD CONTROLS
+  ======================================================= */
 
   document.addEventListener(
     "keydown",
@@ -1538,7 +1969,9 @@ document.addEventListener("DOMContentLoaded", () => {
         !lightbox ||
         lightbox.hidden
       ) {
+
         return;
+
       }
 
 
@@ -1549,35 +1982,52 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
 
-      if (event.key === "ArrowRight") {
+      if (
+        event.key ===
+        "ArrowRight"
+      ) {
 
         nextImage();
 
       }
 
 
-      if (event.key === "ArrowLeft") {
+      if (
+        event.key ===
+        "ArrowLeft"
+      ) {
 
         previousImage();
 
       }
 
 
-      if (event.key === "+") {
+      if (
+        event.key ===
+        "+" ||
+        event.key ===
+        "="
+      ) {
 
         zoomPlus();
 
       }
 
 
-      if (event.key === "-") {
+      if (
+        event.key ===
+        "-"
+      ) {
 
         zoomMinus();
 
       }
 
 
-      if (event.key === "0") {
+      if (
+        event.key ===
+        "0"
+      ) {
 
         resetZoom();
 
@@ -1601,12 +2051,18 @@ document.addEventListener("DOMContentLoaded", () => {
           !lightbox ||
           lightbox.hidden
         ) {
+
           return;
+
         }
+
 
         event.preventDefault();
 
-        if (event.deltaY < 0) {
+
+        if (
+          event.deltaY < 0
+        ) {
 
           zoomPlus();
 
@@ -1629,11 +2085,24 @@ document.addEventListener("DOMContentLoaded", () => {
      DRAG IMAGE WHEN ZOOMED
   ======================================================= */
 
-  let dragging = false;
-  let startX = 0;
-  let startY = 0;
-  let moveX = 0;
-  let moveY = 0;
+  let dragging =
+    false;
+
+
+  let startX =
+    0;
+
+
+  let startY =
+    0;
+
+
+  let moveX =
+    0;
+
+
+  let moveY =
+    0;
 
 
   if (lightboxImage) {
@@ -1642,21 +2111,33 @@ document.addEventListener("DOMContentLoaded", () => {
       "pointerdown",
       event => {
 
-        if (zoomLevel <= 1) {
+        if (
+          zoomLevel <= 1
+        ) {
+
           return;
+
         }
 
-        dragging = true;
+
+        dragging =
+          true;
+
 
         startX =
-          event.clientX - moveX;
+          event.clientX -
+          moveX;
+
 
         startY =
-          event.clientY - moveY;
+          event.clientY -
+          moveY;
+
 
         lightboxImage.classList.add(
           "dragging"
         );
+
 
         lightboxImage.setPointerCapture(
           event.pointerId
@@ -1672,11 +2153,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!dragging) return;
 
+
         moveX =
-          event.clientX - startX;
+          event.clientX -
+          startX;
+
 
         moveY =
-          event.clientY - startY;
+          event.clientY -
+          startY;
+
 
         lightboxImage.style.transform =
           `translate(${moveX}px, ${moveY}px) scale(${zoomLevel})`;
@@ -1687,7 +2173,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function stopDragging() {
 
-      dragging = false;
+      dragging =
+        false;
+
 
       lightboxImage.classList.remove(
         "dragging"
@@ -1701,35 +2189,10 @@ document.addEventListener("DOMContentLoaded", () => {
       stopDragging
     );
 
+
     lightboxImage.addEventListener(
       "pointercancel",
       stopDragging
-    );
-
-  }
-
-
-  /* =======================================================
-     RESET POSITION WHEN ZOOM CHANGES
-  ======================================================= */
-
-  const originalUpdateZoom =
-    updateZoom;
-
-
-  function resetImagePosition() {
-
-    moveX = 0;
-    moveY = 0;
-
-  }
-
-
-  if (zoomReset) {
-
-    zoomReset.addEventListener(
-      "click",
-      resetImagePosition
     );
 
   }
@@ -1745,46 +2208,56 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-  if ("IntersectionObserver" in window) {
+  if (
+    "IntersectionObserver" in
+    window
+  ) {
 
     const observer =
       new IntersectionObserver(
         entries => {
 
-          entries.forEach(entry => {
+          entries.forEach(
+            entry => {
 
-            if (
-              entry.isIntersecting
-            ) {
+              if (
+                entry.isIntersecting
+              ) {
 
-              entry.target.classList.add(
-                "visible"
-              );
+                entry.target.classList.add(
+                  "visible"
+                );
 
-              observer.unobserve(
-                entry.target
-              );
+
+                observer.unobserve(
+                  entry.target
+                );
+
+              }
 
             }
-
-          });
+          );
 
         },
         {
-          threshold: .12
+          threshold: 0.12
         }
       );
 
 
     revealElements.forEach(
-      element => observer.observe(element)
+      element =>
+        observer.observe(element)
     );
+
 
   } else {
 
     revealElements.forEach(
       element =>
-        element.classList.add("visible")
+        element.classList.add(
+          "visible"
+        )
     );
 
   }
@@ -1795,11 +2268,13 @@ document.addEventListener("DOMContentLoaded", () => {
   ======================================================= */
 
   const assetObserver =
-    new MutationObserver(() => {
+    new MutationObserver(
+      () => {
 
-      prepareImages();
+        prepareImages();
 
-    });
+      }
+    );
 
 
   if (freeAssetGrid) {
