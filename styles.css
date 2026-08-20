@@ -1274,3 +1274,181 @@ footer {
   background: #211b13 !important;
   color: #d8b36a !important;
 }
+/* =================================
+   PORTFOLYO — PINTEREST / MASONRY
+   ================================= */
+
+.portfolio-section {
+  width: 100%;
+  padding: 80px 6vw;
+  background: #090909;
+}
+
+.portfolio-header {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.portfolio-label {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #d8b36a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+.portfolio-header h2 {
+  margin: 0;
+  color: #f5f0e7;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(32px, 5vw, 58px);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.portfolio-header p {
+  margin: 15px auto 0;
+  max-width: 600px;
+  color: #aaa49a;
+  font-size: 15px;
+}
+
+
+/* =========================
+   MASONRY GRID
+========================= */
+
+.portfolio-grid {
+  column-count: 3;
+  column-gap: 18px;
+  width: 100%;
+}
+
+
+/* =========================
+   PHOTO CARD
+========================= */
+
+.portfolio-item {
+  width: 100%;
+  margin: 0 0 18px;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  overflow: hidden;
+  position: relative;
+  cursor: zoom-in;
+  border-radius: 8px;
+  background: #11100e;
+}
+
+
+/* =========================
+   PHOTO
+========================= */
+
+.portfolio-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+}
+
+
+/* =========================
+   ZOOM WHEN HOVER
+========================= */
+
+.portfolio-item:hover img {
+  transform: scale(1.04);
+}
+
+
+/* =========================
+   DARK OVERLAY
+========================= */
+
+.portfolio-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  transition: background 0.35s ease;
+}
+
+.portfolio-item:hover::after {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+
+  .portfolio-section {
+    padding: 65px 5vw;
+  }
+
+  .portfolio-grid {
+    column-count: 2;
+    column-gap: 14px;
+  }
+
+  .portfolio-item {
+    margin-bottom: 14px;
+  }
+
+}
+
+
+/* =========================
+   TELEFÒN
+========================= */
+
+@media (max-width: 600px) {
+
+  .portfolio-section {
+    padding: 55px 4vw;
+  }
+
+  .portfolio-header {
+    margin-bottom: 30px;
+  }
+
+  .portfolio-header h2 {
+    font-size: 32px;
+  }
+
+  .portfolio-header p {
+    font-size: 14px;
+  }
+
+  .portfolio-grid {
+    column-count: 2;
+    column-gap: 10px;
+  }
+
+  .portfolio-item {
+    margin-bottom: 10px;
+    border-radius: 6px;
+  }
+
+}
+
+
+/* =========================
+   TI TELEFÒN TRÈ PITI
+========================= */
+
+@media (max-width: 380px) {
+
+  .portfolio-grid {
+    column-count: 1;
+  }
+
+}
