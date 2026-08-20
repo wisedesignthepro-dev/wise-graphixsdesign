@@ -1274,3 +1274,12 @@ footer {
   background: #211b13 !important;
   color: #d8b36a !important;
 }
+/* MENU HEADER */
+#main-nav > a {
+  color: #111 !important;
+  font-weight: 700 !important;
+}
+
+#main-nav > a:hover {
+  color: red !important;
+}
