@@ -3,191 +3,976 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Wise.graphixdesign — design grafik, PSD ak resous dijital.">
+
+  <meta
+    name="description"
+    content="Wise.graphixdesign — design grafik, PSD ak resous dijital."
+  >
+
   <title>WISE.GRAPHIXDESIGN STORE</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
 
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="brand.css">
 </head>
 
 <body>
-<header class="site-header">
-  <a class="logo" href="#top" aria-label="Wise.graphixdesign home">
-    <img src="images/LOGO%202026.png" alt="Wise.graphixdesign logo" width="48" height="48">
-    <span>WISE.GRAPHIXDESIGN</span>
+
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+
+  <header class="site-header">
+
+    <a
+      class="logo"
+      href="#top"
+      aria-label="Wise.graphixdesign home"
+    >
+      <img
+        src="images/LOGO%202026.png"
+        alt="Wise.graphixdesign logo"
+        width="48"
+        height="48"
+      >
+
+      <span>WISE.GRAPHIXDESIGN</span>
+    </a>
+
+
+    <button
+      class="menu-toggle"
+      id="mb"
+      type="button"
+      aria-label="Ouvri meni a"
+      aria-expanded="false"
+    >
+      ☰
+    </button>
+
+
+    <nav
+      id="main-nav"
+      aria-label="Navigasyon prensipal"
+    >
+
+      <a href="#work" data-i18n="navWork">
+        Travay mwen yo
+      </a>
+
+      <a href="#store" data-i18n="navStore">
+        Boutik PSD
+      </a>
+
+      <a href="#free" data-i18n="navFree">
+        Asset gratis
+      </a>
+
+      <a href="#services" data-i18n="navServices">
+        Sèvis
+      </a>
+
+
+      <!-- LANGUAGE -->
+
+      <div class="lang">
+
+        <button
+          id="lb"
+          type="button"
+          aria-expanded="false"
+          aria-controls="lm"
+        >
+          🌐 Kreyòl
+          <span aria-hidden="true">▾</span>
+        </button>
+
+
+        <div
+          id="lm"
+          class="lang-menu"
+          role="menu"
+        >
+
+          <button
+            type="button"
+            data-lang="ht"
+            role="menuitem"
+          >
+            🇭🇹 Kreyòl
+          </button>
+
+          <button
+            type="button"
+            data-lang="en"
+            role="menuitem"
+          >
+            🇺🇸 English
+          </button>
+
+          <button
+            type="button"
+            data-lang="fr"
+            role="menuitem"
+          >
+            🇫🇷 Français
+          </button>
+
+          <button
+            type="button"
+            data-lang="es"
+            role="menuitem"
+          >
+            🇪🇸 Español
+          </button>
+
+        </div>
+
+      </div>
+
+    </nav>
+
+  </header>
+
+
+  <!-- =====================================================
+       MAIN
+  ====================================================== -->
+
+  <main id="top">
+
+
+    <!-- ===================================================
+         HERO
+    ==================================================== -->
+
+    <section class="hero">
+
+      <div class="hero-copy reveal">
+
+        <small data-i18n="heroEyebrow">
+          STIDYO DESIGN KREYATIF
+        </small>
+
+
+        <h1 data-i18n-html="heroTitle">
+          Design ki<br>
+          <em>fè moun sonje w.</em>
+        </h1>
+
+
+        <p data-i18n="heroText">
+          Kreyasyon grafik premium, PSD editab ak resous dijital
+          pou mak ak biznis ki vle kanpe apa.
+        </p>
+
+
+        <a
+          class="btn gold"
+          href="#work"
+          data-i18n="heroPrimary"
+        >
+          Gade travay mwen ↗
+        </a>
+
+
+        <a
+          class="btn"
+          href="#store"
+          data-i18n="heroSecondary"
+        >
+          Achte PSD →
+        </a>
+
+      </div>
+
+
+      <!-- HERO SLIDESHOW -->
+
+      <figure class="hero-image reveal delay-1">
+
+        <div class="hero-slideshow">
+
+          <img
+            src="images/cover1.jpg"
+            alt="Wise.graphixdesign Cover 1"
+            class="slide active"
+          >
+
+          <img
+            src="images/cover2.png"
+            alt="Wise.graphixdesign Cover 2"
+            class="slide"
+          >
+
+          <img
+            src="images/cover3.png"
+            alt="Wise.graphixdesign Cover 3"
+            class="slide"
+          >
+
+        </div>
+
+
+        <div
+          class="slide-dots"
+          aria-label="Slideshow navigation"
+        >
+
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+
+        </div>
+
+
+        <figcaption>
+          WISE.GRAPHIXDESIGN · 2026
+        </figcaption>
+
+      </figure>
+
+    </section>
+
+
+    <!-- ===================================================
+         TICKER
+    ==================================================== -->
+
+    <div
+      class="ticker"
+      aria-hidden="true"
+    >
+      FLYERS ✦ COVERS ✦ ÉTIQUÈT ✦ BRANDING ✦ PSD ✦ PNG ✦
+      MOCKUPS ✦ BACKGROUND ✦ TEXTURE ✦
+    </div>
+
+
+    <!-- ===================================================
+         PORTFOLIO
+    ==================================================== -->
+
+    <section id="work">
+
+      <small data-i18n="workEyebrow">
+        01 / PORTFOLIO
+      </small>
+
+
+      <h2 data-i18n-html="workTitle">
+        Travay <em>mwen yo.</em>
+      </h2>
+
+
+      <!-- FILTERS -->
+
+      <div
+        class="filters"
+        role="group"
+        aria-label="Filtre portfolio"
+      >
+
+        <button
+          class="active"
+          type="button"
+          data-filter="all"
+          data-i18n="filterAll"
+        >
+          Tout
+        </button>
+
+        <button
+          type="button"
+          data-filter="flyer"
+          data-i18n="filterFlyers"
+        >
+          Flyers
+        </button>
+
+        <button
+          type="button"
+          data-filter="cover"
+          data-i18n="filterCovers"
+        >
+          Covers
+        </button>
+
+        <button
+          type="button"
+          data-filter="label"
+          data-i18n="filterLabels"
+        >
+          Étiquèt
+        </button>
+
+        <button
+          type="button"
+          data-filter="brand"
+          data-i18n="filterBranding"
+        >
+          Branding
+        </button>
+
+      </div>
+
+
+      <!--
+        PORTFOLIO
+        Ou ka mete kantite imaj ou vle isit la.
+        script.js ap travay avèk tout cards ki nan grid la.
+      -->
+
+      <div class="grid portfolio-grid">
+
+        <article
+          class="portfolio-card reveal"
+          data-category="flyer"
+        >
+          <img
+            src="images/STREET SHUTDOWN.png"
+            alt="Back to School Flyer"
+          >
+
+          <p>
+            BACK TO SCHOOL
+          </p>
+        </article>
+
+
+        <article
+          class="portfolio-card reveal"
+          data-category="flyer"
+        >
+          <img
+            src="images/flyer00.png"
+            alt="Flyer Wise.graphixdesign"
+          >
+
+          <p data-i18n="portfolioFlyer">
+            Flyer Event
+          </p>
+        </article>
+
+
+        <article
+          class="portfolio-card reveal"
+          data-category="cover"
+        >
+          <img
+            src="images/cover00.png"
+            alt="Cover Design"
+          >
+
+          <p data-i18n="portfolioCover">
+            Cover Design
+          </p>
+        </article>
+
+
+        <article
+          class="portfolio-card reveal"
+          data-category="cover"
+        >
+          <img
+            src="images/CHANPYON MASTER02.jpg"
+            alt="Cover Design"
+          >
+
+          <p>
+            Cover Design
+          </p>
+        </article>
+
+
+        <article
+          class="portfolio-card reveal"
+          data-category="label"
+        >
+          <img
+            src="images/label.png"
+            alt="Product Label"
+          >
+
+          <p data-i18n="portfolioLabel">
+            Product Label
+          </p>
+        </article>
+
+
+        <article
+          class="portfolio-card reveal"
+          data-category="brand"
+        >
+          <img
+            src="images/branding.png"
+            alt="Brand Identity"
+          >
+
+          <p data-i18n="portfolioBrand">
+            Brand Identity
+          </p>
+        </article>
+
+
+        <article
+          class="portfolio-card reveal"
+          data-category="flyer"
+        >
+          <img
+            src="images/FRITZ HERBY SHOT IT.png"
+            alt="Flyer Design"
+          >
+
+          <p>
+            FLYER DESIGN
+          </p>
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         PSD STORE
+    ==================================================== -->
+
+    <section
+      id="store"
+      class="dark"
+    >
+
+      <small data-i18n="storeEyebrow">
+        02 / DIGITAL STORE
+      </small>
+
+
+      <h2 data-i18n-html="storeTitle">
+        Boutik <em>PSD.</em>
+      </h2>
+
+
+      <!-- FREE PSD -->
+
+      <div class="store-section">
+
+        <div class="store-section-heading">
+
+          <span class="store-label">
+            FREE PSD
+          </span>
+
+          <h3>
+            PSD Gratis
+          </h3>
+
+          <p>
+            Telechaje PSD ou bezwen yo gratis.
+          </p>
+
+        </div>
+
+
+        <div
+          id="free-psd-grid"
+          class="grid store-grid"
+        ></div>
+
+      </div>
+
+
+      <!-- PAID PSD -->
+
+      <div class="store-section">
+
+        <div class="store-section-heading">
+
+          <span class="store-label gold-label">
+            PREMIUM PSD
+          </span>
+
+          <h3>
+            PSD Pou Achte
+          </h3>
+
+          <p>
+            Design premium, pare pou modifye.
+          </p>
+
+        </div>
+
+
+        <div
+          id="paid-psd-grid"
+          class="grid store-grid"
+        ></div>
+
+      </div>
+
+
+      <p class="note">
+
+        <b>MONCASH</b>
+
+        <span data-i18n="storeNote">
+          — Estrikti checkout la pare pou koneksyon backend.
+        </span>
+
+      </p>
+
+    </section>
+
+
+    <!-- ===================================================
+         ASSET GRATIS
+         FREE + PAID
+    ==================================================== -->
+
+    <section id="free">
+
+      <small data-i18n="freeEyebrow">
+        03 / DIGITAL ASSETS
+      </small>
+
+
+      <h2 data-i18n-html="freeTitle">
+        Asset <em>gratis.</em>
+      </h2>
+
+
+      <!-- =================================================
+           ASSET FREE / PAID SWITCH
+      ================================================== -->
+
+      <div
+        class="asset-status-tabs"
+        role="tablist"
+        aria-label="Kalite asset"
+      >
+
+        <button
+          class="asset-status active"
+          type="button"
+          data-asset-status="free"
+          role="tab"
+          aria-selected="true"
+        >
+          FREE ASSETS
+        </button>
+
+
+        <button
+          class="asset-status"
+          type="button"
+          data-asset-status="paid"
+          role="tab"
+          aria-selected="false"
+        >
+          PAID ASSETS
+        </button>
+
+      </div>
+
+
+      <!-- =================================================
+           ASSET CATEGORIES
+      ================================================== -->
+
+      <div
+        class="asset-types"
+        role="tablist"
+        aria-label="Kategori asset"
+      >
+
+        <button
+          class="asset-type active"
+          type="button"
+          data-asset-type="png"
+          role="tab"
+          aria-selected="true"
+          data-i18n="assetPNG"
+        >
+          PNG
+        </button>
+
+
+        <button
+          class="asset-type"
+          type="button"
+          data-asset-type="background"
+          role="tab"
+          aria-selected="false"
+        >
+          BACKGROUND
+        </button>
+
+
+        <button
+          class="asset-type"
+          type="button"
+          data-asset-type="texture"
+          role="tab"
+          aria-selected="false"
+          data-i18n="assetTextures"
+        >
+          Textures
+        </button>
+
+
+        <button
+          class="asset-type"
+          type="button"
+          data-asset-type="mockup"
+          role="tab"
+          aria-selected="false"
+          data-i18n="assetMockups"
+        >
+          Mockups
+        </button>
+
+      </div>
+
+
+      <p
+        class="asset-intro"
+        data-i18n="assetIntro"
+      >
+        Klike sou yon kategori pou wè fichye yo,
+        epi telechaje sa ou bezwen an.
+      </p>
+
+
+      <!--
+        SCRIPT.JS ap ranpli grid sa a otomatikman.
+        FREE ak PAID sèvi ak menm card/style.
+      -->
+
+      <div
+        id="asset-grid"
+        class="grid asset-grid"
+        aria-live="polite"
+      ></div>
+
+    </section>
+
+
+    <!-- ===================================================
+         SERVICES
+    ==================================================== -->
+
+    <section id="services">
+
+      <small data-i18n="servicesEyebrow">
+        04 / SERVICES
+      </small>
+
+
+      <h2 data-i18n-html="servicesTitle">
+        Sèvis pou <em>biznis.</em>
+      </h2>
+
+
+      <div class="services">
+
+        <p data-i18n="service1">
+          01 — Logo & Branding
+        </p>
+
+        <p data-i18n="service2">
+          02 — Flyer & Social Media
+        </p>
+
+        <p data-i18n="service3">
+          03 — Packaging & Étiquèt
+        </p>
+
+        <p data-i18n="service4">
+          04 — Motion Design
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================
+       FOOTER
+  ====================================================== -->
+
+  <footer>
+
+    © 2026 WISE.GRAPHIXDESIGN ·
+
+    <span data-i18n="footer">
+      Design grafik · PSD · Asset dijital
+    </span>
+
+  </footer>
+
+
+  <!-- =====================================================
+       DOWNLOAD MODAL
+  ====================================================== -->
+
+  <div
+    class="download-modal"
+    id="download-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="download-title"
+    hidden
+  >
+
+    <div class="download-modal-card">
+
+      <span
+        class="download-check"
+        aria-hidden="true"
+      >
+        ✓
+      </span>
+
+
+      <p class="download-kicker">
+        WISE.GRAPHIXDESIGN
+      </p>
+
+
+      <h2 id="download-title">
+        Mèsi pou telechajman an!
+      </h2>
+
+
+      <p>
+        Asset ou a ap telechaje kounye a.
+        N ap kontan wè sa ou kreye avè l.
+      </p>
+
+
+      <button
+        class="modal-close"
+        id="modal-close"
+        type="button"
+      >
+        Kontinye navige →
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       WHATSAPP
+  ====================================================== -->
+
+  <a
+    class="whatsapp"
+    href="https://wa.me/50949094294?text=Bonjou%20Wise.graphixdesign%2C%20mwen%20ta%20renmen%20konnen%20plis%20sou%20s%C3%A8vis%20ou%20yo"
+    target="_blank"
+    rel="noopener"
+    aria-label="Kontakte nou sou WhatsApp"
+  >
+
+    <svg
+      width="21"
+      height="21"
+      viewBox="0 0 32 32"
+      aria-hidden="true"
+    >
+
+      <path
+        d="M16 3.2a12.7 12.7 0 0 0-10.9 19.2L3.2 28.8l6.6-1.7A12.8 12.8 0 1 0 16 3.2Zm0 23.2c-2 0-4-.5-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.4 10.4 0 1 1 16 26.4Zm5.7-7.8c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.7.2s-.8 1.1-1 1.3c-.2.2-.4.3-.7.1-1.9-.9-3.1-1.6-4.3-3.6-.3-.5.3-.5.9-1.7.1-.2.1-.4 0-.6l-1.1-2.5c-.3-.7-.6-.6-.8-.6h-.7c-.3 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9 0 1.7 1.2 3.4 1.4 3.6.2.2 2.4 3.8 6 5.1 2.2.8 3 .9 4.1.8.7-.1 2-.8 2.3-1.6.3-.8.3-1.5.2-1.6-.1-.2-.3-.3-.6-.5Z"
+        fill="currentColor"
+      />
+
+    </svg>
+
+
+    <span data-i18n="whatsapp">
+      WhatsApp
+    </span>
+
   </a>
 
-  <button class="menu-toggle" id="mb" type="button" aria-label="Ouvri meni a" aria-expanded="false">☰</button>
 
-  <nav id="main-nav" aria-label="Navigasyon prensipal">
-    <a href="#work" data-i18n="navWork">Travay mwen yo</a>
-    <a href="#store" data-i18n="navStore">Boutik PSD</a>
-    <a href="#free" data-i18n="navFree">Asset gratis</a>
-    <a href="#services" data-i18n="navServices">Sèvis</a>
+  <!-- =====================================================
+       IMAGE LIGHTBOX
+  ====================================================== -->
 
-    <div class="lang">
-      <button id="lb" type="button" aria-expanded="false" aria-controls="lm">
-        🌐 <span id="current-lang">Kreyòl</span> <span aria-hidden="true">▾</span>
-      </button>
-      <div id="lm" class="lang-menu" role="menu">
-        <button type="button" data-lang="ht" role="menuitem">🇭🇹 Kreyòl</button>
-        <button type="button" data-lang="en" role="menuitem">🇺🇸 English</button>
-        <button type="button" data-lang="fr" role="menuitem">🇫🇷 Français</button>
-        <button type="button" data-lang="es" role="menuitem">🇪🇸 Español</button>
+  <div
+    id="image-lightbox"
+    class="image-lightbox"
+    hidden
+  >
+
+    <button
+      class="lightbox-close"
+      id="lightbox-close"
+      type="button"
+      aria-label="Fèmen imaj la"
+    >
+      ×
+    </button>
+
+
+    <button
+      class="lightbox-arrow lightbox-prev"
+      id="lightbox-prev"
+      type="button"
+      aria-label="Imaj anvan an"
+    >
+
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+
+        <path
+          d="M15 18l-6-6 6-6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+
+      </svg>
+
+    </button>
+
+
+    <button
+      class="lightbox-arrow lightbox-next"
+      id="lightbox-next"
+      type="button"
+      aria-label="Imaj swivan an"
+    >
+
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+
+        <path
+          d="M9 18l6-6-6-6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+
+      </svg>
+
+    </button>
+
+
+    <div
+      class="lightbox-content"
+      id="lightbox-content"
+    >
+
+      <img
+        id="lightbox-image"
+        src=""
+        alt=""
+        draggable="false"
+      >
+
+
+      <div class="lightbox-controls">
+
+        <button
+          id="zoom-out"
+          type="button"
+          aria-label="Zoom out"
+          title="Zoom out"
+        >
+
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <path
+              d="M5 12h14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+
+          </svg>
+
+        </button>
+
+
+        <button
+          id="zoom-reset"
+          type="button"
+          aria-label="Reset zoom"
+          title="Reset zoom"
+        >
+          100%
+        </button>
+
+
+        <button
+          id="zoom-in"
+          type="button"
+          aria-label="Zoom in"
+          title="Zoom in"
+        >
+
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <path
+              d="M12 5v14M5 12h14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+
+          </svg>
+
+        </button>
+
       </div>
-    </div>
-  </nav>
-</header>
 
-<main id="top">
-  <section class="hero">
-    <div class="hero-copy reveal">
-      <small data-i18n="heroEyebrow">STIDYO DESIGN KREYATIF</small>
-      <h1 data-i18n-html="heroTitle">Design ki<br><em>fè moun sonje w.</em></h1>
-      <p data-i18n="heroText">Kreyasyon grafik premium, PSD editab ak resous dijital pou mak ak biznis ki vle kanpe apa.</p>
-      <a class="btn gold" href="#work" data-i18n="heroPrimary">Gade travay mwen ↗</a>
-      <a class="btn" href="#store" data-i18n="heroSecondary">Achte PSD →</a>
     </div>
 
-    <figure class="hero-image reveal delay-1">
-      <div class="hero-slideshow">
-        <img src="images/cover1.jpg" alt="Wise.graphixdesign Cover 1" class="slide active">
-        <img src="images/cover2.png" alt="Wise.graphixdesign Cover 2" class="slide">
-        <img src="images/cover3.png" alt="Wise.graphixdesign Cover 3" class="slide">
-      </div>
-      <div class="slide-dots" aria-label="Slideshow navigation">
-        <button class="dot active" type="button" aria-label="Slide 1"></button>
-        <button class="dot" type="button" aria-label="Slide 2"></button>
-        <button class="dot" type="button" aria-label="Slide 3"></button>
-      </div>
-      <figcaption>WISE.GRAPHIXDESIGN · 2026</figcaption>
-    </figure>
-  </section>
-
-  <div class="ticker" aria-hidden="true">FLYERS ✦ COVERS ✦ ÉTIQUÈT ✦ BRANDING ✦ PSD ✦ PNG ✦ MOCKUPS ✦</div>
-
-  <section id="work">
-    <small data-i18n="workEyebrow">01 / PORTFOLIO</small>
-    <h2 data-i18n-html="workTitle">Travay <em>mwen yo.</em></h2>
-
-    <div class="filters" role="group" aria-label="Filtre portfolio">
-      <button class="active" type="button" data-filter="all">Tout</button>
-      <button type="button" data-filter="flyer">Flyers</button>
-      <button type="button" data-filter="cover">Covers</button>
-      <button type="button" data-filter="label">Étiquèt</button>
-      <button type="button" data-filter="brand">Branding</button>
-    </div>
-
-    <div id="portfolio-grid" class="grid portfolio-grid"></div>
-  </section>
-
-  <section id="store" class="dark">
-    <small data-i18n="storeEyebrow">02 / DIGITAL STORE</small>
-    <h2 data-i18n-html="storeTitle">Boutik <em>PSD.</em></h2>
-
-    <div class="store-switch" role="tablist" aria-label="PSD">
-      <button class="store-tab active" type="button" data-store-mode="free" role="tab" aria-selected="true">PSD GRATIS</button>
-      <button class="store-tab" type="button" data-store-mode="paid" role="tab" aria-selected="false">PSD PAID</button>
-    </div>
-
-    <div id="free-psd-area" class="store-area">
-      <div class="store-section-heading">
-        <span class="store-label">FREE PSD</span>
-        <h3>PSD Gratis</h3>
-        <p>Telechaje PSD ou bezwen yo gratis.</p>
-      </div>
-      <div id="free-psd-grid" class="grid store-grid"></div>
-    </div>
-
-    <div id="paid-psd-area" class="store-area" hidden>
-      <div class="store-section-heading">
-        <span class="store-label gold-label">PREMIUM PSD</span>
-        <h3>PSD Pou Achte</h3>
-        <p>Design premium, pare pou modifye.</p>
-      </div>
-      <div id="paid-psd-grid" class="grid store-grid"></div>
-    </div>
-
-    <p class="note"><b>MONCASH</b> — Estrikti checkout la pare pou koneksyon backend.</p>
-  </section>
-
-  <section id="free">
-    <small data-i18n="freeEyebrow">03 / FREE RESOURCES</small>
-    <h2 data-i18n-html="freeTitle">Asset <em>gratis.</em></h2>
-
-    <div class="asset-switch" role="tablist" aria-label="Asset">
-      <button class="asset-main-tab active" type="button" data-asset-mode="free" role="tab" aria-selected="true">ASSET GRATIS</button>
-      <button class="asset-main-tab" type="button" data-asset-mode="paid" role="tab" aria-selected="false">ASSET PAID</button>
-    </div>
-
-    <div id="free-assets-area" class="asset-area">
-      <div class="asset-types" role="tablist" aria-label="Kategori asset gratis">
-        <button class="asset-type active" type="button" data-asset-type="png">PNG</button>
-        <button class="asset-type" type="button" data-asset-type="background">BACKGROUND</button>
-        <button class="asset-type" type="button" data-asset-type="texture">TEXTURES</button>
-        <button class="asset-type" type="button" data-asset-type="mockup">MOCKUPS</button>
-      </div>
-      <p class="asset-intro">Klike sou yon kategori pou wè fichye yo, epi telechaje sa ou bezwen an.</p>
-      <div id="asset-grid" class="grid asset-grid"></div>
-    </div>
-
-    <div id="paid-assets-area" class="asset-area" hidden>
-      <div class="asset-types" role="tablist" aria-label="Kategori asset paid">
-        <button class="paid-asset-type active" type="button" data-paid-asset-type="png">PNG</button>
-        <button class="paid-asset-type" type="button" data-paid-asset-type="background">BACKGROUND</button>
-        <button class="paid-asset-type" type="button" data-paid-asset-type="texture">TEXTURES</button>
-        <button class="paid-asset-type" type="button" data-paid-asset-type="mockup">MOCKUPS</button>
-      </div>
-      <p class="asset-intro">Asset premium pou moun ki vle achte resous pwofesyonèl yo.</p>
-      <div id="paid-asset-grid" class="grid asset-grid"></div>
-    </div>
-  </section>
-
-  <section id="services">
-    <small data-i18n="servicesEyebrow">04 / SERVICES</small>
-    <h2 data-i18n-html="servicesTitle">Sèvis pou <em>biznis.</em></h2>
-    <div class="services">
-      <p>01 — Logo & Branding</p>
-      <p>02 — Flyer & Social Media</p>
-      <p>03 — Packaging & Étiquèt</p>
-      <p>04 — Motion Design</p>
-    </div>
-  </section>
-</main>
-
-<footer>© 2026 WISE.GRAPHIXDESIGN · <span>Design grafik · PSD · Asset dijital</span></footer>
-
-<div class="download-modal" id="download-modal" role="dialog" aria-modal="true" aria-labelledby="download-title" hidden>
-  <div class="download-modal-card">
-    <span class="download-check" aria-hidden="true">✓</span>
-    <p class="download-kicker">WISE.GRAPHIXDESIGN</p>
-    <h2 id="download-title">Mèsi pou telechajman an!</h2>
-    <p>Asset ou a ap telechaje kounye a. N ap kontan wè sa ou kreye avè l.</p>
-    <button class="modal-close" id="modal-close" type="button">Kontinye navige →</button>
   </div>
-</div>
 
-<a class="whatsapp" href="https://wa.me/50949094294?text=Bonjou%20Wise.graphixdesign%2C%20mwen%20ta%20renmen%20konnen%20plis%20sou%20s%C3%A8vis%20ou%20yo" target="_blank" rel="noopener" aria-label="Kontakte nou sou WhatsApp">
-  <span aria-hidden="true">◉</span><span>WhatsApp</span>
-</a>
 
-<div id="image-lightbox" class="image-lightbox" hidden>
-  <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Fèmen imaj la">×</button>
-  <button class="lightbox-arrow lightbox-prev" id="lightbox-prev" type="button" aria-label="Imaj anvan an">‹</button>
-  <button class="lightbox-arrow lightbox-next" id="lightbox-next" type="button" aria-label="Imaj swivan an">›</button>
-  <div class="lightbox-content" id="lightbox-content">
-    <img id="lightbox-image" src="" alt="" draggable="false">
-    <div class="lightbox-controls">
-      <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
-      <button id="zoom-reset" class="zoom-reset" type="button" aria-label="Reset zoom">100%</button>
-      <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
-    </div>
-  </div>
-</div>
+  <!-- =====================================================
+       SCRIPTS
+  ====================================================== -->
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
+
+  <script src="download-modal.js"></script>
+
 </body>
 </html>
