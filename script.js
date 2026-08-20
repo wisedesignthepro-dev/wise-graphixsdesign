@@ -1,5 +1,14 @@
 /* =========================================================
    WISE.GRAPHIXDESIGN — script.js FINAL
+   RESPONSIVE: MOBILE + TABLET + DESKTOP
+
+   PORTFOLIO
+   PSD FREE + PSD PAID
+   FREE + PAID ASSETS
+   LANGUAGE
+   LIGHTBOX
+   SLIDESHOW
+   DOWNLOAD MODAL
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -12,21 +21,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const mainNav = document.getElementById("main-nav");
 
   if (menuButton && mainNav) {
+
     menuButton.addEventListener("click", () => {
+
       const isOpen = mainNav.classList.toggle("open");
 
       menuButton.setAttribute(
         "aria-expanded",
         String(isOpen)
       );
+
     });
 
     mainNav.querySelectorAll("a").forEach(link => {
+
       link.addEventListener("click", () => {
+
         mainNav.classList.remove("open");
-        menuButton.setAttribute("aria-expanded", "false");
+
+        menuButton.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+
       });
+
     });
+
   }
 
 
@@ -34,67 +55,82 @@ document.addEventListener("DOMContentLoaded", () => {
      LANGUAGE MENU
   ======================================================= */
 
-  const languageButton = document.getElementById("lb");
-  const languageMenu = document.getElementById("lm");
+  const languageButton =
+    document.getElementById("lb");
 
+  const languageMenu =
+    document.getElementById("lm");
 
   if (languageButton && languageMenu) {
 
-    languageButton.addEventListener("click", event => {
+    languageButton.addEventListener(
+      "click",
+      event => {
 
-      event.stopPropagation();
+        event.stopPropagation();
 
-      const open =
-        languageMenu.classList.toggle("open");
+        const open =
+          languageMenu.classList.toggle("open");
 
-      languageButton.setAttribute(
-        "aria-expanded",
-        String(open)
-      );
+        languageButton.setAttribute(
+          "aria-expanded",
+          String(open)
+        );
 
-    });
+      }
+    );
 
 
     languageMenu
       .querySelectorAll("[data-lang]")
       .forEach(button => {
 
-        button.addEventListener("click", () => {
+        button.addEventListener(
+          "click",
+          () => {
 
-          const language =
-            button.dataset.lang;
+            const language =
+              button.dataset.lang;
 
-          setLanguage(language);
+            setLanguage(language);
 
-          languageMenu.classList.remove("open");
+            languageMenu.classList.remove(
+              "open"
+            );
+
+            languageButton.setAttribute(
+              "aria-expanded",
+              "false"
+            );
+
+          }
+        );
+
+      });
+
+
+    document.addEventListener(
+      "click",
+      event => {
+
+        if (
+          !languageMenu.contains(event.target) &&
+          !languageButton.contains(event.target)
+        ) {
+
+          languageMenu.classList.remove(
+            "open"
+          );
 
           languageButton.setAttribute(
             "aria-expanded",
             "false"
           );
 
-        });
-
-      });
-
-
-    document.addEventListener("click", event => {
-
-      if (
-        !languageMenu.contains(event.target) &&
-        !languageButton.contains(event.target)
-      ) {
-
-        languageMenu.classList.remove("open");
-
-        languageButton.setAttribute(
-          "aria-expanded",
-          "false"
-        );
+        }
 
       }
-
-    });
+    );
 
   }
 
@@ -112,7 +148,8 @@ document.addEventListener("DOMContentLoaded", () => {
       navFree: "Asset gratis",
       navServices: "Sèvis",
 
-      heroEyebrow: "STIDYO DESIGN KREYATIF",
+      heroEyebrow:
+        "STIDYO DESIGN KREYATIF",
 
       heroTitle:
         "Design ki<br><em>fè moun sonje w.</em>",
@@ -650,12 +687,15 @@ document.addEventListener("DOMContentLoaded", () => {
   function setLanguage(language) {
 
     const dictionary =
-      translations[language] || translations.ht;
+      translations[language] ||
+      translations.ht;
+
 
     currentLanguage =
       translations[language]
         ? language
         : "ht";
+
 
     document.documentElement.lang =
       currentLanguage;
@@ -729,12 +769,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    /*
-      Si asset cards yo deja sou paj la,
-      mete lang aktyèl la sou bouton yo.
-    */
-
-    updateAssetButtonLanguages();
+    updateAllButtonLanguages();
 
   }
 
@@ -767,6 +802,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!slides.length) return;
 
+
     currentSlide =
       (index + slides.length) %
       slides.length;
@@ -797,6 +833,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function startSlideshow() {
 
     if (slides.length <= 1) return;
+
 
     clearInterval(slideshowTimer);
 
@@ -836,7 +873,7 @@ document.addEventListener("DOMContentLoaded", () => {
      PORTFOLIO FILTER
   ======================================================= */
 
-  const filterButtons =
+  const portfolioFilters =
     document.querySelectorAll(
       ".filters [data-filter]"
     );
@@ -844,112 +881,164 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const portfolioCards =
     document.querySelectorAll(
-      "#work .portfolio-card"
+      ".portfolio-grid .portfolio-card"
     );
 
 
-  filterButtons.forEach(button => {
+  portfolioFilters.forEach(button => {
 
-    button.addEventListener(
-      "click",
-      () => {
+    button.addEventListener("click", () => {
 
-        const filter =
-          button.dataset.filter;
+      const selectedFilter =
+        button.dataset.filter;
 
 
-        filterButtons.forEach(btn => {
+      portfolioFilters.forEach(btn => {
+        btn.classList.remove("active");
+      });
 
-          btn.classList.remove(
-            "active"
+
+      button.classList.add("active");
+
+
+      portfolioCards.forEach(card => {
+
+        const category =
+          card.dataset.category;
+
+
+        if (
+          selectedFilter === "all" ||
+          category === selectedFilter
+        ) {
+
+          card.classList.remove(
+            "portfolio-hidden"
           );
 
-        });
+        } else {
 
+          card.classList.add(
+            "portfolio-hidden"
+          );
 
-        button.classList.add(
-          "active"
-        );
+        }
 
+      });
 
-        portfolioCards.forEach(card => {
-
-          const category =
-            card.dataset.category;
-
-
-          if (
-            filter === "all" ||
-            category === filter
-          ) {
-
-            card.hidden = false;
-
-          } else {
-
-            card.hidden = true;
-
-          }
-
-        });
-
-      }
-    );
+    });
 
   });
 
 
   /* =======================================================
-     FREE + PAID ASSET SYSTEM
+     FREE PSD
+     
+     PSD yo rete deyò assets/
+     Folder:
+     psd-free/
+  ======================================================= */
+
+  const freePSD = [
+
+    {
+      name: "PSD Gratis 01",
+      description: "PSD gratis pou modifye.",
+      image: "images/psd/free/psd01.jpg",
+      download: "psd-free/psd01.psd"
+    },
+
+    {
+      name: "PSD Gratis 02",
+      description: "PSD gratis pou modifye.",
+      image: "images/psd/free/psd02.jpg",
+      download: "psd-free/psd02.psd"
+    }
+
+  ];
+
+
+  /* =======================================================
+     PAID PSD
+     
+     PSD yo rete deyò assets/
+     Folder:
+     psd-paid/
+  ======================================================= */
+
+  const paidPSD = [
+
+    {
+      name: "Premium PSD 01",
+      description: "PSD premium editab.",
+      image: "images/psd/paid/psd01.jpg",
+      price: "$5",
+      buy: "#"
+    },
+
+    {
+      name: "Premium PSD 02",
+      description: "PSD premium editab.",
+      image: "images/psd/paid/psd02.jpg",
+      price: "$7",
+      buy: "#"
+    }
+
+  ];
+
+
+  /* =======================================================
+     FREE ASSETS
   ======================================================= */
 
   const freeAssets = [
 
-    /*
     {
       type: "png",
-      name: "gato00",
+      name: "PNG 01",
       description: "PNG gratis",
-      image: "images/assets/free/gato00",
-      download: "assets/free/gato00"
+      image: "images/assets/free/png/png01.png",
+      download: "assets/free/png/png01.png"
     },
 
     {
       type: "background",
       name: "Background 01",
       description: "Background gratis",
-      image: "images/assets/free/background01.jpg",
-      download: "assets/free/background01.jpg"
+      image: "images/assets/free/background/background01.jpg",
+      download: "assets/free/background/background01.jpg"
     },
 
     {
       type: "texture",
       name: "Texture 01",
       description: "Texture gratis",
-      image: "images/assets/free/texture01.jpg",
-      download: "assets/free/texture01.jpg"
+      image: "images/assets/free/texture/texture01.jpg",
+      download: "assets/free/texture/texture01.jpg"
     },
 
     {
       type: "mockup",
       name: "Mockup 01",
       description: "Mockup gratis",
-      image: "images/assets/free/mockup01.jpg",
-      download: "assets/free/mockup01.jpg"
+      image: "images/assets/free/mockup/mockup01.jpg",
+      download: "assets/free/mockup/mockup01.jpg"
     }
-    */
 
   ];
 
 
+  /* =======================================================
+     PAID ASSETS
+  ======================================================= */
+
   const paidAssets = [
 
-    /*
     {
       type: "png",
       name: "Premium PNG 01",
       description: "PNG premium",
-      image: "images/assets/paid/png01.png",
+      image: "images/assets/paid/png/png01.png",
       price: "$5",
       buy: "#"
     },
@@ -958,7 +1047,7 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "background",
       name: "Premium Background 01",
       description: "Background premium",
-      image: "images/assets/paid/background01.jpg",
+      image: "images/assets/paid/background/background01.jpg",
       price: "$5",
       buy: "#"
     },
@@ -967,7 +1056,7 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "texture",
       name: "Premium Texture 01",
       description: "Texture premium",
-      image: "images/assets/paid/texture01.jpg",
+      image: "images/assets/paid/texture/texture01.jpg",
       price: "$5",
       buy: "#"
     },
@@ -976,13 +1065,28 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "mockup",
       name: "Premium Mockup 01",
       description: "Mockup premium",
-      image: "images/assets/paid/mockup01.jpg",
+      image: "images/assets/paid/mockup/mockup01.jpg",
       price: "$7",
       buy: "#"
     }
-    */
 
   ];
+
+
+  /* =======================================================
+     GRIDS
+  ======================================================= */
+
+  const freePSDGrid =
+    document.getElementById(
+      "free-psd-grid"
+    );
+
+
+  const paidPSDGrid =
+    document.getElementById(
+      "paid-psd-grid"
+    );
 
 
   const freeAssetGrid =
@@ -1003,35 +1107,303 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-  let currentAssetType =
-    "png";
+  /* =======================================================
+     CURRENT ASSET TYPES
+  ======================================================= */
 
+  let currentFreeAssetType = "png";
+  let currentPaidAssetType = "png";
+
+
+  /* =======================================================
+     ASSET TYPE NAME
+  ======================================================= */
 
   function assetTypeName(type) {
 
+    const dictionary =
+      translations[currentLanguage] ||
+      translations.ht;
+
+
     const names = {
 
-      png: "PNG",
+      png:
+        dictionary.assetPNG ||
+        "PNG",
 
       background:
-        translations[currentLanguage]
-          ?.assetBackground ||
+        dictionary.assetBackground ||
         "BACKGROUND",
 
       texture:
-        translations[currentLanguage]
-          ?.assetTextures ||
-        "TEXTURE",
+        dictionary.assetTextures ||
+        "TEXTURES",
 
       mockup:
-        translations[currentLanguage]
-          ?.assetMockups ||
+        dictionary.assetMockups ||
         "MOCKUP"
 
     };
 
 
     return names[type] || type;
+
+  }
+
+
+  /* =======================================================
+     CREATE PSD CARD
+  ======================================================= */
+
+  function createPSDCard(
+    item,
+    paid = false
+  ) {
+
+    const card =
+      document.createElement(
+        "article"
+      );
+
+
+    card.className =
+      "asset-card psd-card";
+
+
+    /* IMAGE */
+
+    const image =
+      document.createElement(
+        "img"
+      );
+
+
+    image.src =
+      item.image || "";
+
+
+    image.alt =
+      item.name ||
+      "PSD";
+
+
+    image.loading =
+      "lazy";
+
+
+    image.className =
+      "asset-image";
+
+
+    /* TITLE */
+
+    const title =
+      document.createElement(
+        "h3"
+      );
+
+
+    title.textContent =
+      item.name ||
+      "PSD";
+
+
+    /* DESCRIPTION */
+
+    const description =
+      document.createElement(
+        "p"
+      );
+
+
+    description.textContent =
+      item.description ||
+      "PSD";
+
+
+    card.appendChild(image);
+    card.appendChild(title);
+    card.appendChild(description);
+
+
+    /* =====================================================
+       PAID PSD
+    ===================================================== */
+
+    if (paid) {
+
+      const price =
+        document.createElement(
+          "strong"
+        );
+
+
+      price.className =
+        "asset-price";
+
+
+      price.textContent =
+        item.price ||
+        translations[currentLanguage].paid;
+
+
+      card.appendChild(price);
+
+
+      const buy =
+        document.createElement(
+          "button"
+        );
+
+
+      buy.type =
+        "button";
+
+
+      buy.className =
+        "buy";
+
+
+      buy.dataset.assetButton =
+        "buy";
+
+
+      buy.textContent =
+        translations[
+          currentLanguage
+        ].buyNow;
+
+
+      if (
+        item.buy &&
+        item.buy !== "#"
+      ) {
+
+        buy.addEventListener(
+          "click",
+          () => {
+
+            window.location.href =
+              item.buy;
+
+          }
+        );
+
+      } else {
+
+        buy.addEventListener(
+          "click",
+          () => {
+
+            alert(
+              translations[
+                currentLanguage
+              ].paymentNotConnected
+            );
+
+          }
+        );
+
+      }
+
+
+      card.appendChild(
+        buy
+      );
+
+    } else {
+
+      /* ===================================================
+         FREE PSD
+      =================================================== */
+
+      const download =
+        document.createElement(
+          "button"
+        );
+
+
+      download.type =
+        "button";
+
+
+      download.className =
+        "download";
+
+
+      download.dataset.assetButton =
+        "download";
+
+
+      download.textContent =
+        translations[
+          currentLanguage
+        ].downloadFree;
+
+
+      download.addEventListener(
+        "click",
+        () => {
+
+          if (
+            item.download &&
+            item.download !== "#"
+          ) {
+
+            const link =
+              document.createElement(
+                "a"
+              );
+
+
+            link.href =
+              item.download;
+
+
+            link.download =
+              "";
+
+
+            link.rel =
+              "noopener";
+
+
+            document.body.appendChild(
+              link
+            );
+
+
+            link.click();
+
+
+            link.remove();
+
+
+            showDownloadModal();
+
+          } else {
+
+            alert(
+              translations[
+                currentLanguage
+              ].addDownload
+            );
+
+          }
+
+        }
+      );
+
+
+      card.appendChild(
+        download
+      );
+
+    }
+
+
+    return card;
 
   }
 
@@ -1059,6 +1431,8 @@ document.addEventListener("DOMContentLoaded", () => {
       asset.type || "png";
 
 
+    /* IMAGE */
+
     const image =
       document.createElement(
         "img"
@@ -1078,14 +1452,11 @@ document.addEventListener("DOMContentLoaded", () => {
       "lazy";
 
 
-    /*
-      CLASS espesyal pou imaj asset yo.
-      Li pèmèt CSS kontwole yo pi byen.
-    */
-
     image.className =
       "asset-image";
 
+
+    /* TITLE */
 
     const title =
       document.createElement(
@@ -1097,6 +1468,8 @@ document.addEventListener("DOMContentLoaded", () => {
       asset.name ||
       "Digital Asset";
 
+
+    /* DESCRIPTION */
 
     const description =
       document.createElement(
@@ -1110,9 +1483,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     card.appendChild(image);
-
     card.appendChild(title);
-
     card.appendChild(description);
 
 
@@ -1137,9 +1508,7 @@ document.addEventListener("DOMContentLoaded", () => {
         translations[currentLanguage].paid;
 
 
-      card.appendChild(
-        price
-      );
+      card.appendChild(price);
 
 
       const buy =
@@ -1161,7 +1530,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       buy.textContent =
-        translations[currentLanguage].buyNow;
+        translations[
+          currentLanguage
+        ].buyNow;
 
 
       if (
@@ -1200,7 +1571,6 @@ document.addEventListener("DOMContentLoaded", () => {
       card.appendChild(
         buy
       );
-
 
     } else {
 
@@ -1255,6 +1625,10 @@ document.addEventListener("DOMContentLoaded", () => {
               "";
 
 
+            link.rel =
+              "noopener";
+
+
             document.body.appendChild(
               link
             );
@@ -1295,10 +1669,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     UPDATE ASSET BUTTON LANGUAGES
+     UPDATE ALL BUTTON LANGUAGES
   ======================================================= */
 
-  function updateAssetButtonLanguages() {
+  function updateAllButtonLanguages() {
 
     const dictionary =
       translations[currentLanguage] ||
@@ -1332,6 +1706,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
+     RENDER PSD
+  ======================================================= */
+
+  function renderPSD(
+    items,
+    grid,
+    paid = false
+  ) {
+
+    if (!grid) return;
+
+
+    grid.innerHTML = "";
+
+
+    items.forEach(item => {
+
+      grid.appendChild(
+        createPSDCard(
+          item,
+          paid
+        )
+      );
+
+    });
+
+  }
+
+
+  /* =======================================================
      RENDER ASSETS
   ======================================================= */
 
@@ -1339,14 +1743,13 @@ document.addEventListener("DOMContentLoaded", () => {
     assets,
     grid,
     paid = false,
-    type = currentAssetType
+    type = null
   ) {
 
     if (!grid) return;
 
 
-    grid.innerHTML =
-      "";
+    grid.innerHTML = "";
 
 
     const filtered =
@@ -1375,16 +1778,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     RENDER ALL ASSETS
+     RENDER ALL
   ======================================================= */
 
   function renderAllAssets() {
+
+    /* PSD */
+
+    renderPSD(
+      freePSD,
+      freePSDGrid,
+      false
+    );
+
+
+    renderPSD(
+      paidPSD,
+      paidPSDGrid,
+      true
+    );
+
+
+    /* ASSETS */
 
     renderAssets(
       freeAssets,
       freeAssetGrid,
       false,
-      currentAssetType
+      currentFreeAssetType
     );
 
 
@@ -1392,7 +1813,7 @@ document.addEventListener("DOMContentLoaded", () => {
       paidAssets,
       paidAssetGrid,
       true,
-      currentAssetType
+      currentPaidAssetType
     );
 
 
@@ -1402,17 +1823,11 @@ document.addEventListener("DOMContentLoaded", () => {
         freeAssets,
         oldAssetGrid,
         false,
-        currentAssetType
+        currentFreeAssetType
       );
 
     }
 
-
-    /*
-      CORRECTION:
-      prepareImages() fèt touswit apre
-      assets yo fin kreye.
-    */
 
     prepareImages();
 
@@ -1420,26 +1835,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     ASSET CATEGORY BUTTONS
+     FREE CATEGORY BUTTONS
   ======================================================= */
 
-  const assetButtons =
+  const freeAssetButtons =
     document.querySelectorAll(
-      "[data-asset-type]"
+      ".free-asset-types [data-asset-type]"
     );
 
 
-  assetButtons.forEach(button => {
+  freeAssetButtons.forEach(button => {
 
     button.addEventListener(
       "click",
-      () => {
+      event => {
 
-        currentAssetType =
+        event.preventDefault();
+        event.stopPropagation();
+
+
+        const selectedType =
           button.dataset.assetType;
 
 
-        assetButtons.forEach(btn => {
+        if (!selectedType) return;
+
+
+        currentFreeAssetType =
+          selectedType;
+
+
+        freeAssetButtons.forEach(btn => {
 
           btn.classList.remove(
             "active"
@@ -1465,7 +1891,88 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
-        renderAllAssets();
+        renderAssets(
+          freeAssets,
+          freeAssetGrid,
+          false,
+          currentFreeAssetType
+        );
+
+
+        prepareImages();
+
+      }
+    );
+
+  });
+
+
+  /* =======================================================
+     PAID CATEGORY BUTTONS
+  ======================================================= */
+
+  const paidAssetButtons =
+    document.querySelectorAll(
+      ".paid-asset-types [data-paid-asset-type]"
+    );
+
+
+  paidAssetButtons.forEach(button => {
+
+    button.addEventListener(
+      "click",
+      event => {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+
+        const selectedType =
+          button.dataset.paidAssetType;
+
+
+        if (!selectedType) return;
+
+
+        currentPaidAssetType =
+          selectedType;
+
+
+        paidAssetButtons.forEach(btn => {
+
+          btn.classList.remove(
+            "active"
+          );
+
+
+          btn.setAttribute(
+            "aria-selected",
+            "false"
+          );
+
+        });
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        button.setAttribute(
+          "aria-selected",
+          "true"
+        );
+
+
+        renderAssets(
+          paidAssets,
+          paidAssetGrid,
+          true,
+          currentPaidAssetType
+        );
+
+
+        prepareImages();
 
       }
     );
@@ -1604,32 +2111,221 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-  let lightboxImages =
-    [];
+  let lightboxImages = [];
+  let lightboxIndex = 0;
+  let zoomLevel = 1;
+
+  let moveX = 0;
+  let moveY = 0;
 
 
-  let lightboxIndex =
-    0;
+  /* =====================================================
+     COLLECT LIGHTBOX IMAGES
+  ===================================================== */
+
+  function collectLightboxImages(
+    sourceImage = null
+  ) {
+
+    /* ===================================================
+       PORTFOLIO
+    =================================================== */
+
+    if (
+      sourceImage &&
+      sourceImage.closest(".portfolio-card")
+    ) {
+
+      const portfolioCard =
+        sourceImage.closest(
+          ".portfolio-card"
+        );
 
 
-  let zoomLevel =
-    1;
+      const category =
+        portfolioCard.dataset.category;
 
 
-  function collectLightboxImages() {
+      lightboxImages =
+        Array.from(
+          document.querySelectorAll(
+            `.portfolio-grid .portfolio-card[data-category="${category}"] img`
+          )
+        ).filter(image => {
+
+          return (
+            image.src &&
+            image.id !== "lightbox-image"
+          );
+
+        });
+
+
+      return;
+
+    }
+
+
+    /* ===================================================
+       FREE ASSETS
+    =================================================== */
+
+    if (
+      sourceImage &&
+      sourceImage.closest("#free-assets-grid")
+    ) {
+
+      const assetCard =
+        sourceImage.closest(
+          ".asset-card"
+        );
+
+
+      const assetType =
+        assetCard?.dataset.assetType;
+
+
+      if (assetType) {
+
+        lightboxImages =
+          Array.from(
+            document.querySelectorAll(
+              `#free-assets-grid .asset-card[data-asset-type="${assetType}"] img`
+            )
+          ).filter(image => {
+
+            return (
+              image.src &&
+              image.id !== "lightbox-image"
+            );
+
+          });
+
+
+        return;
+
+      }
+
+    }
+
+
+    /* ===================================================
+       PAID ASSETS
+    =================================================== */
+
+    if (
+      sourceImage &&
+      sourceImage.closest("#paid-assets-grid")
+    ) {
+
+      const assetCard =
+        sourceImage.closest(
+          ".asset-card"
+        );
+
+
+      const assetType =
+        assetCard?.dataset.assetType;
+
+
+      if (assetType) {
+
+        lightboxImages =
+          Array.from(
+            document.querySelectorAll(
+              `#paid-assets-grid .asset-card[data-asset-type="${assetType}"] img`
+            )
+          ).filter(image => {
+
+            return (
+              image.src &&
+              image.id !== "lightbox-image"
+            );
+
+          });
+
+
+        return;
+
+      }
+
+    }
+
+
+    /* ===================================================
+       PSD FREE
+       Tout PSD gratis ansanm
+    =================================================== */
+
+    if (
+      sourceImage &&
+      sourceImage.closest("#free-psd-grid")
+    ) {
+
+      lightboxImages =
+        Array.from(
+          document.querySelectorAll(
+            "#free-psd-grid .psd-card img"
+          )
+        ).filter(image => {
+
+          return (
+            image.src &&
+            image.id !== "lightbox-image"
+          );
+
+        });
+
+
+      return;
+
+    }
+
+
+    /* ===================================================
+       PSD PAID
+       Tout PSD peye ansanm
+    =================================================== */
+
+    if (
+      sourceImage &&
+      sourceImage.closest("#paid-psd-grid")
+    ) {
+
+      lightboxImages =
+        Array.from(
+          document.querySelectorAll(
+            "#paid-psd-grid .psd-card img"
+          )
+        ).filter(image => {
+
+          return (
+            image.src &&
+            image.id !== "lightbox-image"
+          );
+
+        });
+
+
+      return;
+
+    }
+
+
+    /* ===================================================
+       DEFAULT
+    =================================================== */
 
     lightboxImages =
       Array.from(
         document.querySelectorAll(
-          "img:not(#lightbox-image)"
+          ".portfolio-grid img, #free-assets-grid img, #paid-assets-grid img, #free-psd-grid img, #paid-psd-grid img"
         )
       ).filter(image => {
 
         return (
           image.src &&
-          !image.closest(
-            ".lang-menu"
-          )
+          image.id !== "lightbox-image"
         );
 
       });
@@ -1637,13 +2333,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  /* =======================================================
+     UPDATE ZOOM
+  ======================================================= */
+
   function updateZoom() {
 
     if (!lightboxImage) return;
 
 
     lightboxImage.style.transform =
-      `translate(${moveX}px, ${moveY}px) scale(${zoomLevel})`;
+      `translate3d(${moveX}px, ${moveY}px, 0) scale(${zoomLevel})`;
 
 
     if (zoomReset) {
@@ -1657,6 +2357,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
+
+  /* =======================================================
+     OPEN LIGHTBOX
+  ======================================================= */
 
   function openLightbox(index) {
 
@@ -1694,16 +2398,9 @@ document.addEventListener("DOMContentLoaded", () => {
       source.alt || "";
 
 
-    zoomLevel =
-      1;
-
-
-    moveX =
-      0;
-
-
-    moveY =
-      0;
+    zoomLevel = 1;
+    moveX = 0;
+    moveY = 0;
 
 
     updateZoom();
@@ -1719,6 +2416,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
+
+  /* =======================================================
+     CLOSE LIGHTBOX
+  ======================================================= */
 
   function closeLightbox() {
 
@@ -1739,10 +2440,17 @@ document.addEventListener("DOMContentLoaded", () => {
       lightboxImage.src =
         "";
 
+      lightboxImage.style.transform =
+        "";
+
     }
 
   }
 
+
+  /* =======================================================
+     NEXT / PREVIOUS
+  ======================================================= */
 
   function nextImage() {
 
@@ -1761,6 +2469,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
+
+  /* =======================================================
+     ZOOM
+  ======================================================= */
 
   function zoomPlus() {
 
@@ -1792,16 +2504,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function resetZoom() {
 
-    zoomLevel =
-      1;
-
-
-    moveX =
-      0;
-
-
-    moveY =
-      0;
+    zoomLevel = 1;
+    moveX = 0;
+    moveY = 0;
 
 
     updateZoom();
@@ -1815,61 +2520,69 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function prepareImages() {
 
-    collectLightboxImages();
+    const images =
+      document.querySelectorAll(
+        ".portfolio-grid img, #free-assets-grid img, #paid-assets-grid img, #free-psd-grid img, #paid-psd-grid img"
+      );
 
 
-    lightboxImages.forEach(
-      (image, index) => {
+    images.forEach(image => {
 
-        if (
-          image.dataset.lightboxReady
-        ) {
+      if (
+        image.dataset.lightboxReady === "true"
+      ) {
 
-          return;
-
-        }
-
-
-        image.dataset.lightboxReady =
-          "true";
-
-
-        image.addEventListener(
-          "click",
-          () => {
-
-            collectLightboxImages();
-
-
-            const newIndex =
-              lightboxImages.indexOf(
-                image
-              );
-
-
-            openLightbox(
-              newIndex >= 0
-                ? newIndex
-                : index
-            );
-
-          }
-        );
+        return;
 
       }
-    );
+
+
+      image.dataset.lightboxReady =
+        "true";
+
+
+      image.style.cursor =
+        "zoom-in";
+
+
+      image.addEventListener(
+        "click",
+        event => {
+
+          if (
+            event.target.closest(
+              "button, a"
+            )
+          ) {
+
+            return;
+
+          }
+
+
+          collectLightboxImages(
+            image
+          );
+
+
+          const newIndex =
+            lightboxImages.indexOf(
+              image
+            );
+
+
+          openLightbox(
+            newIndex >= 0
+              ? newIndex
+              : 0
+          );
+
+        }
+      );
+
+    });
 
   }
-
-
-  /*
-    Initialisation.
-    Li fèt apre fonksyon yo fin defini.
-  */
-
-  renderAllAssets();
-
-  prepareImages();
 
 
   /* =======================================================
@@ -1975,16 +2688,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
 
-      if (event.key === "Escape") {
+      if (
+        event.key === "Escape"
+      ) {
 
         closeLightbox();
+        return;
 
       }
 
 
       if (
-        event.key ===
-        "ArrowRight"
+        event.key === "ArrowRight"
       ) {
 
         nextImage();
@@ -1993,8 +2708,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       if (
-        event.key ===
-        "ArrowLeft"
+        event.key === "ArrowLeft"
       ) {
 
         previousImage();
@@ -2003,10 +2717,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       if (
-        event.key ===
-        "+" ||
-        event.key ===
-        "="
+        event.key === "+" ||
+        event.key === "="
       ) {
 
         zoomPlus();
@@ -2015,8 +2727,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       if (
-        event.key ===
-        "-"
+        event.key === "-"
       ) {
 
         zoomMinus();
@@ -2025,8 +2736,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       if (
-        event.key ===
-        "0"
+        event.key === "0"
       ) {
 
         resetZoom();
@@ -2038,7 +2748,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     ZOOM WITH MOUSE WHEEL
+     MOUSE WHEEL ZOOM
   ======================================================= */
 
   if (lightboxImage) {
@@ -2082,27 +2792,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     DRAG IMAGE WHEN ZOOMED
+     TOUCH / POINTER DRAG
   ======================================================= */
 
-  let dragging =
-    false;
-
-
-  let startX =
-    0;
-
-
-  let startY =
-    0;
-
-
-  let moveX =
-    0;
-
-
-  let moveY =
-    0;
+  let dragging = false;
+  let startX = 0;
+  let startY = 0;
 
 
   if (lightboxImage) {
@@ -2120,8 +2815,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        dragging =
-          true;
+        dragging = true;
 
 
         startX =
@@ -2142,6 +2836,9 @@ document.addEventListener("DOMContentLoaded", () => {
         lightboxImage.setPointerCapture(
           event.pointerId
         );
+
+
+        event.preventDefault();
 
       }
     );
@@ -2165,21 +2862,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         lightboxImage.style.transform =
-          `translate(${moveX}px, ${moveY}px) scale(${zoomLevel})`;
+          `translate3d(${moveX}px, ${moveY}px, 0) scale(${zoomLevel})`;
+
+
+        event.preventDefault();
 
       }
     );
 
 
-    function stopDragging() {
+    function stopDragging(event) {
 
-      dragging =
-        false;
+      if (!dragging) return;
+
+
+      dragging = false;
 
 
       lightboxImage.classList.remove(
         "dragging"
       );
+
+
+      if (
+        event &&
+        lightboxImage.hasPointerCapture &&
+        lightboxImage.hasPointerCapture(
+          event.pointerId
+        )
+      ) {
+
+        lightboxImage.releasePointerCapture(
+          event.pointerId
+        );
+
+      }
 
     }
 
@@ -2192,6 +2909,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     lightboxImage.addEventListener(
       "pointercancel",
+      stopDragging
+    );
+
+
+    lightboxImage.addEventListener(
+      "lostpointercapture",
       stopDragging
     );
 
@@ -2209,8 +2932,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   if (
-    "IntersectionObserver" in
-    window
+    "IntersectionObserver" in window
   ) {
 
     const observer =
@@ -2250,7 +2972,6 @@ document.addEventListener("DOMContentLoaded", () => {
         observer.observe(element)
     );
 
-
   } else {
 
     revealElements.forEach(
@@ -2264,7 +2985,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     OBSERVE DYNAMIC ASSET IMAGES
+     OBSERVE DYNAMIC IMAGES
   ======================================================= */
 
   const assetObserver =
@@ -2303,6 +3024,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  if (freePSDGrid) {
+
+    assetObserver.observe(
+      freePSDGrid,
+      {
+        childList: true,
+        subtree: true
+      }
+    );
+
+  }
+
+
+  if (paidPSDGrid) {
+
+    assetObserver.observe(
+      paidPSDGrid,
+      {
+        childList: true,
+        subtree: true
+      }
+    );
+
+  }
+
+
   if (oldAssetGrid) {
 
     assetObserver.observe(
@@ -2314,6 +3061,19 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
   }
+
+
+  /* =======================================================
+     INITIALISATION
+  ======================================================= */
+
+  renderAllAssets();
+
+  prepareImages();
+
+  setLanguage(
+    currentLanguage
+  );
 
 
   /* =======================================================
