@@ -1,1616 +1,1757 @@
 /* =========================================================
-   WISE.GRAPHIXDESIGN — FINAL SCRIPT
-   AJOUTE OTAN DE ITEMS OU VLE NAN LIST SA YO.
+   WISE.GRAPHIXDESIGN — script.js FINAL
 ========================================================= */
 
+document.addEventListener("DOMContentLoaded", () => {
 
-/* =========================================================
-   1. PORTFOLIO
-   Ou ka ajoute kantite imaj ou vle.
-========================================================= */
+  /* =======================================================
+     MOBILE MENU
+  ======================================================= */
 
-const portfolioItems = [
+  const menuButton = document.getElementById("mb");
+  const mainNav = document.getElementById("main-nav");
 
-  {
-    image: "images/STREET SHUTDOWN.png",
-    title: "BACK TO SCHOOL",
-    category: "flyer"
-  },
-
-  {
-    image: "images/flyer00.png",
-    title: "Flyer Event",
-    category: "flyer"
-  },
-
-  {
-    image: "images/cover00.png",
-    title: "Cover Design",
-    category: "cover"
-  },
-
-  {
-    image: "images/CHANPYON MASTER02.jpg",
-    title: "Cover Design",
-    category: "cover"
-  },
-
-  {
-    image: "images/label.png",
-    title: "Product Label",
-    category: "label"
-  },
-
-  {
-    image: "images/branding.png",
-    title: "Brand Identity",
-    category: "brand"
-  },
-
-  {
-    image: "images/FRITZ HERBY SHOT IT.png",
-    title: "FLYER DESIGN",
-    category: "flyer"
-  }
-
-];
-
-
-/* =========================================================
-   2. PSD GRATIS
-========================================================= */
-
-const freePSD = [
-
-  /*
-  {
-    image: "images/psd-free-01.jpg",
-    title: "PSD Flyer 01",
-    description: "PSD gratis",
-    download: "downloads/psd-free-01.zip"
-  }
-  */
-
-];
-
-
-/* =========================================================
-   3. PSD PAID
-========================================================= */
-
-const paidPSD = [
-
-  /*
-  {
-    image: "images/psd-paid-01.jpg",
-    title: "Premium Flyer",
-    description: "PSD premium",
-    price: "$10",
-    buyUrl: "#"
-  }
-  */
-
-];
-
-
-/* =========================================================
-   4. ASSET GRATIS
-   PNG / BACKGROUND / TEXTURES / MOCKUPS
-========================================================= */
-
-const freeAssets = {
-
-  png: [
-
-    /*
-    {
-      image: "images/assets/png-01.png",
-      title: "PNG Element 01",
-      description: "PNG gratis",
-      download: "downloads/png-01.zip"
-    }
-    */
-
-  ],
-
-  background: [
-
-    /*
-    {
-      image: "images/assets/bg-01.jpg",
-      title: "Background 01",
-      description: "Background gratis",
-      download: "downloads/bg-01.zip"
-    }
-    */
-
-  ],
-
-  texture: [
-
-    /*
-    {
-      image: "images/assets/texture-01.jpg",
-      title: "Texture 01",
-      description: "Texture gratis",
-      download: "downloads/texture-01.zip"
-    }
-    */
-
-  ],
-
-  mockup: [
-
-    /*
-    {
-      image: "images/assets/mockup-01.jpg",
-      title: "Mockup 01",
-      description: "Mockup gratis",
-      download: "downloads/mockup-01.zip"
-    }
-    */
-
-  ]
-
-};
-
-
-/* =========================================================
-   5. ASSET PAID
-   MENM KATEGORI YO
-========================================================= */
-
-const paidAssets = {
-
-  png: [
-
-    /*
-    {
-      image: "images/assets-paid/png-01.png",
-      title: "Premium PNG 01",
-      description: "PNG premium",
-      price: "$5",
-      buyUrl: "#"
-    }
-    */
-
-  ],
-
-  background: [
-
-    /*
-    {
-      image: "images/assets-paid/bg-01.jpg",
-      title: "Premium Background 01",
-      description: "Background premium",
-      price: "$5",
-      buyUrl: "#"
-    }
-    */
-
-  ],
-
-  texture: [
-
-    /*
-    {
-      image: "images/assets-paid/texture-01.jpg",
-      title: "Premium Texture 01",
-      description: "Texture premium",
-      price: "$5",
-      buyUrl: "#"
-    }
-    */
-
-  ],
-
-  mockup: [
-
-    /*
-    {
-      image: "images/assets-paid/mockup-01.jpg",
-      title: "Premium Mockup 01",
-      description: "Mockup premium",
-      price: "$8",
-      buyUrl: "#"
-    }
-    */
-
-  ]
-
-};
-
-
-/* =========================================================
-   UTILITIES
-========================================================= */
-
-const $ = (selector, root = document) =>
-  root.querySelector(selector);
-
-const $$ = (selector, root = document) =>
-  [...root.querySelectorAll(selector)];
-
-
-function escapeHTML(value = "") {
-
-  return String(value).replace(/[&<>"']/g, character => ({
-
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-
-  }[character]));
-
-}
-
-
-/* =========================================================
-   PORTFOLIO
-========================================================= */
-
-const portfolioGrid = $("#portfolio-grid");
-
-
-function renderPortfolio(filter = "all") {
-
-  if (!portfolioGrid) return;
-
-  const items =
-    filter === "all"
-      ? portfolioItems
-      : portfolioItems.filter(
-          item => item.category === filter
-        );
-
-
-  portfolioGrid.innerHTML = items.map((item, index) => `
-
-    <article
-      class="portfolio-card reveal visible"
-      data-lightbox-index="${index}"
-    >
-
-      <img
-        src="${escapeHTML(item.image)}"
-        alt="${escapeHTML(item.title)}"
-        loading="lazy"
-      >
-
-      <p>
-        ${escapeHTML(item.title)}
-      </p>
-
-    </article>
-
-  `).join("");
-
-
-  $$(".portfolio-card", portfolioGrid).forEach(card => {
-
-    card.addEventListener("click", () => {
-
-      const visibleItems =
-        filter === "all"
-          ? portfolioItems
-          : portfolioItems.filter(
-              item => item.category === filter
-            );
-
-      openLightbox(
-        visibleItems,
-        Number(card.dataset.lightboxIndex)
-      );
-
-    });
-
-  });
-
-}
-
-
-renderPortfolio();
-
-
-/* =========================================================
-   PORTFOLIO FILTERS
-========================================================= */
-
-$$(".filters button").forEach(button => {
-
-  button.addEventListener("click", () => {
-
-    $$(".filters button").forEach(btn =>
-      btn.classList.remove("active")
-    );
-
-    button.classList.add("active");
-
-    renderPortfolio(
-      button.dataset.filter
-    );
-
-  });
-
-});
-
-
-/* =========================================================
-   STORE — PSD GRATIS / PSD PAID
-========================================================= */
-
-function renderStoreGrid(
-  target,
-  items,
-  paid = false
-) {
-
-  const grid = $(target);
-
-  if (!grid) return;
-
-
-  if (!items.length) {
-
-    grid.innerHTML = `
-
-      <div class="empty-state">
-
-        Pa gen pwodwi nan kategori sa a ankò.
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  grid.innerHTML = items.map(
-    (item, index) => {
-
-      const action = paid
-
-        ? `
-
-          <button
-            class="buy"
-            type="button"
-            data-buy="${index}"
-          >
-
-            Achte
-            ${item.price
-              ? "— " + escapeHTML(item.price)
-              : "→"}
-
-          </button>
-
-        `
-
-        : `
-
-          <button
-            class="download"
-            type="button"
-            data-download="${index}"
-          >
-
-            Telechaje gratis
-
-          </button>
-
-        `;
-
-
-      return `
-
-        <article
-          class="store-card"
-          data-store-index="${index}"
-        >
-
-          <img
-            src="${escapeHTML(item.image)}"
-            alt="${escapeHTML(item.title)}"
-            loading="lazy"
-          >
-
-          <h3>
-            ${escapeHTML(item.title)}
-          </h3>
-
-          <p>
-            ${escapeHTML(
-              item.description || ""
-            )}
-          </p>
-
-          ${
-            paid
-              ? `
-                <strong>
-                  ${escapeHTML(
-                    item.price || ""
-                  )}
-                </strong>
-              `
-              : ""
-          }
-
-          ${action}
-
-        </article>
-
-      `;
-
-    }
-  ).join("");
-
-
-  /* Lightbox */
-
-  $$(".store-card > img", grid)
-    .forEach((img, index) => {
-
-      img.addEventListener(
-        "click",
-        () => openLightbox(items, index)
-      );
-
-    });
-
-
-  /* Download */
-
-  $$(".download", grid)
-    .forEach(button => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          const item =
-            items[
-              Number(
-                button.dataset.download
-              )
-            ];
-
-          if (item.download) {
-
-            startDownload(
-              item.download
-            );
-
-          }
-
-        }
-      );
-
-    });
-
-
-  /* Buy */
-
-  $$(".buy", grid)
-    .forEach(button => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          const item =
-            items[
-              Number(
-                button.dataset.buy
-              )
-            ];
-
-
-          if (
-            item.buyUrl &&
-            item.buyUrl !== "#"
-          ) {
-
-            window.open(
-              item.buyUrl,
-              "_blank",
-              "noopener"
-            );
-
-          } else {
-
-            alert(
-              "Mete lyen checkout MonCash ou nan buyUrl pou pwodwi sa a."
-            );
-
-          }
-
-        }
-      );
-
-    });
-
-}
-
-
-renderStoreGrid(
-  "#free-psd-grid",
-  freePSD,
-  false
-);
-
-
-renderStoreGrid(
-  "#paid-psd-grid",
-  paidPSD,
-  true
-);
-
-
-/* =========================================================
-   PSD FREE / PAID TABS
-========================================================= */
-
-$$(".store-tab").forEach(tab => {
-
-  tab.addEventListener(
-    "click",
-    () => {
-
-      $$(".store-tab").forEach(t => {
-
-        t.classList.remove("active");
-
-        t.setAttribute(
-          "aria-selected",
-          "false"
-        );
-
-      });
-
-
-      tab.classList.add("active");
-
-      tab.setAttribute(
-        "aria-selected",
-        "true"
-      );
-
-
-      const free =
-        tab.dataset.storeMode === "free";
-
-
-      const freeArea =
-        $("#free-psd-area");
-
-      const paidArea =
-        $("#paid-psd-area");
-
-
-      if (freeArea)
-        freeArea.hidden = !free;
-
-
-      if (paidArea)
-        paidArea.hidden = free;
-
-    }
-  );
-
-});
-
-
-/* =========================================================
-   ASSET GRATIS / PAID
-========================================================= */
-
-let currentFreeAssetType = "png";
-
-let currentPaidAssetType = "png";
-
-
-function renderAssets(
-  type,
-  paid = false
-) {
-
-  const data =
-    paid
-      ? paidAssets[type]
-      : freeAssets[type];
-
-
-  const target =
-    paid
-      ? "#paid-asset-grid"
-      : "#asset-grid";
-
-
-  const grid = $(target);
-
-  if (!grid) return;
-
-
-  if (!data || !data.length) {
-
-    grid.innerHTML = `
-
-      <div class="empty-state">
-
-        Pa gen asset nan kategori sa a ankò.
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  grid.innerHTML = data.map(
-    (item, index) => {
-
-      const action = paid
-
-        ? `
-
-          <button
-            class="buy"
-            type="button"
-            data-buy="${index}"
-          >
-
-            Achte
-            ${
-              item.price
-                ? "— " +
-                  escapeHTML(
-                    item.price
-                  )
-                : "→"
-            }
-
-          </button>
-
-        `
-
-        : `
-
-          <button
-            class="download"
-            type="button"
-            data-download="${index}"
-          >
-
-            Telechaje gratis
-
-          </button>
-
-        `;
-
-
-      return `
-
-        <article class="asset-card">
-
-          <img
-            src="${escapeHTML(item.image)}"
-            alt="${escapeHTML(item.title)}"
-            loading="lazy"
-          >
-
-          <h3>
-            ${escapeHTML(item.title)}
-          </h3>
-
-          <p>
-            ${escapeHTML(
-              item.description || ""
-            )}
-          </p>
-
-          ${
-            paid
-              ? `
-                <strong>
-                  ${escapeHTML(
-                    item.price || ""
-                  )}
-                </strong>
-              `
-              : ""
-          }
-
-          ${action}
-
-        </article>
-
-      `;
-
-    }
-  ).join("");
-
-
-  /* Lightbox */
-
-  $$(".asset-card img", grid)
-    .forEach((img, index) => {
-
-      img.addEventListener(
-        "click",
-        () => openLightbox(data, index)
-      );
-
-    });
-
-
-  /* Download */
-
-  $$(".download", grid)
-    .forEach(button => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          const item =
-            data[
-              Number(
-                button.dataset.download
-              )
-            ];
-
-
-          if (item.download) {
-
-            startDownload(
-              item.download
-            );
-
-          }
-
-        }
-      );
-
-    });
-
-
-  /* Buy */
-
-  $$(".buy", grid)
-    .forEach(button => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          const item =
-            data[
-              Number(
-                button.dataset.buy
-              )
-            ];
-
-
-          if (
-            item.buyUrl &&
-            item.buyUrl !== "#"
-          ) {
-
-            window.open(
-              item.buyUrl,
-              "_blank",
-              "noopener"
-            );
-
-          } else {
-
-            alert(
-              "Mete lyen checkout MonCash ou nan buyUrl pou asset sa a."
-            );
-
-          }
-
-        }
-      );
-
-    });
-
-}
-
-
-renderAssets(
-  "png",
-  false
-);
-
-
-renderAssets(
-  "png",
-  true
-);
-
-
-/* =========================================================
-   ASSET FREE / PAID TABS
-========================================================= */
-
-$$(".asset-main-tab").forEach(tab => {
-
-  tab.addEventListener(
-    "click",
-    () => {
-
-      $$(".asset-main-tab").forEach(t => {
-
-        t.classList.remove("active");
-
-        t.setAttribute(
-          "aria-selected",
-          "false"
-        );
-
-      });
-
-
-      tab.classList.add("active");
-
-      tab.setAttribute(
-        "aria-selected",
-        "true"
-      );
-
-
-      const free =
-        tab.dataset.assetMode === "free";
-
-
-      const freeArea =
-        $("#free-assets-area");
-
-      const paidArea =
-        $("#paid-assets-area");
-
-
-      if (freeArea)
-        freeArea.hidden = !free;
-
-
-      if (paidArea)
-        paidArea.hidden = free;
-
-    }
-  );
-
-});
-
-
-/* =========================================================
-   ASSET GRATIS CATEGORIES
-========================================================= */
-
-$$(".asset-type").forEach(tab => {
-
-  tab.addEventListener(
-    "click",
-    () => {
-
-      $$(".asset-type").forEach(t =>
-        t.classList.remove("active")
-      );
-
-
-      tab.classList.add("active");
-
-
-      currentFreeAssetType =
-        tab.dataset.assetType;
-
-
-      renderAssets(
-        currentFreeAssetType,
-        false
-      );
-
-    }
-  );
-
-});
-
-
-/* =========================================================
-   ASSET PAID CATEGORIES
-========================================================= */
-
-$$(".paid-asset-type").forEach(tab => {
-
-  tab.addEventListener(
-    "click",
-    () => {
-
-      $$(".paid-asset-type").forEach(t =>
-        t.classList.remove("active")
-      );
-
-
-      tab.classList.add("active");
-
-
-      currentPaidAssetType =
-        tab.dataset.paidAssetType;
-
-
-      renderAssets(
-        currentPaidAssetType,
-        true
-      );
-
-    }
-  );
-
-});
-
-
-/* =========================================================
-   DOWNLOAD MODAL
-========================================================= */
-
-const modal =
-  $("#download-modal");
-
-const modalClose =
-  $("#modal-close");
-
-
-function startDownload(url) {
-
-  const link =
-    document.createElement("a");
-
-
-  link.href = url;
-
-  link.download = "";
-
-
-  document.body.appendChild(link);
-
-  link.click();
-
-  link.remove();
-
-
-  if (modal)
-    modal.hidden = false;
-
-}
-
-
-if (modalClose) {
-
-  modalClose.addEventListener(
-    "click",
-    () => {
-      modal.hidden = true;
-    }
-  );
-
-}
-
-
-if (modal) {
-
-  modal.addEventListener(
-    "click",
-    event => {
-
-      if (
-        event.target === modal
-      ) {
-
-        modal.hidden = true;
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   HERO SLIDESHOW
-========================================================= */
-
-const slides =
-  $$(".hero-slideshow .slide");
-
-const dots =
-  $$(".slide-dots .dot");
-
-
-let slideIndex = 0;
-
-let slideTimer;
-
-
-function showSlide(index) {
-
-  if (!slides.length)
-    return;
-
-
-  slideIndex =
-    (index + slides.length)
-    % slides.length;
-
-
-  slides.forEach(
-    (slide, index) => {
-
-      slide.classList.toggle(
-        "active",
-        index === slideIndex
-      );
-
-    }
-  );
-
-
-  dots.forEach(
-    (dot, index) => {
-
-      dot.classList.toggle(
-        "active",
-        index === slideIndex
-      );
-
-    }
-  );
-
-}
-
-
-function startSlideshow() {
-
-  clearInterval(
-    slideTimer
-  );
-
-
-  slideTimer =
-    setInterval(
-      () => {
-
-        showSlide(
-          slideIndex + 1
-        );
-
-      },
-      5000
-    );
-
-}
-
-
-dots.forEach(
-  (dot, index) => {
-
-    dot.addEventListener(
-      "click",
-      () => {
-
-        showSlide(index);
-
-        startSlideshow();
-
-      }
-    );
-
-  }
-);
-
-
-showSlide(0);
-
-startSlideshow();
-
-
-/* =========================================================
-   MOBILE MENU
-========================================================= */
-
-const menuButton =
-  $("#mb");
-
-const nav =
-  $("#main-nav");
-
-
-if (menuButton) {
-
-  menuButton.addEventListener(
-    "click",
-    () => {
-
-      const open =
-        nav.classList.toggle(
-          "open"
-        );
-
+  if (menuButton && mainNav) {
+    menuButton.addEventListener("click", () => {
+      const isOpen = mainNav.classList.toggle("open");
 
       menuButton.setAttribute(
         "aria-expanded",
-        String(open)
+        String(isOpen)
       );
+    });
 
-    }
-  );
-
-}
-
-
-/* =========================================================
-   LANGUAGE MENU
-========================================================= */
-
-const langButton =
-  $("#lb");
-
-const langMenu =
-  $("#lm");
+    mainNav.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        mainNav.classList.remove("open");
+        menuButton.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
 
 
-if (langButton) {
+  /* =======================================================
+     LANGUAGE MENU
+  ======================================================= */
 
-  langButton.addEventListener(
-    "click",
-    event => {
+  const languageButton = document.getElementById("lb");
+  const languageMenu = document.getElementById("lm");
 
+  if (languageButton && languageMenu) {
+
+    languageButton.addEventListener("click", event => {
       event.stopPropagation();
 
+      const open = languageMenu.classList.toggle("open");
 
-      const open =
-        langMenu.classList.toggle(
-          "open"
-        );
-
-
-      langButton.setAttribute(
+      languageButton.setAttribute(
         "aria-expanded",
         String(open)
       );
+    });
 
-    }
-  );
+    languageMenu.querySelectorAll("[data-lang]").forEach(button => {
 
-}
+      button.addEventListener("click", () => {
 
+        const language = button.dataset.lang;
 
-document.addEventListener(
-  "click",
-  () => {
+        setLanguage(language);
 
-    if (langMenu)
-      langMenu.classList.remove(
-        "open"
-      );
+        languageMenu.classList.remove("open");
 
-
-    if (langButton)
-      langButton.setAttribute(
-        "aria-expanded",
-        "false"
-      );
-
-  }
-);
-
-
-/* =========================================================
-   CLOSE MOBILE MENU WHEN CLICK LINK
-========================================================= */
-
-$$(
-  "#main-nav > a"
-).forEach(link => {
-
-  link.addEventListener(
-    "click",
-    () => {
-
-      if (nav)
-        nav.classList.remove(
-          "open"
-        );
-
-
-      if (menuButton)
-        menuButton.setAttribute(
+        languageButton.setAttribute(
           "aria-expanded",
           "false"
         );
 
-    }
-  );
-
-});
-
-
-/* =========================================================
-   TRANSLATIONS
-========================================================= */
-
-const translations = {
-
-  ht: {
-
-    navWork:
-      "Travay mwen yo",
-
-    navStore:
-      "Boutik PSD",
-
-    navFree:
-      "Asset gratis",
-
-    navServices:
-      "Sèvis",
-
-    heroEyebrow:
-      "STIDYO DESIGN KREYATIF",
-
-    heroTitle:
-      "Design ki<br><em>fè moun sonje w.</em>",
-
-    heroText:
-      "Kreyasyon grafik premium, PSD editab ak resous dijital pou mak ak biznis ki vle kanpe apa.",
-
-    heroPrimary:
-      "Gade travay mwen ↗",
-
-    heroSecondary:
-      "Achte PSD →",
-
-    workEyebrow:
-      "01 / PORTFOLIO",
-
-    workTitle:
-      "Travay <em>mwen yo.</em>",
-
-    storeEyebrow:
-      "02 / DIGITAL STORE",
-
-    storeTitle:
-      "Boutik <em>PSD.</em>",
-
-    freeEyebrow:
-      "03 / FREE RESOURCES",
-
-    freeTitle:
-      "Asset <em>gratis.</em>",
-
-    servicesEyebrow:
-      "04 / SERVICES",
-
-    servicesTitle:
-      "Sèvis pou <em>biznis.</em>"
-
-  },
-
-
-  en: {
-
-    navWork:
-      "My Work",
-
-    navStore:
-      "PSD Store",
-
-    navFree:
-      "Free Assets",
-
-    navServices:
-      "Services",
-
-    heroEyebrow:
-      "CREATIVE DESIGN STUDIO",
-
-    heroTitle:
-      "Design that<br><em>makes you memorable.</em>",
-
-    heroText:
-      "Premium graphic design, editable PSDs and digital resources for brands and businesses that want to stand out.",
-
-    heroPrimary:
-      "View my work ↗",
-
-    heroSecondary:
-      "Buy PSD →",
-
-    workEyebrow:
-      "01 / PORTFOLIO",
-
-    workTitle:
-      "My <em>work.</em>",
-
-    storeEyebrow:
-      "02 / DIGITAL STORE",
-
-    storeTitle:
-      "PSD <em>Store.</em>",
-
-    freeEyebrow:
-      "03 / FREE RESOURCES",
-
-    freeTitle:
-      "Free <em>assets.</em>",
-
-    servicesEyebrow:
-      "04 / SERVICES",
-
-    servicesTitle:
-      "Services for <em>business.</em>"
-
-  },
-
-
-  fr: {
-
-    navWork:
-      "Mes travaux",
-
-    navStore:
-      "Boutique PSD",
-
-    navFree:
-      "Assets gratuits",
-
-    navServices:
-      "Services",
-
-    heroEyebrow:
-      "STUDIO DE DESIGN CRÉATIF",
-
-    heroTitle:
-      "Un design qui<br><em>vous rend mémorable.</em>",
-
-    heroText:
-      "Design graphique premium, PSD modifiables et ressources numériques pour les marques et entreprises.",
-
-    heroPrimary:
-      "Voir mes travaux ↗",
-
-    heroSecondary:
-      "Acheter un PSD →",
-
-    workEyebrow:
-      "01 / PORTFOLIO",
-
-    workTitle:
-      "Mes <em>travaux.</em>",
-
-    storeEyebrow:
-      "02 / BOUTIQUE DIGITALE",
-
-    storeTitle:
-      "Boutique <em>PSD.</em>",
-
-    freeEyebrow:
-      "03 / RESSOURCES GRATUITES",
-
-    freeTitle:
-      "Assets <em>gratuits.</em>",
-
-    servicesEyebrow:
-      "04 / SERVICES",
-
-    servicesTitle:
-      "Services pour <em>entreprises.</em>"
-
-  },
-
-
-  es: {
-
-    navWork:
-      "Mis trabajos",
-
-    navStore:
-      "Tienda PSD",
-
-    navFree:
-      "Assets gratis",
-
-    navServices:
-      "Servicios",
-
-    heroEyebrow:
-      "ESTUDIO DE DISEÑO CREATIVO",
-
-    heroTitle:
-      "Diseño que<br><em>te hace memorable.</em>",
-
-    heroText:
-      "Diseño gráfico premium, PSD editables y recursos digitales para marcas y negocios.",
-
-    heroPrimary:
-      "Ver mis trabajos ↗",
-
-    heroSecondary:
-      "Comprar PSD →",
-
-    workEyebrow:
-      "01 / PORTAFOLIO",
-
-    workTitle:
-      "Mis <em>trabajos.</em>",
-
-    storeEyebrow:
-      "02 / TIENDA DIGITAL",
-
-    storeTitle:
-      "Tienda <em>PSD.</em>",
-
-    freeEyebrow:
-      "03 / RECURSOS GRATIS",
-
-    freeTitle:
-      "Assets <em>gratis.</em>",
-
-    servicesEyebrow:
-      "04 / SERVICIOS",
-
-    servicesTitle:
-      "Servicios para <em>negocios.</em>"
-
-  }
-
-};
-
-
-const langNames = {
-
-  ht:
-    "Kreyòl",
-
-  en:
-    "English",
-
-  fr:
-    "Français",
-
-  es:
-    "Español"
-
-};
-
-
-function setLanguage(lang) {
-
-  const dict =
-    translations[lang]
-    || translations.ht;
-
-
-  $$("[data-i18n]")
-    .forEach(element => {
-
-      const key =
-        element.dataset.i18n;
-
-
-      if (dict[key]) {
-
-        element.textContent =
-          dict[key];
-
-      }
+      });
 
     });
 
+    document.addEventListener("click", event => {
 
-  $$("[data-i18n-html]")
-    .forEach(element => {
+      if (
+        !languageMenu.contains(event.target) &&
+        !languageButton.contains(event.target)
+      ) {
+        languageMenu.classList.remove("open");
 
-      const key =
-        element.dataset.i18nHtml;
-
-
-      if (dict[key]) {
-
-        element.innerHTML =
-          dict[key];
-
-      }
-
-    });
-
-
-  const currentLang =
-    $("#current-lang");
-
-
-  if (currentLang) {
-
-    currentLang.textContent =
-      langNames[lang]
-      || "Kreyòl";
-
-  }
-
-
-  document.documentElement.lang =
-    lang;
-
-
-  localStorage.setItem(
-    "wiseLanguage",
-    lang
-  );
-
-}
-
-
-$$(".lang-menu button")
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      event => {
-
-        event.stopPropagation();
-
-
-        setLanguage(
-          button.dataset.lang
+        languageButton.setAttribute(
+          "aria-expanded",
+          "false"
         );
-
-
-        if (langMenu)
-          langMenu.classList.remove(
-            "open"
-          );
-
-
-        if (langButton)
-          langButton.setAttribute(
-            "aria-expanded",
-            "false"
-          );
-
       }
+
+    });
+  }
+
+
+  /* =======================================================
+     TRANSLATIONS
+  ======================================================= */
+
+  const translations = {
+
+    ht: {
+
+      navWork: "Travay mwen yo",
+      navStore: "Boutik PSD",
+      navFree: "Asset gratis",
+      navServices: "Sèvis",
+
+      heroEyebrow: "STIDYO DESIGN KREYATIF",
+
+      heroTitle:
+        "Design ki<br><em>fè moun sonje w.</em>",
+
+      heroText:
+        "Kreyasyon grafik premium, PSD editab ak resous dijital pou mak ak biznis ki vle kanpe apa.",
+
+      heroPrimary:
+        "Gade travay mwen ↗",
+
+      heroSecondary:
+        "Achte PSD →",
+
+      workEyebrow:
+        "01 / PORTFOLIO",
+
+      workTitle:
+        "Travay <em>mwen yo.</em>",
+
+      filterAll:
+        "Tout",
+
+      filterFlyers:
+        "Flyers",
+
+      filterCovers:
+        "Covers",
+
+      filterLabels:
+        "Étiquèt",
+
+      filterBranding:
+        "Branding",
+
+      storeEyebrow:
+        "02 / DIGITAL STORE",
+
+      storeTitle:
+        "Boutik <em>PSD.</em>",
+
+      freeEyebrow:
+        "03 / FREE RESOURCES",
+
+      freeTitle:
+        "Asset <em>gratis.</em>",
+
+      assetPNG:
+        "PNG",
+
+      assetTextures:
+        "Textures",
+
+      assetMockups:
+        "Mockups",
+
+      assetIntro:
+        "Klike sou yon kategori pou wè fichye yo, epi telechaje sa ou bezwen an.",
+
+      servicesEyebrow:
+        "04 / SERVICES",
+
+      servicesTitle:
+        "Sèvis pou <em>biznis.</em>",
+
+      service1:
+        "01 — Logo & Branding",
+
+      service2:
+        "02 — Flyer & Social Media",
+
+      service3:
+        "03 — Packaging & Étiquèt",
+
+      service4:
+        "04 — Motion Design",
+
+      portfolioFlyer:
+        "Flyer Event",
+
+      portfolioCover:
+        "Cover Design",
+
+      portfolioLabel:
+        "Product Label",
+
+      portfolioBrand:
+        "Brand Identity",
+
+      storeNote:
+        "— Estrikti checkout la pare pou koneksyon backend.",
+
+      footer:
+        "Design grafik · PSD · Asset dijital",
+
+      whatsapp:
+        "WhatsApp"
+
+    },
+
+
+    en: {
+
+      navWork:
+        "My Work",
+
+      navStore:
+        "PSD Store",
+
+      navFree:
+        "Free Assets",
+
+      navServices:
+        "Services",
+
+      heroEyebrow:
+        "CREATIVE DESIGN STUDIO",
+
+      heroTitle:
+        "Design that<br><em>makes you memorable.</em>",
+
+      heroText:
+        "Premium graphic design, editable PSD files and digital resources for brands and businesses that want to stand out.",
+
+      heroPrimary:
+        "View my work ↗",
+
+      heroSecondary:
+        "Buy PSD →",
+
+      workEyebrow:
+        "01 / PORTFOLIO",
+
+      workTitle:
+        "My <em>work.</em>",
+
+      filterAll:
+        "All",
+
+      filterFlyers:
+        "Flyers",
+
+      filterCovers:
+        "Covers",
+
+      filterLabels:
+        "Labels",
+
+      filterBranding:
+        "Branding",
+
+      storeEyebrow:
+        "02 / DIGITAL STORE",
+
+      storeTitle:
+        "PSD <em>Store.</em>",
+
+      freeEyebrow:
+        "03 / FREE RESOURCES",
+
+      freeTitle:
+        "Free <em>Assets.</em>",
+
+      assetPNG:
+        "PNG",
+
+      assetTextures:
+        "Textures",
+
+      assetMockups:
+        "Mockups",
+
+      assetIntro:
+        "Choose a category to view the files and download what you need.",
+
+      servicesEyebrow:
+        "04 / SERVICES",
+
+      servicesTitle:
+        "Services for <em>business.</em>",
+
+      service1:
+        "01 — Logo & Branding",
+
+      service2:
+        "02 — Flyer & Social Media",
+
+      service3:
+        "03 — Packaging & Labels",
+
+      service4:
+        "04 — Motion Design",
+
+      portfolioFlyer:
+        "Event Flyer",
+
+      portfolioCover:
+        "Cover Design",
+
+      portfolioLabel:
+        "Product Label",
+
+      portfolioBrand:
+        "Brand Identity",
+
+      storeNote:
+        "— Checkout structure ready for backend connection.",
+
+      footer:
+        "Graphic Design · PSD · Digital Assets",
+
+      whatsapp:
+        "WhatsApp"
+
+    },
+
+
+    fr: {
+
+      navWork:
+        "Mes travaux",
+
+      navStore:
+        "Boutique PSD",
+
+      navFree:
+        "Assets gratuits",
+
+      navServices:
+        "Services",
+
+      heroEyebrow:
+        "STUDIO DE DESIGN CRÉATIF",
+
+      heroTitle:
+        "Un design qui<br><em>vous rend mémorable.</em>",
+
+      heroText:
+        "Créations graphiques premium, fichiers PSD modifiables et ressources digitales pour les marques et entreprises qui veulent se démarquer.",
+
+      heroPrimary:
+        "Voir mes travaux ↗",
+
+      heroSecondary:
+        "Acheter un PSD →",
+
+      workEyebrow:
+        "01 / PORTFOLIO",
+
+      workTitle:
+        "Mes <em>travaux.</em>",
+
+      filterAll:
+        "Tout",
+
+      filterFlyers:
+        "Flyers",
+
+      filterCovers:
+        "Covers",
+
+      filterLabels:
+        "Étiquettes",
+
+      filterBranding:
+        "Branding",
+
+      storeEyebrow:
+        "02 / BOUTIQUE DIGITALE",
+
+      storeTitle:
+        "Boutique <em>PSD.</em>",
+
+      freeEyebrow:
+        "03 / RESSOURCES GRATUITES",
+
+      freeTitle:
+        "Assets <em>gratuits.</em>",
+
+      assetPNG:
+        "PNG",
+
+      assetTextures:
+        "Textures",
+
+      assetMockups:
+        "Mockups",
+
+      assetIntro:
+        "Choisissez une catégorie pour voir les fichiers et télécharger ce dont vous avez besoin.",
+
+      servicesEyebrow:
+        "04 / SERVICES",
+
+      servicesTitle:
+        "Services pour <em>entreprises.</em>",
+
+      service1:
+        "01 — Logo & Branding",
+
+      service2:
+        "02 — Flyer & Réseaux sociaux",
+
+      service3:
+        "03 — Packaging & Étiquettes",
+
+      service4:
+        "04 — Motion Design",
+
+      portfolioFlyer:
+        "Flyer événement",
+
+      portfolioCover:
+        "Cover Design",
+
+      portfolioLabel:
+        "Étiquette produit",
+
+      portfolioBrand:
+        "Identité de marque",
+
+      storeNote:
+        "— Structure checkout prête pour la connexion backend.",
+
+      footer:
+        "Design graphique · PSD · Assets digitaux",
+
+      whatsapp:
+        "WhatsApp"
+
+    },
+
+
+    es: {
+
+      navWork:
+        "Mis trabajos",
+
+      navStore:
+        "Tienda PSD",
+
+      navFree:
+        "Assets gratis",
+
+      navServices:
+        "Servicios",
+
+      heroEyebrow:
+        "ESTUDIO DE DISEÑO CREATIVO",
+
+      heroTitle:
+        "Diseño que<br><em>te hace memorable.</em>",
+
+      heroText:
+        "Diseño gráfico premium, archivos PSD editables y recursos digitales para marcas y negocios que quieren destacar.",
+
+      heroPrimary:
+        "Ver mis trabajos ↗",
+
+      heroSecondary:
+        "Comprar PSD →",
+
+      workEyebrow:
+        "01 / PORTFOLIO",
+
+      workTitle:
+        "Mis <em>trabajos.</em>",
+
+      filterAll:
+        "Todo",
+
+      filterFlyers:
+        "Flyers",
+
+      filterCovers:
+        "Covers",
+
+      filterLabels:
+        "Etiquetas",
+
+      filterBranding:
+        "Branding",
+
+      storeEyebrow:
+        "02 / TIENDA DIGITAL",
+
+      storeTitle:
+        "Tienda <em>PSD.</em>",
+
+      freeEyebrow:
+        "03 / RECURSOS GRATIS",
+
+      freeTitle:
+        "Assets <em>gratis.</em>",
+
+      assetPNG:
+        "PNG",
+
+      assetTextures:
+        "Texturas",
+
+      assetMockups:
+        "Mockups",
+
+      assetIntro:
+        "Elige una categoría para ver los archivos y descargar lo que necesitas.",
+
+      servicesEyebrow:
+        "04 / SERVICIOS",
+
+      servicesTitle:
+        "Servicios para <em>negocios.</em>",
+
+      service1:
+        "01 — Logo & Branding",
+
+      service2:
+        "02 — Flyer & Redes Sociales",
+
+      service3:
+        "03 — Packaging & Etiquetas",
+
+      service4:
+        "04 — Motion Design",
+
+      portfolioFlyer:
+        "Flyer de evento",
+
+      portfolioCover:
+        "Diseño de Cover",
+
+      portfolioLabel:
+        "Etiqueta de producto",
+
+      portfolioBrand:
+        "Identidad de marca",
+
+      storeNote:
+        "— Estructura de checkout lista para conexión backend.",
+
+      footer:
+        "Diseño gráfico · PSD · Assets digitales",
+
+      whatsapp:
+        "WhatsApp"
+
+    }
+
+  };
+
+
+  /* =======================================================
+     LANGUAGE FUNCTION
+  ======================================================= */
+
+  function setLanguage(language) {
+
+    const dictionary =
+      translations[language] || translations.ht;
+
+    document.documentElement.lang = language;
+
+    document.querySelectorAll("[data-i18n]").forEach(element => {
+
+      const key = element.dataset.i18n;
+
+      if (
+        Object.prototype.hasOwnProperty.call(dictionary, key)
+      ) {
+        element.textContent = dictionary[key];
+      }
+
+    });
+
+
+    document.querySelectorAll("[data-i18n-html]").forEach(element => {
+
+      const key = element.dataset.i18nHtml;
+
+      if (
+        Object.prototype.hasOwnProperty.call(dictionary, key)
+      ) {
+        element.innerHTML = dictionary[key];
+      }
+
+    });
+
+
+    const selectedLanguage =
+      document.querySelector(
+        `[data-lang="${language}"]`
+      );
+
+    if (selectedLanguage && languageButton) {
+
+      languageButton.innerHTML =
+        selectedLanguage.innerHTML +
+        ' <span aria-hidden="true">▾</span>';
+
+    }
+
+    localStorage.setItem(
+      "wiseLanguage",
+      language
     );
+  }
+
+
+  const savedLanguage =
+    localStorage.getItem("wiseLanguage") || "ht";
+
+  setLanguage(savedLanguage);
+
+
+  /* =======================================================
+     HERO SLIDESHOW
+  ======================================================= */
+
+  const slides =
+    Array.from(
+      document.querySelectorAll(".hero-slideshow .slide")
+    );
+
+  const dots =
+    Array.from(
+      document.querySelectorAll(".slide-dots .dot")
+    );
+
+  let currentSlide = 0;
+  let slideshowTimer = null;
+
+  function showSlide(index) {
+
+    if (!slides.length) return;
+
+    currentSlide =
+      (index + slides.length) % slides.length;
+
+    slides.forEach((slide, i) => {
+      slide.classList.toggle(
+        "active",
+        i === currentSlide
+      );
+    });
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle(
+        "active",
+        i === currentSlide
+      );
+    });
+  }
+
+
+  function startSlideshow() {
+
+    if (slides.length <= 1) return;
+
+    clearInterval(slideshowTimer);
+
+    slideshowTimer = setInterval(() => {
+
+      showSlide(currentSlide + 1);
+
+    }, 5000);
+  }
+
+
+  dots.forEach((dot, index) => {
+
+    dot.addEventListener("click", () => {
+
+      showSlide(index);
+      startSlideshow();
+
+    });
+
+  });
+
+  showSlide(0);
+  startSlideshow();
+
+
+  /* =======================================================
+     PORTFOLIO FILTER
+  ======================================================= */
+
+  const filterButtons =
+    document.querySelectorAll(
+      ".filters [data-filter]"
+    );
+
+  const portfolioCards =
+    document.querySelectorAll(
+      "#work .portfolio-card"
+    );
+
+
+  filterButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      const filter =
+        button.dataset.filter;
+
+      filterButtons.forEach(btn => {
+        btn.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+
+      portfolioCards.forEach(card => {
+
+        const category =
+          card.dataset.category;
+
+        if (
+          filter === "all" ||
+          category === filter
+        ) {
+          card.hidden = false;
+        } else {
+          card.hidden = true;
+        }
+
+      });
+
+    });
 
   });
 
 
-setLanguage(
-  localStorage.getItem(
-    "wiseLanguage"
-  ) || "ht"
-);
+  /* =======================================================
+     FREE + PAID ASSET SYSTEM
+     
+     Ou ka ajoute kantite imaj ou vle isit la.
+     
+     TYPE:
+     png
+     background
+     texture
+     mockup
+  ======================================================= */
 
 
-/* =========================================================
-   REVEAL ANIMATION
-========================================================= */
+  const freeAssets = [
 
-if ("IntersectionObserver" in window) {
+    /*
+    {
+      type: "png",
+      name: "PNG Asset 01",
+      description: "PNG gratis",
+      image: "images/assets/free/png01.png",
+      download: "assets/free/png01.png"
+    },
 
-  const revealObserver =
-    new IntersectionObserver(
-      entries => {
+    {
+      type: "background",
+      name: "Background 01",
+      description: "Background gratis",
+      image: "images/assets/free/background01.jpg",
+      download: "assets/free/background01.jpg"
+    },
 
-        entries.forEach(
-          entry => {
+    {
+      type: "texture",
+      name: "Texture 01",
+      description: "Texture gratis",
+      image: "images/assets/free/texture01.jpg",
+      download: "assets/free/texture01.jpg"
+    },
+
+    {
+      type: "mockup",
+      name: "Mockup 01",
+      description: "Mockup gratis",
+      image: "images/assets/free/mockup01.jpg",
+      download: "assets/free/mockup01.jpg"
+    }
+    */
+
+  ];
+
+
+  const paidAssets = [
+
+    /*
+    {
+      type: "png",
+      name: "Premium PNG 01",
+      description: "PNG premium",
+      image: "images/assets/paid/png01.png",
+      price: "$5",
+      buy: "#"
+    },
+
+    {
+      type: "background",
+      name: "Premium Background 01",
+      description: "Background premium",
+      image: "images/assets/paid/background01.jpg",
+      price: "$5",
+      buy: "#"
+    },
+
+    {
+      type: "texture",
+      name: "Premium Texture 01",
+      description: "Texture premium",
+      image: "images/assets/paid/texture01.jpg",
+      price: "$5",
+      buy: "#"
+    },
+
+    {
+      type: "mockup",
+      name: "Premium Mockup 01",
+      description: "Mockup premium",
+      image: "images/assets/paid/mockup01.jpg",
+      price: "$7",
+      buy: "#"
+    }
+    */
+
+  ];
+
+
+  /*
+    ---------------------------------------------------------
+    Si HTML ou itilize ID sa yo:
+
+    free-assets-grid
+    paid-assets-grid
+
+    script la ap ranpli yo otomatikman.
+
+    Si li itilize:
+
+    asset-grid
+
+    li kapab toujou montre FREE assets yo.
+    ---------------------------------------------------------
+  */
+
+
+  const freeAssetGrid =
+    document.getElementById("free-assets-grid");
+
+  const paidAssetGrid =
+    document.getElementById("paid-assets-grid");
+
+  const oldAssetGrid =
+    document.getElementById("asset-grid");
+
+
+  let currentAssetType = "png";
+
+
+  function assetTypeName(type) {
+
+    const names = {
+      png: "PNG",
+      background: "BACKGROUND",
+      texture: "TEXTURE",
+      mockup: "MOCKUP"
+    };
+
+    return names[type] || type;
+  }
+
+
+  function createAssetCard(asset, paid = false) {
+
+    const card =
+      document.createElement("article");
+
+    card.className = "asset-card";
+
+    card.dataset.assetType =
+      asset.type || "png";
+
+
+    const image =
+      document.createElement("img");
+
+    image.src =
+      asset.image || "";
+
+    image.alt =
+      asset.name || assetTypeName(asset.type);
+
+    image.loading = "lazy";
+
+
+    const title =
+      document.createElement("h3");
+
+    title.textContent =
+      asset.name || "Digital Asset";
+
+
+    const description =
+      document.createElement("p");
+
+    description.textContent =
+      asset.description ||
+      assetTypeName(asset.type);
+
+
+    card.appendChild(image);
+    card.appendChild(title);
+    card.appendChild(description);
+
+
+    if (paid) {
+
+      const price =
+        document.createElement("strong");
+
+      price.textContent =
+        asset.price || "PAID";
+
+      card.appendChild(price);
+
+
+      const buy =
+        document.createElement("button");
+
+      buy.type = "button";
+      buy.className = "buy";
+      buy.textContent = "Achte kounye a →";
+
+      if (asset.buy && asset.buy !== "#") {
+
+        buy.addEventListener("click", () => {
+
+          window.location.href =
+            asset.buy;
+
+        });
+
+      } else {
+
+        buy.addEventListener("click", () => {
+
+          alert(
+            "Sistèm peman an poko konekte."
+          );
+
+        });
+
+      }
+
+      card.appendChild(buy);
+
+    } else {
+
+      const download =
+        document.createElement("button");
+
+      download.type = "button";
+      download.className = "download";
+
+      download.textContent =
+        "Telechaje gratis";
+
+      download.addEventListener(
+        "click",
+        () => {
+
+          if (
+            asset.download &&
+            asset.download !== "#"
+          ) {
+
+            const link =
+              document.createElement("a");
+
+            link.href =
+              asset.download;
+
+            link.download = "";
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            link.remove();
+
+            showDownloadModal();
+
+          } else {
+
+            alert(
+              "Ajoute chemen fichye download la nan script.js."
+            );
+
+          }
+
+        }
+      );
+
+      card.appendChild(download);
+
+    }
+
+
+    return card;
+  }
+
+
+  function renderAssets(
+    assets,
+    grid,
+    paid = false,
+    type = currentAssetType
+  ) {
+
+    if (!grid) return;
+
+    grid.innerHTML = "";
+
+    const filtered =
+      assets.filter(asset => {
+
+        return (
+          !type ||
+          asset.type === type
+        );
+
+      });
+
+
+    filtered.forEach(asset => {
+
+      grid.appendChild(
+        createAssetCard(
+          asset,
+          paid
+        )
+      );
+
+    });
+
+  }
+
+
+  function renderAllAssets() {
+
+    renderAssets(
+      freeAssets,
+      freeAssetGrid,
+      false,
+      currentAssetType
+    );
+
+    renderAssets(
+      paidAssets,
+      paidAssetGrid,
+      true,
+      currentAssetType
+    );
+
+
+    /*
+      Compatibilite ak ansyen #asset-grid
+    */
+
+    if (oldAssetGrid) {
+
+      renderAssets(
+        freeAssets,
+        oldAssetGrid,
+        false,
+        currentAssetType
+      );
+
+    }
+
+  }
+
+
+  /* =======================================================
+     ASSET CATEGORY BUTTONS
+  ======================================================= */
+
+  const assetButtons =
+    document.querySelectorAll(
+      "[data-asset-type]"
+    );
+
+
+  assetButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      currentAssetType =
+        button.dataset.assetType;
+
+      assetButtons.forEach(btn => {
+
+        btn.classList.remove("active");
+
+        btn.setAttribute(
+          "aria-selected",
+          "false"
+        );
+
+      });
+
+
+      button.classList.add("active");
+
+      button.setAttribute(
+        "aria-selected",
+        "true"
+      );
+
+
+      renderAllAssets();
+
+    });
+
+  });
+
+
+  renderAllAssets();
+
+
+  /* =======================================================
+     DOWNLOAD MODAL
+  ======================================================= */
+
+  const downloadModal =
+    document.getElementById(
+      "download-modal"
+    );
+
+  const modalClose =
+    document.getElementById(
+      "modal-close"
+    );
+
+
+  function showDownloadModal() {
+
+    if (!downloadModal) return;
+
+    downloadModal.hidden = false;
+
+    document.body.classList.add(
+      "lightbox-open"
+    );
+
+  }
+
+
+  function hideDownloadModal() {
+
+    if (!downloadModal) return;
+
+    downloadModal.hidden = true;
+
+    document.body.classList.remove(
+      "lightbox-open"
+    );
+
+  }
+
+
+  if (modalClose) {
+
+    modalClose.addEventListener(
+      "click",
+      hideDownloadModal
+    );
+
+  }
+
+
+  if (downloadModal) {
+
+    downloadModal.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          downloadModal
+        ) {
+          hideDownloadModal();
+        }
+
+      }
+    );
+
+  }
+
+
+  /* =======================================================
+     IMAGE LIGHTBOX
+  ======================================================= */
+
+  const lightbox =
+    document.getElementById(
+      "image-lightbox"
+    );
+
+  const lightboxImage =
+    document.getElementById(
+      "lightbox-image"
+    );
+
+  const lightboxClose =
+    document.getElementById(
+      "lightbox-close"
+    );
+
+  const lightboxPrev =
+    document.getElementById(
+      "lightbox-prev"
+    );
+
+  const lightboxNext =
+    document.getElementById(
+      "lightbox-next"
+    );
+
+  const zoomIn =
+    document.getElementById(
+      "zoom-in"
+    );
+
+  const zoomOut =
+    document.getElementById(
+      "zoom-out"
+    );
+
+  const zoomReset =
+    document.getElementById(
+      "zoom-reset"
+    );
+
+
+  let lightboxImages = [];
+  let lightboxIndex = 0;
+  let zoomLevel = 1;
+
+
+  function collectLightboxImages() {
+
+    lightboxImages =
+      Array.from(
+        document.querySelectorAll(
+          "img:not(#lightbox-image)"
+        )
+      ).filter(image => {
+
+        return (
+          image.src &&
+          !image.closest(".lang-menu")
+        );
+
+      });
+
+  }
+
+
+  function updateZoom() {
+
+    if (!lightboxImage) return;
+
+    lightboxImage.style.transform =
+      `scale(${zoomLevel})`;
+
+    if (zoomReset) {
+
+      zoomReset.textContent =
+        `${Math.round(zoomLevel * 100)}%`;
+
+    }
+
+  }
+
+
+  function openLightbox(index) {
+
+    if (
+      !lightbox ||
+      !lightboxImage ||
+      !lightboxImages.length
+    ) {
+      return;
+    }
+
+
+    lightboxIndex =
+      (index + lightboxImages.length) %
+      lightboxImages.length;
+
+
+    const source =
+      lightboxImages[lightboxIndex];
+
+
+    lightboxImage.src =
+      source.currentSrc ||
+      source.src;
+
+    lightboxImage.alt =
+      source.alt || "";
+
+
+    zoomLevel = 1;
+
+    updateZoom();
+
+
+    lightbox.hidden = false;
+
+    document.body.classList.add(
+      "lightbox-open"
+    );
+
+  }
+
+
+  function closeLightbox() {
+
+    if (!lightbox) return;
+
+    lightbox.hidden = true;
+
+    document.body.classList.remove(
+      "lightbox-open"
+    );
+
+    if (lightboxImage) {
+
+      lightboxImage.src = "";
+
+    }
+
+  }
+
+
+  function nextImage() {
+
+    openLightbox(
+      lightboxIndex + 1
+    );
+
+  }
+
+
+  function previousImage() {
+
+    openLightbox(
+      lightboxIndex - 1
+    );
+
+  }
+
+
+  function zoomPlus() {
+
+    zoomLevel =
+      Math.min(
+        zoomLevel + .25,
+        4
+      );
+
+    updateZoom();
+
+  }
+
+
+  function zoomMinus() {
+
+    zoomLevel =
+      Math.max(
+        zoomLevel - .25,
+        .5
+      );
+
+    updateZoom();
+
+  }
+
+
+  function resetZoom() {
+
+    zoomLevel = 1;
+
+    updateZoom();
+
+  }
+
+
+  /*
+     IMPORTANT:
+     Re-collect images after dynamic
+     Asset cards are created.
+  */
+
+  function prepareImages() {
+
+    collectLightboxImages();
+
+    lightboxImages.forEach(
+      (image, index) => {
+
+        if (
+          image.dataset.lightboxReady
+        ) {
+          return;
+        }
+
+        image.dataset.lightboxReady =
+          "true";
+
+        image.addEventListener(
+          "click",
+          () => {
+
+            collectLightboxImages();
+
+            const newIndex =
+              lightboxImages.indexOf(
+                image
+              );
+
+            openLightbox(
+              newIndex >= 0
+                ? newIndex
+                : index
+            );
+
+          }
+        );
+
+      }
+    );
+
+  }
+
+
+  prepareImages();
+
+
+  if (lightboxClose) {
+
+    lightboxClose.addEventListener(
+      "click",
+      closeLightbox
+    );
+
+  }
+
+
+  if (lightboxPrev) {
+
+    lightboxPrev.addEventListener(
+      "click",
+      previousImage
+    );
+
+  }
+
+
+  if (lightboxNext) {
+
+    lightboxNext.addEventListener(
+      "click",
+      nextImage
+    );
+
+  }
+
+
+  if (zoomIn) {
+
+    zoomIn.addEventListener(
+      "click",
+      zoomPlus
+    );
+
+  }
+
+
+  if (zoomOut) {
+
+    zoomOut.addEventListener(
+      "click",
+      zoomMinus
+    );
+
+  }
+
+
+  if (zoomReset) {
+
+    zoomReset.addEventListener(
+      "click",
+      resetZoom
+    );
+
+  }
+
+
+  if (lightbox) {
+
+    lightbox.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          lightbox
+        ) {
+          closeLightbox();
+        }
+
+      }
+    );
+
+  }
+
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        !lightbox ||
+        lightbox.hidden
+      ) {
+        return;
+      }
+
+
+      if (event.key === "Escape") {
+
+        closeLightbox();
+
+      }
+
+
+      if (event.key === "ArrowRight") {
+
+        nextImage();
+
+      }
+
+
+      if (event.key === "ArrowLeft") {
+
+        previousImage();
+
+      }
+
+
+      if (event.key === "+") {
+
+        zoomPlus();
+
+      }
+
+
+      if (event.key === "-") {
+
+        zoomMinus();
+
+      }
+
+
+      if (event.key === "0") {
+
+        resetZoom();
+
+      }
+
+    }
+  );
+
+
+  /* =======================================================
+     ZOOM WITH MOUSE WHEEL
+  ======================================================= */
+
+  if (lightboxImage) {
+
+    lightboxImage.addEventListener(
+      "wheel",
+      event => {
+
+        if (
+          !lightbox ||
+          lightbox.hidden
+        ) {
+          return;
+        }
+
+        event.preventDefault();
+
+        if (event.deltaY < 0) {
+
+          zoomPlus();
+
+        } else {
+
+          zoomMinus();
+
+        }
+
+      },
+      {
+        passive: false
+      }
+    );
+
+  }
+
+
+  /* =======================================================
+     DRAG IMAGE WHEN ZOOMED
+  ======================================================= */
+
+  let dragging = false;
+  let startX = 0;
+  let startY = 0;
+  let moveX = 0;
+  let moveY = 0;
+
+
+  if (lightboxImage) {
+
+    lightboxImage.addEventListener(
+      "pointerdown",
+      event => {
+
+        if (zoomLevel <= 1) {
+          return;
+        }
+
+        dragging = true;
+
+        startX =
+          event.clientX - moveX;
+
+        startY =
+          event.clientY - moveY;
+
+        lightboxImage.classList.add(
+          "dragging"
+        );
+
+        lightboxImage.setPointerCapture(
+          event.pointerId
+        );
+
+      }
+    );
+
+
+    lightboxImage.addEventListener(
+      "pointermove",
+      event => {
+
+        if (!dragging) return;
+
+        moveX =
+          event.clientX - startX;
+
+        moveY =
+          event.clientY - startY;
+
+        lightboxImage.style.transform =
+          `translate(${moveX}px, ${moveY}px) scale(${zoomLevel})`;
+
+      }
+    );
+
+
+    function stopDragging() {
+
+      dragging = false;
+
+      lightboxImage.classList.remove(
+        "dragging"
+      );
+
+    }
+
+
+    lightboxImage.addEventListener(
+      "pointerup",
+      stopDragging
+    );
+
+    lightboxImage.addEventListener(
+      "pointercancel",
+      stopDragging
+    );
+
+  }
+
+
+  /* =======================================================
+     RESET POSITION WHEN ZOOM CHANGES
+  ======================================================= */
+
+  const originalUpdateZoom =
+    updateZoom;
+
+
+  function resetImagePosition() {
+
+    moveX = 0;
+    moveY = 0;
+
+  }
+
+
+  if (zoomReset) {
+
+    zoomReset.addEventListener(
+      "click",
+      resetImagePosition
+    );
+
+  }
+
+
+  /* =======================================================
+     REVEAL ANIMATION
+  ======================================================= */
+
+  const revealElements =
+    document.querySelectorAll(
+      ".reveal"
+    );
+
+
+  if ("IntersectionObserver" in window) {
+
+    const observer =
+      new IntersectionObserver(
+        entries => {
+
+          entries.forEach(entry => {
 
             if (
               entry.isIntersecting
@@ -1620,475 +1761,92 @@ if ("IntersectionObserver" in window) {
                 "visible"
               );
 
+              observer.unobserve(
+                entry.target
+              );
+
             }
 
-          }
-        );
+          });
 
-      },
+        },
+        {
+          threshold: .12
+        }
+      );
+
+
+    revealElements.forEach(
+      element => observer.observe(element)
+    );
+
+  } else {
+
+    revealElements.forEach(
+      element =>
+        element.classList.add("visible")
+    );
+
+  }
+
+
+  /* =======================================================
+     OBSERVE DYNAMIC ASSET IMAGES
+  ======================================================= */
+
+  const assetObserver =
+    new MutationObserver(() => {
+
+      prepareImages();
+
+    });
+
+
+  if (freeAssetGrid) {
+
+    assetObserver.observe(
+      freeAssetGrid,
       {
-        threshold: 0.08
+        childList: true,
+        subtree: true
       }
     );
 
+  }
 
-  $$(".reveal")
-    .forEach(element =>
-      revealObserver.observe(
-        element
-      )
+
+  if (paidAssetGrid) {
+
+    assetObserver.observe(
+      paidAssetGrid,
+      {
+        childList: true,
+        subtree: true
+      }
     );
 
-}
+  }
 
 
-/* =========================================================
-   LIGHTBOX
-   GRAN PLAN
-   PREV / NEXT
-   ZOOM
-========================================================= */
+  if (oldAssetGrid) {
 
-const lightbox =
-  $("#image-lightbox");
-
-const lightboxImage =
-  $("#lightbox-image");
-
-const lightboxClose =
-  $("#lightbox-close");
-
-const lightboxPrev =
-  $("#lightbox-prev");
-
-const lightboxNext =
-  $("#lightbox-next");
-
-const zoomIn =
-  $("#zoom-in");
-
-const zoomOut =
-  $("#zoom-out");
-
-const zoomReset =
-  $("#zoom-reset");
-
-
-let lightboxItems = [];
-
-let lightboxIndex = 0;
-
-let zoom = 1;
-
-
-/* =========================================================
-   OPEN
-========================================================= */
-
-function openLightbox(
-  items,
-  index = 0
-) {
-
-  if (
-    !items ||
-    !items.length ||
-    !lightbox
-  )
-    return;
-
-
-  lightboxItems =
-    items;
-
-
-  lightboxIndex =
-    index;
-
-
-  zoom = 1;
-
-
-  updateLightbox();
-
-
-  lightbox.hidden =
-    false;
-
-
-  document.body.classList.add(
-    "lightbox-open"
-  );
-
-}
-
-
-/* =========================================================
-   UPDATE
-========================================================= */
-
-function updateLightbox() {
-
-  if (
-    !lightboxItems.length ||
-    !lightboxImage
-  )
-    return;
-
-
-  const item =
-    lightboxItems[
-      lightboxIndex
-    ];
-
-
-  lightboxImage.src =
-    item.image;
-
-
-  lightboxImage.alt =
-    item.title || "";
-
-
-  applyZoom();
-
-}
-
-
-/* =========================================================
-   CLOSE
-========================================================= */
-
-function closeLightbox() {
-
-  if (!lightbox)
-    return;
-
-
-  lightbox.hidden =
-    true;
-
-
-  document.body.classList.remove(
-    "lightbox-open"
-  );
-
-
-  if (lightboxImage)
-    lightboxImage.src = "";
-
-}
-
-
-/* =========================================================
-   ZOOM
-========================================================= */
-
-function applyZoom() {
-
-  if (!lightboxImage)
-    return;
-
-
-  lightboxImage.style.transform =
-    `scale(${zoom})`;
-
-
-  if (zoomReset) {
-
-    zoomReset.textContent =
-      Math.round(
-        zoom * 100
-      ) + "%";
+    assetObserver.observe(
+      oldAssetGrid,
+      {
+        childList: true,
+        subtree: true
+      }
+    );
 
   }
 
-}
 
+  /* =======================================================
+     CONSOLE CONFIRMATION
+  ======================================================= */
 
-/* =========================================================
-   NEXT / PREVIOUS
-========================================================= */
-
-function changeLightbox(
-  step
-) {
-
-  if (
-    !lightboxItems.length
-  )
-    return;
-
-
-  lightboxIndex =
-    (
-      lightboxIndex +
-      step +
-      lightboxItems.length
-    ) %
-    lightboxItems.length;
-
-
-  zoom = 1;
-
-
-  updateLightbox();
-
-}
-
-
-/* =========================================================
-   BUTTONS
-========================================================= */
-
-if (lightboxClose) {
-
-  lightboxClose.addEventListener(
-    "click",
-    closeLightbox
+  console.log(
+    "WISE.GRAPHIXDESIGN — script.js loaded successfully."
   );
 
-}
-
-
-if (lightboxPrev) {
-
-  lightboxPrev.addEventListener(
-    "click",
-    () =>
-      changeLightbox(-1)
-  );
-
-}
-
-
-if (lightboxNext) {
-
-  lightboxNext.addEventListener(
-    "click",
-    () =>
-      changeLightbox(1)
-  );
-
-}
-
-
-if (zoomIn) {
-
-  zoomIn.addEventListener(
-    "click",
-    () => {
-
-      zoom =
-        Math.min(
-          3,
-          zoom + 0.25
-        );
-
-
-      applyZoom();
-
-    }
-  );
-
-}
-
-
-if (zoomOut) {
-
-  zoomOut.addEventListener(
-    "click",
-    () => {
-
-      zoom =
-        Math.max(
-          0.5,
-          zoom - 0.25
-        );
-
-
-      applyZoom();
-
-    }
-  );
-
-}
-
-
-if (zoomReset) {
-
-  zoomReset.addEventListener(
-    "click",
-    () => {
-
-      zoom = 1;
-
-      applyZoom();
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   CLICK BACKGROUND TO CLOSE
-========================================================= */
-
-if (lightbox) {
-
-  lightbox.addEventListener(
-    "click",
-    event => {
-
-      if (
-        event.target === lightbox
-      ) {
-
-        closeLightbox();
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   KEYBOARD
-========================================================= */
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      !lightbox ||
-      lightbox.hidden
-    )
-      return;
-
-
-    if (
-      event.key === "Escape"
-    ) {
-
-      closeLightbox();
-
-    }
-
-
-    if (
-      event.key === "ArrowLeft"
-    ) {
-
-      changeLightbox(-1);
-
-    }
-
-
-    if (
-      event.key === "ArrowRight"
-    ) {
-
-      changeLightbox(1);
-
-    }
-
-
-    if (
-      event.key === "+"
-    ) {
-
-      zoom =
-        Math.min(
-          3,
-          zoom + 0.25
-        );
-
-      applyZoom();
-
-    }
-
-
-    if (
-      event.key === "-"
-    ) {
-
-      zoom =
-        Math.max(
-          0.5,
-          zoom - 0.25
-        );
-
-      applyZoom();
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   SWIPE TELEFÒN
-========================================================= */
-
-let touchStartX = 0;
-
-
-if (lightbox) {
-
-  lightbox.addEventListener(
-    "touchstart",
-    event => {
-
-      touchStartX =
-        event.changedTouches[0]
-          .screenX;
-
-    },
-    {
-      passive: true
-    }
-  );
-
-
-  lightbox.addEventListener(
-    "touchend",
-    event => {
-
-      const touchEndX =
-        event.changedTouches[0]
-          .screenX;
-
-
-      const difference =
-        touchEndX -
-        touchStartX;
-
-
-      if (
-        Math.abs(difference) > 50
-      ) {
-
-        changeLightbox(
-          difference > 0
-            ? -1
-            : 1
-        );
-
-      }
-
-    },
-    {
-      passive: true
-    }
-  );
-
-}
-
-
-/* =========================================================
-   FIN WISE.GRAPHIXDESIGN
-========================================================= */
+});
