@@ -530,137 +530,134 @@
     </section>
 
 
-    <!-- ===================================================
-         ASSET GRATIS
-         FREE + PAID
-    ==================================================== -->
+  <!-- =====================================================
+     ASSET GRATIS
+===================================================== -->
 
-    <section id="free">
+<section id="assets" class="assets-section">
 
-      <small data-i18n="freeEyebrow">
-        03 / DIGITAL ASSETS
-      </small>
+  <small data-i18n="freeEyebrow">
+    03 / FREE RESOURCES
+  </small>
 
+  <h2 data-i18n-html="freeTitle">
+    Asset <em>gratis.</em>
+  </h2>
 
-      <h2 data-i18n-html="freeTitle">
-        Asset <em>gratis.</em>
-      </h2>
+  <!-- FREE CATEGORIES -->
+  <div class="asset-types free-asset-types">
 
+    <button
+      type="button"
+      class="asset-type active"
+      data-asset-type="png"
+      aria-selected="true">
+      PNG
+    </button>
 
-      <!-- =================================================
-           ASSET FREE / PAID SWITCH
-      ================================================== -->
+    <button
+      type="button"
+      class="asset-type"
+      data-asset-type="background"
+      aria-selected="false">
+      BACKGROUND
+    </button>
 
-      <div
-        class="asset-status-tabs"
-        role="tablist"
-        aria-label="Kalite asset"
-      >
+    <button
+      type="button"
+      class="asset-type"
+      data-asset-type="texture"
+      aria-selected="false">
+      Textures
+    </button>
 
-        <button
-          class="asset-status active"
-          type="button"
-          data-asset-status="free"
-          role="tab"
-          aria-selected="true"
-        >
-          FREE ASSETS
-        </button>
+    <button
+      type="button"
+      class="asset-type"
+      data-asset-type="mockup"
+      aria-selected="false">
+      Mockups
+    </button>
 
+  </div>
 
-        <button
-          class="asset-status"
-          type="button"
-          data-asset-status="paid"
-          role="tab"
-          aria-selected="false"
-        >
-          PAID ASSETS
-        </button>
+  <p class="asset-intro" data-i18n="assetIntro">
+    Klike sou yon kategori pou wè fichye yo, epi telechaje sa ou bezwen an.
+  </p>
 
-      </div>
-
-
-      <!-- =================================================
-           ASSET CATEGORIES
-      ================================================== -->
-
-      <div
-        class="asset-types"
-        role="tablist"
-        aria-label="Kategori asset"
-      >
-
-        <button
-          class="asset-type active"
-          type="button"
-          data-asset-type="png"
-          role="tab"
-          aria-selected="true"
-          data-i18n="assetPNG"
-        >
-          PNG
-        </button>
+  <!-- FREE ASSETS GRID -->
+  <div
+    id="free-assets-grid"
+    class="asset-grid">
+  </div>
 
 
-        <button
-          class="asset-type"
-          type="button"
-          data-asset-type="background"
-          role="tab"
-          aria-selected="false"
-        >
-          BACKGROUND
-        </button>
+  <!-- =====================================================
+       ASSET PEYE
+  ===================================================== -->
 
+  <div class="paid-assets-section">
 
-        <button
-          class="asset-type"
-          type="button"
-          data-asset-type="texture"
-          role="tab"
-          aria-selected="false"
-          data-i18n="assetTextures"
-        >
-          Textures
-        </button>
+    <div class="store-section-heading">
 
+      <span class="store-label gold-label">
+        PREMIUM RESOURCES
+      </span>
 
-        <button
-          class="asset-type"
-          type="button"
-          data-asset-type="mockup"
-          role="tab"
-          aria-selected="false"
-          data-i18n="assetMockups"
-        >
-          Mockups
-        </button>
+      <h3>
+        Asset <em>peye.</em>
+      </h3>
 
-      </div>
-
-
-      <p
-        class="asset-intro"
-        data-i18n="assetIntro"
-      >
-        Klike sou yon kategori pou wè fichye yo,
-        epi telechaje sa ou bezwen an.
+      <p>
+        Chwazi yon asset premium pou achte epi telechaje li.
       </p>
 
+    </div>
 
-      <!--
-        SCRIPT.JS ap ranpli grid sa a otomatikman.
-        FREE ak PAID sèvi ak menm card/style.
-      -->
 
-      <div
-        id="asset-grid"
-        class="grid asset-grid"
-        aria-live="polite"
-      ></div>
+    <!-- PAID CATEGORIES -->
+    <div class="asset-types paid-asset-types">
 
-    </section>
+      <button
+        type="button"
+        class="asset-type paid-type active"
+        data-paid-asset-type="png">
+        PNG
+      </button>
+
+      <button
+        type="button"
+        class="asset-type paid-type"
+        data-paid-asset-type="background">
+        BACKGROUND
+      </button>
+
+      <button
+        type="button"
+        class="asset-type paid-type"
+        data-paid-asset-type="texture">
+        Textures
+      </button>
+
+      <button
+        type="button"
+        class="asset-type paid-type"
+        data-paid-asset-type="mockup">
+        Mockups
+      </button>
+
+    </div>
+
+
+    <!-- PAID ASSETS GRID -->
+    <div
+      id="paid-assets-grid"
+      class="asset-grid">
+    </div>
+
+  </div>
+
+</section>
 
 
     <!-- ===================================================
