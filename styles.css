@@ -1,5 +1,5 @@
 /* =========================================================
-WISE.GRAPHIXDESIGN — FINAL STYLES
+   WISE.GRAPHIXDESIGN — FINAL STYLES
 ========================================================= */
 
 * {
@@ -50,7 +50,7 @@ button {
 }
 
 /* =========================================================
-HEADER
+   HEADER
 ========================================================= */
 
 .site-header {
@@ -71,6 +71,7 @@ HEADER
   display: flex;
   align-items: center;
   gap: 10px;
+  color: var(--ink);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 1.5px;
@@ -83,6 +84,8 @@ HEADER
   border-radius: 50%;
   object-fit: cover;
 }
+
+/* NAV */
 
 #main-nav {
   display: flex;
@@ -102,7 +105,7 @@ HEADER
 }
 
 /* =========================================================
-LANGUAGE MENU
+   LANGUAGE MENU
 ========================================================= */
 
 .lang {
@@ -118,10 +121,14 @@ LANGUAGE MENU
   cursor: pointer;
   font-size: 11px;
   font-weight: 600;
+  transition: 0.25s ease;
 }
 
-#lb:hover {
+#lb:hover,
+#lb:focus {
   border-color: var(--gold);
+  background: #171410;
+  color: var(--gold);
 }
 
 .lang-menu {
@@ -156,6 +163,7 @@ LANGUAGE MENU
   border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
+  transition: 0.2s ease;
 }
 
 .lang-menu button:hover {
@@ -164,7 +172,7 @@ LANGUAGE MENU
 }
 
 /* =========================================================
-MOBILE MENU
+   MOBILE MENU
 ========================================================= */
 
 .menu-toggle {
@@ -179,8 +187,13 @@ MOBILE MENU
   font-size: 20px;
 }
 
+.menu-toggle:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
 /* =========================================================
-HERO
+   HERO
 ========================================================= */
 
 .hero {
@@ -227,6 +240,10 @@ h2 em {
   line-height: 1.8;
 }
 
+/* =========================================================
+   BUTTONS
+========================================================= */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -258,11 +275,12 @@ h2 em {
 
 .btn.gold:hover {
   background: var(--gold-light);
+  border-color: var(--gold-light);
   color: #090909;
 }
 
 /* =========================================================
-HERO SLIDESHOW — FINAL 1920x800
+   HERO SLIDESHOW — 1920 × 800
 ========================================================= */
 
 .hero-image {
@@ -270,7 +288,6 @@ HERO SLIDESHOW — FINAL 1920x800
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow: visible;
 }
 
 .hero-slideshow {
@@ -294,7 +311,10 @@ HERO SLIDESHOW — FINAL 1920x800
   visibility: hidden;
   z-index: 1;
   cursor: zoom-in;
-  transition: opacity 0.8s ease;
+  transform: none;
+  transition:
+    opacity 0.8s ease,
+    visibility 0.8s ease;
 }
 
 .hero-slideshow .slide.active {
@@ -303,7 +323,7 @@ HERO SLIDESHOW — FINAL 1920x800
   z-index: 2;
 }
 
-/* 3 PWEN YO */
+/* DOTS */
 
 .slide-dots {
   position: absolute;
@@ -320,10 +340,16 @@ HERO SLIDESHOW — FINAL 1920x800
 .slide-dots .dot {
   width: 6px;
   height: 6px;
+  padding: 0;
   border: 0;
   border-radius: 50%;
   background: #514b43;
+  cursor: pointer;
   transition: 0.25s ease;
+}
+
+.slide-dots .dot:hover {
+  background: #aaa49a;
 }
 
 .slide-dots .dot.active {
@@ -332,12 +358,11 @@ HERO SLIDESHOW — FINAL 1920x800
   background: var(--gold);
 }
 
-/* TÈKS ANBA COVER LA */
+/* CAPTION UNDER HERO */
 
 .hero-image figcaption {
-  position: relative;
-  width: 100%;
-  margin: 10px 0 0;
+  position: static;
+  margin-top: 10px;
   padding: 0;
   color: var(--muted);
   font-size: 9px;
@@ -347,7 +372,7 @@ HERO SLIDESHOW — FINAL 1920x800
 }
 
 /* =========================================================
-TICKER
+   TICKER
 ========================================================= */
 
 .ticker {
@@ -363,7 +388,7 @@ TICKER
 }
 
 /* =========================================================
-SECTIONS
+   SECTIONS
 ========================================================= */
 
 section {
@@ -385,7 +410,7 @@ section h2 {
 }
 
 /* =========================================================
-FILTERS
+   FILTERS
 ========================================================= */
 
 .filters {
@@ -410,8 +435,12 @@ FILTERS
 }
 
 .filters button:hover,
+.asset-type:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
 .filters button.active,
-.asset-type:hover,
 .asset-type.active {
   border-color: var(--gold);
   color: var(--gold);
@@ -419,7 +448,7 @@ FILTERS
 }
 
 /* =========================================================
-GRIDS
+   GRIDS
 ========================================================= */
 
 .grid {
@@ -436,7 +465,9 @@ GRIDS
   overflow: hidden;
   background: var(--panel);
   border: 1px solid var(--line);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .portfolio-card:hover {
@@ -461,7 +492,7 @@ GRIDS
 }
 
 /* =========================================================
-PSD STORE
+   PSD STORE
 ========================================================= */
 
 .store-section {
@@ -577,6 +608,7 @@ PSD STORE
 
 .buy:hover {
   background: var(--gold-light);
+  border-color: var(--gold-light);
 }
 
 .download-icon {
@@ -598,7 +630,7 @@ PSD STORE
 }
 
 /* =========================================================
-FREE ASSETS
+   FREE ASSETS
 ========================================================= */
 
 .asset-types {
@@ -661,7 +693,7 @@ FREE ASSETS
 }
 
 /* =========================================================
-SERVICES
+   SERVICES
 ========================================================= */
 
 .services {
@@ -677,8 +709,12 @@ SERVICES
   font-weight: 600;
 }
 
+.services p:hover {
+  color: var(--gold);
+}
+
 /* =========================================================
-FOOTER
+   FOOTER
 ========================================================= */
 
 footer {
@@ -691,7 +727,7 @@ footer {
 }
 
 /* =========================================================
-WHATSAPP
+   WHATSAPP
 ========================================================= */
 
 .whatsapp {
@@ -717,10 +753,11 @@ WHATSAPP
 .whatsapp:hover {
   transform: translateY(-3px);
   border-color: var(--gold);
+  background: #171410;
 }
 
 /* =========================================================
-REVEAL ANIMATION
+   REVEAL
 ========================================================= */
 
 .reveal {
@@ -741,7 +778,7 @@ REVEAL ANIMATION
 }
 
 /* =========================================================
-DOWNLOAD MODAL
+   DOWNLOAD MODAL
 ========================================================= */
 
 .download-modal {
@@ -794,7 +831,7 @@ DOWNLOAD MODAL
   font-weight: 400;
 }
 
-.download-modal-card > p:not(.download-kicker) {
+.download-modal-card > p {
   color: var(--muted);
   font-size: 12px;
 }
@@ -811,8 +848,12 @@ DOWNLOAD MODAL
   font-weight: 700;
 }
 
+.modal-close:hover {
+  background: var(--gold-light);
+}
+
 /* =========================================================
-LIGHTBOX
+   LIGHTBOX
 ========================================================= */
 
 .image-lightbox {
@@ -855,12 +896,12 @@ LIGHTBOX
   transition: transform 0.15s ease;
 }
 
-#lightbox-image:active {
+#lightbox-image.dragging {
   cursor: grabbing;
 }
 
 /* =========================================================
-LIGHTBOX CLOSE
+   LIGHTBOX CLOSE
 ========================================================= */
 
 .lightbox-close {
@@ -889,7 +930,7 @@ LIGHTBOX CLOSE
 }
 
 /* =========================================================
-LIGHTBOX ARROWS
+   LIGHTBOX ARROWS
 ========================================================= */
 
 .lightbox-arrow {
@@ -934,7 +975,7 @@ LIGHTBOX ARROWS
 }
 
 /* =========================================================
-PROFESSIONAL ZOOM CONTROLS
+   LIGHTBOX ZOOM CONTROLS
 ========================================================= */
 
 .lightbox-controls {
@@ -972,7 +1013,6 @@ PROFESSIONAL ZOOM CONTROLS
   border-color: var(--gold);
   background: #211b13;
   color: var(--gold);
-  transform: translateY(-2px);
 }
 
 .lightbox-controls svg {
@@ -990,7 +1030,7 @@ PROFESSIONAL ZOOM CONTROLS
 }
 
 /* =========================================================
-HIDDEN
+   HIDDEN
 ========================================================= */
 
 [hidden] {
@@ -998,7 +1038,7 @@ HIDDEN
 }
 
 /* =========================================================
-RESPONSIVE — TABLET
+   TABLET
 ========================================================= */
 
 @media (max-width: 1100px) {
@@ -1026,7 +1066,7 @@ RESPONSIVE — TABLET
 }
 
 /* =========================================================
-RESPONSIVE — MOBILE
+   MOBILE
 ========================================================= */
 
 @media (max-width: 760px) {
@@ -1101,6 +1141,10 @@ RESPONSIVE — MOBILE
     font-size: 13px;
   }
 
+  .hero-slideshow {
+    aspect-ratio: 1920 / 800;
+  }
+
   section {
     padding: 75px 5vw;
   }
@@ -1117,17 +1161,6 @@ RESPONSIVE — MOBILE
 
   .asset-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  /* HERO MOBILE — toujou 1920:800 */
-
-  .hero-slideshow {
-    aspect-ratio: 1920 / 800;
-  }
-
-  .hero-image figcaption {
-    margin-top: 10px;
-    font-size: 8px;
   }
 
   .image-lightbox {
@@ -1176,7 +1209,7 @@ RESPONSIVE — MOBILE
 }
 
 /* =========================================================
-RESPONSIVE — SMALL PHONE
+   SMALL PHONE
 ========================================================= */
 
 @media (max-width: 480px) {
