@@ -1221,3 +1221,67 @@ footer {
   object-position: center;
   display: block;
 }
+
+.hero-image {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 12 / 5 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+.hero-slideshow {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.hero-slideshow .slide {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.hero-slideshow .slide.active {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* 3 pwen yo rete sou imaj la */
+.slide-dots {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 14px !important;
+  transform: translateX(-50%) !important;
+  z-index: 20 !important;
+}
+
+/* Tèks la rete anndan cover la */
+.hero-image figcaption {
+  position: absolute !important;
+  left: 15px !important;
+  bottom: 14px !important;
+  z-index: 20 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #fff !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+  letter-spacing: 1px !important;
+}
+
+/* Pa gen overlay sou foto a */
+.hero-image::before,
+.hero-image::after {
+  display: none !important;
+  content: none !important;
+}
