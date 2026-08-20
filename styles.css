@@ -1321,72 +1321,194 @@ footer {
 
 .portfolio-grid {
   column-count: 3;
-  column-gap: 18px;
+/* =========================================
+   PORTFOLIO SEULEMAN
+========================================= */
+
+.portfolio-section {
   width: 100%;
+  padding: 90px 6vw;
+  background: #090909;
+  color: #f5f0e7;
+  overflow: hidden;
+}
+
+.portfolio-header {
+  text-align: center;
+  max-width: 750px;
+  margin: 0 auto 45px;
+}
+
+.portfolio-label {
+  margin: 0 0 10px;
+  color: #d8b36a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+.portfolio-header h2 {
+  margin: 0;
+  color: #f5f0e7;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(30px, 5vw, 52px);
+  line-height: 1.1;
+}
+
+.portfolio-description {
+  margin: 15px auto 0;
+  color: #aaa49a;
+  font-size: 15px;
 }
 
 
-/* =========================
-   PHOTO CARD
-========================= */
+/* =========================================
+   PINTEREST / MASONRY GRID
+========================================= */
+
+.portfolio-grid {
+  column-count: 3;
+  column-gap: 18px;
+  width: 100%;
+}
 
 .portfolio-item {
   width: 100%;
   margin: 0 0 18px;
   break-inside: avoid;
-  -webkit-column-break-inside: avoid;
   overflow: hidden;
-  position: relative;
-  cursor: zoom-in;
-  border-radius: 8px;
   background: #11100e;
+  cursor: zoom-in;
+  position: relative;
 }
-
-
-/* =========================
-   PHOTO
-========================= */
 
 .portfolio-item img {
   display: block;
   width: 100%;
   height: auto;
-  max-width: 100%;
   object-fit: cover;
   transition: transform 0.45s ease;
 }
 
 
-/* =========================
-   ZOOM WHEN HOVER
-========================= */
+/* =========================================
+   ZOOM SOU SOURIS
+========================================= */
 
 .portfolio-item:hover img {
-  transform: scale(1.04);
+  transform: scale(1.045);
 }
 
 
-/* =========================
-   DARK OVERLAY
-========================= */
+/* =========================================
+   LIGHTBOX / GRAN PLAN
+========================================= */
 
-.portfolio-item::after {
-  content: "";
-  position: absolute;
+.portfolio-lightbox {
+  position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0);
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.94);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 35px;
+  z-index: 99999;
+
+  opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: background 0.35s ease;
+
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s ease;
 }
 
-.portfolio-item:hover::after {
-  background: rgba(0, 0, 0, 0.08);
+
+/* Lè lightbox la louvri */
+
+.portfolio-lightbox.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 
-/* =========================
-   TABLET
-========================= */
+/* Foto an gran plan */
+
+.portfolio-lightbox-image {
+  display: block;
+
+  max-width: 92vw;
+  max-height: 90vh;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+
+  cursor: zoom-out;
+
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.6);
+
+  transform: scale(0.94);
+  transition: transform 0.3s ease;
+}
+
+.portfolio-lightbox.active .portfolio-lightbox-image {
+  transform: scale(1);
+}
+
+
+/* =========================================
+   BOUTON FÈMEN
+========================================= */
+
+.portfolio-close {
+  position: fixed;
+
+  top: 20px;
+  right: 25px;
+
+  width: 45px;
+  height: 45px;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.65);
+
+  color: #ffffff;
+
+  font-size: 32px;
+  line-height: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  z-index: 100000;
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.portfolio-close:hover {
+  background: #d8b36a;
+  color: #090909;
+  transform: rotate(90deg);
+}
+
+
+/* =========================================
+   TELEFÒN
+========================================= */
 
 @media (max-width: 900px) {
 
@@ -1396,21 +1518,21 @@ footer {
 
   .portfolio-grid {
     column-count: 2;
-    column-gap: 14px;
+    column-gap: 12px;
   }
 
   .portfolio-item {
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
 
 }
 
 
-/* =========================
-   TELEFÒN
-========================= */
+/* =========================================
+   TI TELEFÒN
+========================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 520px) {
 
   .portfolio-section {
     padding: 55px 4vw;
@@ -1424,31 +1546,46 @@ footer {
     font-size: 32px;
   }
 
-  .portfolio-header p {
+  .portfolio-description {
     font-size: 14px;
   }
 
   .portfolio-grid {
     column-count: 2;
-    column-gap: 10px;
+    column-gap: 8px;
   }
 
   .portfolio-item {
-    margin-bottom: 10px;
-    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+
+  .portfolio-lightbox {
+    padding: 15px;
+  }
+
+  .portfolio-lightbox-image {
+    max-width: 96vw;
+    max-height: 88vh;
+  }
+
+  .portfolio-close {
+    top: 12px;
+    right: 12px;
+
+    width: 40px;
+    height: 40px;
+
+    font-size: 28px;
   }
 
 }
 
 
-/* =========================
-   TI TELEFÒN TRÈ PITI
-========================= */
+/* =========================================
+   PA KITE PAGE LA SCROLL LÈ LIGHTBOX LOUVRI
+========================================= */
 
-@media (max-width: 380px) {
-
-  .portfolio-grid {
-    column-count: 1;
-  }
-
+body.portfolio-lightbox-open {
+  overflow: hidden;
+}
 }
