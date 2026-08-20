@@ -1250,3 +1250,27 @@ footer {
     font-size: 9px;
   }
 }
+/* =========================================================
+   HEADER TEXT + LANGUAGE BUTTON
+   ========================================================= */
+
+#main-nav > a {
+  color: #f5f0e7 !important;
+  font-weight: 700 !important;
+}
+
+#main-nav > a:hover {
+  color: #d8b36a !important;
+}
+
+#lb {
+  background: #11100e !important;
+  color: #f5f0e7 !important;
+  border: 1px solid #d8b36a !important;
+  font-weight: 700 !important;
+}
+
+#lb:hover {
+  background: #211b13 !important;
+  color: #d8b36a !important;
+}
