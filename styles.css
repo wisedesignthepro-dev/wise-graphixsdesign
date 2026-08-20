@@ -1274,53 +1274,7 @@ footer {
   background: #211b13 !important;
   color: #d8b36a !important;
 }
-/* =================================
-   PORTFOLYO — PINTEREST / MASONRY
-   ================================= */
 
-.portfolio-section {
-  width: 100%;
-  padding: 80px 6vw;
-  background: #090909;
-}
-
-.portfolio-header {
-  text-align: center;
-  margin-bottom: 45px;
-}
-
-.portfolio-label {
-  display: inline-block;
-  margin-bottom: 10px;
-  color: #d8b36a;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 3px;
-}
-
-.portfolio-header h2 {
-  margin: 0;
-  color: #f5f0e7;
-  font-family: "Playfair Display", serif;
-  font-size: clamp(32px, 5vw, 58px);
-  font-weight: 600;
-  line-height: 1.1;
-}
-
-.portfolio-header p {
-  margin: 15px auto 0;
-  max-width: 600px;
-  color: #aaa49a;
-  font-size: 15px;
-}
-
-
-/* =========================
-   MASONRY GRID
-========================= */
-
-.portfolio-grid {
-  column-count: 3;
 /* =========================================
    PORTFOLIO SEULEMAN
 ========================================= */
