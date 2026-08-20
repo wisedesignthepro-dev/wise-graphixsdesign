@@ -908,10 +908,10 @@ document.addEventListener("DOMContentLoaded", () => {
     /*
     {
       type: "png",
-      name: "PNG Asset 01",
+      name: "gato00",
       description: "PNG gratis",
-      image: "images/assets/free/png01.png",
-      download: "assets/free/png01.png"
+      image: "images/assets/free/gato00",
+      download: "assets/free/gato00"
     },
 
     {
