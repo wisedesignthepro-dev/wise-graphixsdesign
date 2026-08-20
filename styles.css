@@ -1274,30 +1274,3 @@ footer {
   background: #211b13 !important;
   color: #d8b36a !important;
 }
-/* MENU HEADER */
-#main-nav > a {
-  color: #111 !important;
-  font-weight: 700 !important;
-}
-
-#main-nav > a:hover {
-  color: red !important;
-}
-@media (max-width: 760px) {
-  #lb {
-    background: #11100e !important;
-    color: #ffffff !important;
-    border-color: #d8b36a !important;
-    font-weight: 700 !important;
-  }
-
-  .lang-menu button {
-    color: #ffffff !important;
-    background: transparent !important;
-  }
-
-  .lang-menu button:hover {
-    color: #d8b36a !important;
-    background: #211b13 !important;
-  }
-}
