@@ -1,9 +1,21 @@
 /* =========================================================
-   WISE.GRAPHIXDESIGN — FINAL STYLES
-   ========================================================= */
+WISE.GRAPHIXDESIGN — FINAL STYLES
+========================================================= */
 
 * {
   box-sizing: border-box;
+}
+
+:root {
+  --bg: #090909;
+  --panel: #11100e;
+  --panel-2: #15130f;
+  --ink: #f5f0e7;
+  --muted: #aaa49a;
+  --gold: #d8b36a;
+  --gold-light: #efd08d;
+  --line: #302d28;
+  --brown: #241b12;
 }
 
 html {
@@ -12,8 +24,8 @@ html {
 
 body {
   margin: 0;
-  background: #090909;
-  color: #f5f0e7;
+  background: var(--bg);
+  color: var(--ink);
   font-family: "Montserrat", Arial, sans-serif;
   font-size: 14px;
   line-height: 1.6;
@@ -37,21 +49,9 @@ button {
   font: inherit;
 }
 
-:root {
-  --bg: #090909;
-  --panel: #11100e;
-  --panel-2: #15130f;
-  --ink: #f5f0e7;
-  --muted: #aaa49a;
-  --gold: #d8b36a;
-  --gold-light: #efd08d;
-  --line: #302d28;
-  --brown: #241b12;
-}
-
 /* =========================================================
-   HEADER
-   ========================================================= */
+HEADER
+========================================================= */
 
 .site-header {
   position: sticky;
@@ -102,8 +102,8 @@ button {
 }
 
 /* =========================================================
-   LANGUAGE MENU
-   ========================================================= */
+LANGUAGE MENU
+========================================================= */
 
 .lang {
   position: relative;
@@ -164,8 +164,8 @@ button {
 }
 
 /* =========================================================
-   MOBILE MENU
-   ========================================================= */
+MOBILE MENU
+========================================================= */
 
 .menu-toggle {
   display: none;
@@ -180,8 +180,8 @@ button {
 }
 
 /* =========================================================
-   HERO
-   ========================================================= */
+HERO
+========================================================= */
 
 .hero {
   min-height: calc(100vh - 78px);
@@ -262,20 +262,23 @@ h2 em {
 }
 
 /* =========================================================
-   HERO SLIDESHOW
-   ========================================================= */
+HERO SLIDESHOW — FINAL 1920x800
+========================================================= */
 
 .hero-image {
-  margin: 0;
+  position: relative;
   width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
 }
 
 .hero-slideshow {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 1920 / 800;
   overflow: hidden;
-  background: #111;
+  background: #090909;
   border: 1px solid var(--line);
 }
 
@@ -284,36 +287,40 @@ h2 em {
   inset: 0;
   width: 100%;
   height: 100%;
+  display: block;
   object-fit: cover;
+  object-position: center;
   opacity: 0;
-  transform: scale(1.04);
-  transition:
-    opacity 1.2s ease,
-    transform 6s ease;
+  visibility: hidden;
+  z-index: 1;
   cursor: zoom-in;
+  transition: opacity 0.8s ease;
 }
 
 .hero-slideshow .slide.active {
   opacity: 1;
-  transform: scale(1);
+  visibility: visible;
   z-index: 2;
 }
 
-.hero-slideshow .slide.prev {
-  opacity: 0;
-  z-index: 1;
-}
+/* 3 PWEN YO */
 
 .slide-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  z-index: 20;
   display: flex;
   justify-content: center;
   gap: 7px;
-  margin-top: 12px;
+  margin: 0;
+  transform: translateX(-50%);
 }
 
 .slide-dots .dot {
   width: 6px;
   height: 6px;
+  border: 0;
   border-radius: 50%;
   background: #514b43;
   transition: 0.25s ease;
@@ -325,17 +332,23 @@ h2 em {
   background: var(--gold);
 }
 
+/* TÈKS ANBA COVER LA */
+
 .hero-image figcaption {
-  margin-top: 10px;
-  color: #77716a;
+  position: relative;
+  width: 100%;
+  margin: 10px 0 0;
+  padding: 0;
+  color: var(--muted);
   font-size: 9px;
-  letter-spacing: 2px;
-  text-align: right;
+  line-height: 1.4;
+  letter-spacing: 1.5px;
+  text-align: left;
 }
 
 /* =========================================================
-   TICKER
-   ========================================================= */
+TICKER
+========================================================= */
 
 .ticker {
   padding: 17px 6vw;
@@ -350,8 +363,8 @@ h2 em {
 }
 
 /* =========================================================
-   SECTIONS
-   ========================================================= */
+SECTIONS
+========================================================= */
 
 section {
   padding: 110px 6vw;
@@ -372,8 +385,8 @@ section h2 {
 }
 
 /* =========================================================
-   FILTERS
-   ========================================================= */
+FILTERS
+========================================================= */
 
 .filters {
   display: flex;
@@ -406,8 +419,8 @@ section h2 {
 }
 
 /* =========================================================
-   GRIDS
-   ========================================================= */
+GRIDS
+========================================================= */
 
 .grid {
   display: grid;
@@ -448,8 +461,8 @@ section h2 {
 }
 
 /* =========================================================
-   PSD STORE
-   ========================================================= */
+PSD STORE
+========================================================= */
 
 .store-section {
   margin-top: 50px;
@@ -547,19 +560,23 @@ section h2 {
   transition: 0.25s ease;
 }
 
-.download:hover {
+.download {
   border-color: var(--gold);
   color: var(--gold);
+}
+
+.download:hover {
+  background: rgba(216, 179, 106, 0.08);
 }
 
 .buy {
   border-color: var(--gold);
-  color: var(--gold);
+  background: var(--gold);
+  color: #090909;
 }
 
 .buy:hover {
-  background: var(--gold);
-  color: #090909;
+  background: var(--gold-light);
 }
 
 .download-icon {
@@ -581,8 +598,8 @@ section h2 {
 }
 
 /* =========================================================
-   FREE ASSETS
-   ========================================================= */
+FREE ASSETS
+========================================================= */
 
 .asset-types {
   display: flex;
@@ -644,8 +661,8 @@ section h2 {
 }
 
 /* =========================================================
-   SERVICES
-   ========================================================= */
+SERVICES
+========================================================= */
 
 .services {
   border-top: 1px solid var(--line);
@@ -661,8 +678,8 @@ section h2 {
 }
 
 /* =========================================================
-   FOOTER
-   ========================================================= */
+FOOTER
+========================================================= */
 
 footer {
   padding: 35px 6vw;
@@ -674,8 +691,8 @@ footer {
 }
 
 /* =========================================================
-   WHATSAPP
-   ========================================================= */
+WHATSAPP
+========================================================= */
 
 .whatsapp {
   position: fixed;
@@ -703,8 +720,8 @@ footer {
 }
 
 /* =========================================================
-   REVEAL ANIMATION
-   ========================================================= */
+REVEAL ANIMATION
+========================================================= */
 
 .reveal {
   opacity: 0;
@@ -724,8 +741,8 @@ footer {
 }
 
 /* =========================================================
-   DOWNLOAD MODAL
-   ========================================================= */
+DOWNLOAD MODAL
+========================================================= */
 
 .download-modal {
   position: fixed;
@@ -786,22 +803,17 @@ footer {
   margin-top: 15px;
   padding: 11px 18px;
   border: 1px solid var(--gold);
-  background: transparent;
-  color: var(--gold);
+  background: var(--gold);
+  color: #090909;
   border-radius: 4px;
   cursor: pointer;
   font-size: 10px;
   font-weight: 700;
 }
 
-.modal-close:hover {
-  background: var(--gold);
-  color: #090909;
-}
-
 /* =========================================================
-   LIGHTBOX
-   ========================================================= */
+LIGHTBOX
+========================================================= */
 
 .image-lightbox {
   position: fixed;
@@ -848,8 +860,8 @@ footer {
 }
 
 /* =========================================================
-   LIGHTBOX CLOSE
-   ========================================================= */
+LIGHTBOX CLOSE
+========================================================= */
 
 .lightbox-close {
   position: absolute;
@@ -877,8 +889,8 @@ footer {
 }
 
 /* =========================================================
-   LIGHTBOX LEFT / RIGHT ARROWS
-   ========================================================= */
+LIGHTBOX ARROWS
+========================================================= */
 
 .lightbox-arrow {
   position: absolute;
@@ -896,11 +908,7 @@ footer {
   cursor: pointer;
   font-size: 30px;
   line-height: 1;
-  transition:
-    border-color 0.25s ease,
-    color 0.25s ease,
-    background 0.25s ease,
-    transform 0.25s ease;
+  transition: 0.25s ease;
 }
 
 .lightbox-prev {
@@ -926,9 +934,8 @@ footer {
 }
 
 /* =========================================================
-   PROFESSIONAL ZOOM CONTROLS
-   SVG BUTTONS
-   ========================================================= */
+PROFESSIONAL ZOOM CONTROLS
+========================================================= */
 
 .lightbox-controls {
   position: absolute;
@@ -958,11 +965,7 @@ footer {
   background: #171512;
   color: #f5f0e7;
   cursor: pointer;
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .lightbox-controls button:hover {
@@ -970,10 +973,6 @@ footer {
   background: #211b13;
   color: var(--gold);
   transform: translateY(-2px);
-}
-
-.lightbox-controls button:active {
-  transform: translateY(0);
 }
 
 .lightbox-controls svg {
@@ -991,18 +990,19 @@ footer {
 }
 
 /* =========================================================
-   HIDDEN
-   ========================================================= */
+HIDDEN
+========================================================= */
 
 [hidden] {
   display: none !important;
 }
 
 /* =========================================================
-   RESPONSIVE — TABLET
-   ========================================================= */
+RESPONSIVE — TABLET
+========================================================= */
 
 @media (max-width: 1100px) {
+
   .hero {
     grid-template-columns: 1fr;
     gap: 45px;
@@ -1026,10 +1026,11 @@ footer {
 }
 
 /* =========================================================
-   RESPONSIVE — MOBILE
-   ========================================================= */
+RESPONSIVE — MOBILE
+========================================================= */
 
 @media (max-width: 760px) {
+
   .site-header {
     min-height: 68px;
     padding: 0 5vw;
@@ -1118,6 +1119,17 @@ footer {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  /* HERO MOBILE — toujou 1920:800 */
+
+  .hero-slideshow {
+    aspect-ratio: 1920 / 800;
+  }
+
+  .hero-image figcaption {
+    margin-top: 10px;
+    font-size: 8px;
+  }
+
   .image-lightbox {
     padding: 70px 12px 95px;
   }
@@ -1164,10 +1176,11 @@ footer {
 }
 
 /* =========================================================
-   RESPONSIVE — SMALL PHONE
-   ========================================================= */
+RESPONSIVE — SMALL PHONE
+========================================================= */
 
 @media (max-width: 480px) {
+
   .portfolio-grid,
   .store-grid {
     grid-template-columns: 1fr;
@@ -1187,7 +1200,7 @@ footer {
   }
 
   .hero-slideshow {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1920 / 800;
   }
 
   .lightbox-controls {
@@ -1203,158 +1216,4 @@ footer {
     width: 52px;
     font-size: 9px;
   }
-}
-.hero-slideshow {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1920 / 800;
-  overflow: hidden;
-  background: #090909;
-}
-
-.hero-slideshow .slide {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
-
-.hero-image {
-  position: relative !important;
-  width: 100% !important;
-  aspect-ratio: 12 / 5 !important;
-  overflow: hidden !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  background: transparent !important;
-}
-
-.hero-slideshow {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  overflow: hidden !important;
-}
-
-.hero-slideshow .slide {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  object-position: center !important;
-  opacity: 0;
-  visibility: hidden;
-}
-
-.hero-slideshow .slide.active {
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-/* 3 pwen yo rete sou imaj la */
-.slide-dots {
-  position: absolute !important;
-  left: 50% !important;
-  bottom: 14px !important;
-  transform: translateX(-50%) !important;
-  z-index: 20 !important;
-}
-
-/* Tèks la rete anndan cover la */
-.hero-image figcaption {
-  position: absolute !important;
-  left: 15px !important;
-  bottom: 14px !important;
-  z-index: 20 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  color: #fff !important;
-  font-size: 9px !important;
-  line-height: 1 !important;
-  letter-spacing: 1px !important;
-}
-
-/* Pa gen overlay sou foto a */
-.hero-image::before,
-.hero-image::after {
-  display: none !important;
-  content: none !important;
-}
-.hero-image figcaption {
-  position: absolute !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: auto !important;
-  top: calc(100% + 10px) !important;
-
-  margin: 0 !important;
-  padding: 0 !important;
-
-  color: var(--muted) !important;
-  font-size: 9px !important;
-  line-height: 1.4 !important;
-  letter-spacing: 1.5px !important;
-  text-align: left !important;
-
-  z-index: 10 !important;
-}
-
-/* Fè rektang cover la pa koupe caption lan */
-.hero-image {
-  overflow: visible !important;
-}
-
-/* 3 pwen yo rete sou foto a */
-.slide-dots {
-  position: absolute !important;
-  left: 50% !important;
-  bottom: 14px !important;
-  transform: translateX(-50%) !important;
-  z-index: 20 !important;
-}
-.hero-slideshow {
-  position: absolute !important;
-  inset: 0 !important;
-  overflow: hidden !important;
-}
-
-.hero-slideshow .slide {
-  position: absolute !important;
-  inset: 0 !important;
-
-  width: 100% !important;
-  height: 100% !important;
-
-  object-fit: cover !important;
-  object-position: center !important;
-
-  opacity: 1 !important;
-  visibility: visible !important;
-
-  transform: translateX(100%) !important;
-
-  transition: transform 0.8s ease-in-out !important;
-}
-
-.hero-slideshow .slide.active {
-  transform: translateX(0) !important;
-}
-
-/* Foto ki sot la ale agoch */
-.hero-slideshow .slide.previous {
-  transform: translateX(-100%) !important;
-}
-
-/* 3 pwen yo rete sou foto a */
-.slide-dots {
-  position: absolute !important;
-  left: 50% !important;
-  bottom: 14px !important;
-  transform: translateX(-50%) !important;
-  z-index: 20 !important;
 }
