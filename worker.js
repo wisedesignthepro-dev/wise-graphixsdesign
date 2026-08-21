@@ -1,6 +1,6 @@
 /**
  * =========================================================
- * WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER
+ * WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER FINAL
  * =========================================================
  *
  * FRONTEND:
@@ -18,119 +18,191 @@
  * GET  /api/download
  *
  * PAYMENT:
- * MonCash Sandbox -> CONNECTED FOR TOKEN TEST
- * NatCash        -> PREPARE
+ * MonCash Sandbox -> Token test
+ * NatCash        -> Prepare
  *
  * STORAGE:
- * Cloudflare R2 -> PREPARE
+ * Cloudflare R2 -> PAID_ASSETS
  *
  * IMPORTANT:
- * Client ID / Client Secret yo pa ekri nan code la.
- * Yo dwe rete nan Cloudflare Secrets.
+ * MONCASH_CLIENT_ID
+ * MONCASH_CLIENT_SECRET
+ *
+ * dwe rete nan Cloudflare Secrets.
  *
  * =========================================================
  */
 
 export default {
   async fetch(request, env) {
-    const url = new URL(request.url);
+    try {
+      const url = new URL(request.url);
 
-    /*
-     * -------------------------------------------------------
-     * SECURITY HEADERS
-     * -------------------------------------------------------
-     */
+      /*
+       * =====================================================
+       * SECURITY HEADERS
+       * =====================================================
+       */
 
-    const securityHeaders = {
-      "X-Content-Type-Options": "nosniff",
-      "X-Frame-Options": "SAMEORIGIN",
-      "Referrer-Policy": "strict-origin-when-cross-origin",
-      "Permissions-Policy":
-        "camera=(), microphone=(), geolocation=()"
-    };
+      const securityHeaders = {
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy":
+          "camera=(), microphone=(), geolocation=()"
+      };
 
-    /*
-     * -------------------------------------------------------
-     * CORS
-     * -------------------------------------------------------
-     */
+      /*
+       * =====================================================
+       * CORS
+       * =====================================================
+       *
+       * Nou itilize origin request la.
+       * Sa evite louvri API a pou tout sit.
+       */
 
-    const corsHeaders = {
-      "Access-Control-Allow-Origin": url.origin,
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Access-Control-Max-Age": "86400"
-    };
+      const requestOrigin =
+        request.headers.get("Origin");
 
-    /*
-     * -------------------------------------------------------
-     * OPTIONS / CORS PREFLIGHT
-     * -------------------------------------------------------
-     */
+      const corsOrigin =
+        requestOrigin || url.origin;
 
-    if (request.method === "OPTIONS") {
-      return new Response(null, {
-        status: 204,
-        headers: {
-          ...securityHeaders,
-          ...corsHeaders
-        }
-      });
-    }
+      const corsHeaders = {
+        "Access-Control-Allow-Origin":
+          corsOrigin,
 
-    /*
-     * -------------------------------------------------------
-     * API
-     * -------------------------------------------------------
-     */
+        "Access-Control-Allow-Methods":
+          "GET, POST, OPTIONS",
 
-    if (url.pathname.startsWith("/api/")) {
-      return handleAPI(
-        request,
-        env,
-        url,
+        "Access-Control-Allow-Headers":
+          "Content-Type",
+
+        "Access-Control-Max-Age":
+          "86400",
+
+        "Vary":
+          "Origin"
+      };
+
+      /*
+       * =====================================================
+       * CORS PREFLIGHT
+       * =====================================================
+       */
+
+      if (request.method === "OPTIONS") {
+        return new Response(null, {
+          status: 204,
+          headers: {
+            ...securityHeaders,
+            ...corsHeaders
+          }
+        });
+      }
+
+      /*
+       * =====================================================
+       * API
+       * =====================================================
+       */
+
+      if (url.pathname.startsWith("/api/")) {
+        return handleAPI(
+          request,
+          env,
+          url,
+          {
+            ...securityHeaders,
+            ...corsHeaders
+          }
+        );
+      }
+
+      /*
+       * =====================================================
+       * STATIC WEBSITE
+       * =====================================================
+       */
+
+      if (!env.ASSETS) {
+        return new Response(
+          "ASSETS binding is not configured.",
+          {
+            status: 500,
+            headers: securityHeaders
+          }
+        );
+      }
+
+      /*
+       * Cloudflare ASSETS
+       */
+
+      const response =
+        await env.ASSETS.fetch(request);
+
+      /*
+       * Ajoute security headers
+       * san modifye kontni sit la.
+       */
+
+      const newHeaders =
+        new Headers(response.headers);
+
+      for (
+        const [key, value]
+        of Object.entries(securityHeaders)
+      ) {
+        newHeaders.set(
+          key,
+          value
+        );
+      }
+
+      return new Response(
+        response.body,
         {
-          ...securityHeaders,
-          ...corsHeaders
+          status:
+            response.status,
+
+          statusText:
+            response.statusText,
+
+          headers:
+            newHeaders
         }
       );
-    }
 
-    /*
-     * -------------------------------------------------------
-     * STATIC WEBSITE
-     * -------------------------------------------------------
-     */
+    } catch (error) {
 
-    if (!env.ASSETS) {
+      /*
+       * =====================================================
+       * GLOBAL ERROR
+       * =====================================================
+       */
+
       return new Response(
-        "ASSETS binding is not configured.",
+        JSON.stringify({
+          success: false,
+          error:
+            "Worker internal error.",
+          message:
+            error?.message ||
+            "Unknown error"
+        }),
         {
           status: 500,
-          headers: securityHeaders
+
+          headers: {
+            "Content-Type":
+              "application/json; charset=UTF-8",
+
+            "Cache-Control":
+              "no-store"
+          }
         }
       );
     }
-
-    const response = await env.ASSETS.fetch(request);
-
-    /*
-     * Add security headers.
-     */
-
-    const newHeaders = new Headers(response.headers);
-
-    for (const [key, value] of Object.entries(
-      securityHeaders
-    )) {
-      newHeaders.set(key, value);
-    }
-
-    return new Response(response.body, {
-      status: response.status,
-      statusText: response.statusText,
-      headers: newHeaders
-    });
   }
 };
 
@@ -148,7 +220,7 @@ async function handleAPI(
   headers
 ) {
 
-  /*
+  /**
    * =======================================================
    * GET /api/health
    * =======================================================
@@ -158,6 +230,7 @@ async function handleAPI(
     url.pathname === "/api/health" &&
     request.method === "GET"
   ) {
+
     return jsonResponse(
       {
         success: true,
@@ -172,18 +245,27 @@ async function handleAPI(
           "Wise.graphixdesign",
 
         payment: {
-  moncash: {
-    clientId: Boolean(env.MONCASH_CLIENT_ID),
-    clientSecret: Boolean(env.MONCASH_CLIENT_SECRET)
-  },
 
-  natcash:
-    env.NATCASH_API_KEY
-      ? "credentials_configured"
-      : "not_configured"
-},
+          moncash: {
+            clientId:
+              Boolean(
+                env.MONCASH_CLIENT_ID
+              ),
+
+            clientSecret:
+              Boolean(
+                env.MONCASH_CLIENT_SECRET
+              )
+          },
+
+          natcash:
+            env.NATCASH_API_KEY
+              ? "credentials_configured"
+              : "not_configured"
+        },
 
         storage: {
+
           r2:
             env.PAID_ASSETS
               ? "configured"
@@ -193,23 +275,29 @@ async function handleAPI(
         timestamp:
           new Date().toISOString()
       },
+
       200,
+
       headers
     );
   }
 
 
-  /*
+  /**
    * =======================================================
    * GET /api/moncash-token
    * =======================================================
    *
    * TEST:
    *
-   * Worker -> MonCash Sandbox -> Access Token
+   * Worker
+   *   ↓
+   * MonCash Sandbox
+   *   ↓
+   * Access Token
    *
-   * IMPORTANT:
-   * Nou pa janm retounen Client Secret la.
+   * Client Secret la PA JANM soti
+   * nan Worker la.
    */
 
   if (
@@ -218,13 +306,14 @@ async function handleAPI(
   ) {
 
     /*
-     * Verifye credentials yo egziste.
+     * Verify Secrets yo.
      */
 
     if (
       !env.MONCASH_CLIENT_ID ||
       !env.MONCASH_CLIENT_SECRET
     ) {
+
       return jsonResponse(
         {
           success: false,
@@ -235,14 +324,16 @@ async function handleAPI(
           message:
             "MONCASH_CLIENT_ID oswa MONCASH_CLIENT_SECRET pa configured nan Cloudflare Secrets."
         },
+
         500,
+
         headers
       );
     }
 
 
     /*
-     * MonCash Sandbox API.
+     * MonCash Sandbox OAuth endpoint.
      */
 
     const tokenUrl =
@@ -250,10 +341,11 @@ async function handleAPI(
 
 
     /*
-     * Basic Authentication:
+     * Basic Authentication
      *
-     * username = Client ID
-     * password = Client Secret
+     * Client ID
+     * +
+     * Client Secret
      */
 
     const basicCredentials =
@@ -268,9 +360,11 @@ async function handleAPI(
         await fetch(
           tokenUrl,
           {
-            method: "POST",
+            method:
+              "POST",
 
             headers: {
+
               "Authorization":
                 `Basic ${basicCredentials}`,
 
@@ -288,7 +382,8 @@ async function handleAPI(
 
 
       /*
-       * Li repons MonCash la.
+       * Li repons lan kòm text
+       * anvan JSON parse.
        */
 
       const rawText =
@@ -298,17 +393,21 @@ async function handleAPI(
       let tokenData;
 
       try {
+
         tokenData =
           JSON.parse(rawText);
+
       } catch {
+
         tokenData = {
-          raw: rawText
+          raw:
+            rawText
         };
       }
 
 
       /*
-       * Si MonCash pa bay 2xx.
+       * MonCash pa bay 2xx.
        */
 
       if (!tokenResponse.ok) {
@@ -329,20 +428,22 @@ async function handleAPI(
             moncashResponse:
               tokenData
           },
+
           502,
+
           headers
         );
       }
 
 
       /*
-       * Token jwenn.
-       *
-       * Pou sekirite, nou PA retounen token an
-       * nan repons browser la.
+       * Verify access_token.
        */
 
-      if (!tokenData?.access_token) {
+      if (
+        !tokenData ||
+        !tokenData.access_token
+      ) {
 
         return jsonResponse(
           {
@@ -357,14 +458,19 @@ async function handleAPI(
             moncashResponse:
               tokenData
           },
+
           502,
+
           headers
         );
       }
 
 
       /*
-       * KONEKSYON MONCASH OK.
+       * SECURITY:
+       *
+       * Nou PA retounen access_token
+       * nan browser la.
        */
 
       return jsonResponse(
@@ -381,15 +487,20 @@ async function handleAPI(
             "Worker la reyisi jwenn Access Token MonCash Sandbox la.",
 
           tokenType:
-            tokenData.token_type || "bearer",
+            tokenData.token_type ||
+            "bearer",
 
           expiresIn:
-            tokenData.expires_in || null,
+            tokenData.expires_in ||
+            null,
 
           scope:
-            tokenData.scope || "read,write"
+            tokenData.scope ||
+            "read,write"
         },
+
         200,
+
         headers
       );
 
@@ -406,24 +517,27 @@ async function handleAPI(
             "Worker la pa t kapab kontakte MonCash Sandbox.",
 
           error:
-            error?.message || "Unknown error"
+            error?.message ||
+            "Unknown error"
         },
+
         502,
+
         headers
       );
     }
   }
 
 
-  /*
+  /**
    * =======================================================
    * POST /api/checkout
    * =======================================================
    *
-   * TEMPORARY CHECKOUT
+   * Checkout preparasyon.
    *
-   * Payment reyèl poko fèt nan route sa a.
-   * Pwochen etap la se konekte CreatePayment.
+   * Sa poko fè CreatePayment.
+   * Li sèlman prepare order la.
    */
 
   if (
@@ -433,9 +547,15 @@ async function handleAPI(
 
     let body;
 
+    /*
+     * Parse JSON.
+     */
+
     try {
+
       body =
         await request.json();
+
     } catch {
 
       return jsonResponse(
@@ -445,23 +565,35 @@ async function handleAPI(
           error:
             "Invalid JSON request."
         },
+
         400,
+
         headers
       );
     }
 
 
+    /*
+     * Product.
+     */
+
     const productId =
       body?.productId;
 
+
     const productName =
-      body?.productName || null;
+      body?.productName ||
+      null;
+
 
     const requestedPrice =
-      body?.price || null;
+      body?.price ||
+      null;
+
 
     const paymentMethod =
-      body?.paymentMethod || null;
+      body?.paymentMethod ||
+      null;
 
 
     /*
@@ -477,14 +609,16 @@ async function handleAPI(
           error:
             "productId is required."
         },
+
         400,
+
         headers
       );
     }
 
 
     /*
-     * Payment methods nou sipòte.
+     * Payment methods.
      */
 
     const allowedPaymentMethods = [
@@ -493,10 +627,22 @@ async function handleAPI(
     ];
 
 
+    const normalizedPaymentMethod =
+      paymentMethod
+        ? String(
+            paymentMethod
+          ).toLowerCase()
+        : null;
+
+
+    /*
+     * Verify payment method.
+     */
+
     if (
-      paymentMethod &&
+      normalizedPaymentMethod &&
       !allowedPaymentMethods.includes(
-        String(paymentMethod).toLowerCase()
+        normalizedPaymentMethod
       )
     ) {
 
@@ -510,7 +656,9 @@ async function handleAPI(
           allowedMethods:
             allowedPaymentMethods
         },
+
         400,
+
         headers
       );
     }
@@ -532,30 +680,46 @@ async function handleAPI(
       "not_configured";
 
 
+    /*
+     * MONCASH
+     */
+
     if (
-      String(paymentMethod).toLowerCase() ===
+      normalizedPaymentMethod ===
       "moncash"
     ) {
 
       paymentStatus =
         env.MONCASH_CLIENT_ID &&
         env.MONCASH_CLIENT_SECRET
+
           ? "credentials_configured"
+
           : "not_configured";
     }
 
 
+    /*
+     * NATCASH
+     */
+
     if (
-      String(paymentMethod).toLowerCase() ===
+      normalizedPaymentMethod ===
       "natcash"
     ) {
 
       paymentStatus =
         env.NATCASH_API_KEY
+
           ? "credentials_configured"
+
           : "not_configured";
     }
 
+
+    /*
+     * Response.
+     */
 
     return jsonResponse(
       {
@@ -567,6 +731,7 @@ async function handleAPI(
         orderId,
 
         product: {
+
           id:
             productId,
 
@@ -577,8 +742,9 @@ async function handleAPI(
         },
 
         payment: {
+
           method:
-            paymentMethod ||
+            normalizedPaymentMethod ||
             "not_selected",
 
           status:
@@ -588,13 +754,15 @@ async function handleAPI(
         message:
           "Checkout la pare. CreatePayment MonCash ap vini nan pwochen etap la."
       },
+
       200,
+
       headers
     );
   }
 
 
-  /*
+  /**
    * =======================================================
    * GET /api/payment-status
    * =======================================================
@@ -611,6 +779,10 @@ async function handleAPI(
       );
 
 
+    /*
+     * Transaction ID obligatwa.
+     */
+
     if (!transactionId) {
 
       return jsonResponse(
@@ -620,11 +792,18 @@ async function handleAPI(
           error:
             "transactionId is required."
         },
+
         400,
+
         headers
       );
     }
 
+
+    /*
+     * Payment verification
+     * poko konekte.
+     */
 
     return jsonResponse(
       {
@@ -641,16 +820,21 @@ async function handleAPI(
         message:
           "Payment verification poko konekte."
       },
+
       200,
+
       headers
     );
   }
 
 
-  /*
+  /**
    * =======================================================
    * GET /api/download
    * =======================================================
+   *
+   * Download PAID asset yo
+   * dwe pase nan verification payment.
    */
 
   if (
@@ -663,11 +847,16 @@ async function handleAPI(
         "productId"
       );
 
+
     const transactionId =
       url.searchParams.get(
         "transactionId"
       );
 
+
+    /*
+     * Product ID obligatwa.
+     */
 
     if (!productId) {
 
@@ -678,14 +867,16 @@ async function handleAPI(
           error:
             "productId is required."
         },
+
         400,
+
         headers
       );
     }
 
 
     /*
-     * R2 poko configured.
+     * R2 pa configured.
      */
 
     if (!env.PAID_ASSETS) {
@@ -702,14 +893,16 @@ async function handleAPI(
           message:
             "Secure download poko aktive. R2 poko konekte."
         },
+
         503,
+
         headers
       );
     }
 
 
     /*
-     * Payment verification obligatwa.
+     * Payment transaction obligatwa.
      */
 
     if (!transactionId) {
@@ -724,14 +917,20 @@ async function handleAPI(
           message:
             "Payment verification nesesè anvan download."
         },
+
         403,
+
         headers
       );
     }
 
 
     /*
-     * Poko bay fichye a.
+     * Payment verification
+     * poko konekte.
+     *
+     * Pa janm bay R2 file la
+     * anvan payment verifye.
      */
 
     return jsonResponse(
@@ -748,13 +947,15 @@ async function handleAPI(
         message:
           "Payment la poko verifye. Download la bloke."
       },
+
       403,
+
       headers
     );
   }
 
 
-  /*
+  /**
    * =======================================================
    * API ROUTE NOT FOUND
    * =======================================================
@@ -767,7 +968,9 @@ async function handleAPI(
       error:
         "API route not found."
     },
+
     404,
+
     headers
   );
 }
@@ -787,6 +990,7 @@ function createOrderId() {
       .slice(0, 12)
       .toUpperCase();
 
+
   return `WGD-${Date.now()}-${random}`;
 }
 
@@ -805,6 +1009,7 @@ function jsonResponse(
 
   const responseHeaders =
     new Headers({
+
       "Content-Type":
         "application/json; charset=UTF-8",
 
@@ -821,6 +1026,7 @@ function jsonResponse(
       null,
       2
     ),
+
     {
       status,
 
