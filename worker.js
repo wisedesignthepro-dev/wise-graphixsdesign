@@ -172,17 +172,16 @@ async function handleAPI(
           "Wise.graphixdesign",
 
         payment: {
-          moncash:
-            env.MONCASH_CLIENT_ID &&
-            env.MONCASH_CLIENT_SECRET
-              ? "credentials_configured"
-              : "not_configured",
+  moncash: {
+    clientId: Boolean(env.MONCASH_CLIENT_ID),
+    clientSecret: Boolean(env.MONCASH_CLIENT_SECRET)
+  },
 
-          natcash:
-            env.NATCASH_API_KEY
-              ? "credentials_configured"
-              : "not_configured"
-        },
+  natcash:
+    env.NATCASH_API_KEY
+      ? "credentials_configured"
+      : "not_configured"
+},
 
         storage: {
           r2:
