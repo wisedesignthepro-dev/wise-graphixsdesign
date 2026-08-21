@@ -3,23 +3,30 @@
  * WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER
  * =========================================================
  *
- * Frontend:
+ * FRONTEND:
  *   index.html
  *   styles.css
  *   brand.css
  *   script.js
  *   images/*
  *
- * Backend API:
- *   /api/health
- *   /api/checkout
- *   /api/payment-status
- *   /api/download
+ * API:
+ *   GET  /api/health
+ *   POST /api/checkout
+ *   GET  /api/payment-status
+ *   GET  /api/download
  *
- * Future:
- *   MonCash
- *   R2
- *   Secure paid downloads
+ * PAYMENT:
+ *   MonCash  -> prepare
+ *   NatCash  -> prepare
+ *
+ * STORAGE:
+ *   Cloudflare R2 -> prepare
+ *
+ * IMPORTANT:
+ *   Worker la mache menm si MonCash/NatCash/R2
+ *   poko konekte.
+ *
  * =========================================================
  */
 
@@ -29,25 +36,65 @@ export default {
 
     /*
      * -------------------------------------------------------
-     * CORS / BASIC HEADERS
+     * SECURITY HEADERS
      * -------------------------------------------------------
      */
 
-    const headers = {
+    const securityHeaders = {
       "X-Content-Type-Options": "nosniff",
       "X-Frame-Options": "SAMEORIGIN",
       "Referrer-Policy": "strict-origin-when-cross-origin",
-      "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+      "Permissions-Policy":
+        "camera=(), microphone=(), geolocation=()"
     };
 
     /*
      * -------------------------------------------------------
-     * API ROUTES
+     * CORS
+     * -------------------------------------------------------
+     */
+
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": url.origin,
+      "Access-Control-Allow-Methods":
+        "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "Content-Type",
+      "Access-Control-Max-Age": "86400"
+    };
+
+    /*
+     * -------------------------------------------------------
+     * OPTIONS / CORS PREFLIGHT
+     * -------------------------------------------------------
+     */
+
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: {
+          ...securityHeaders,
+          ...corsHeaders
+        }
+      });
+    }
+
+    /*
+     * -------------------------------------------------------
+     * API
      * -------------------------------------------------------
      */
 
     if (url.pathname.startsWith("/api/")) {
-      return handleAPI(request, env, url, headers);
+      return handleAPI(
+        request,
+        env,
+        url,
+        {
+          ...securityHeaders,
+          ...corsHeaders
+        }
+      );
     }
 
     /*
@@ -55,28 +102,39 @@ export default {
      * STATIC WEBSITE
      * -------------------------------------------------------
      *
-     * Tout sa ki pa /api/* ale dirèkteman nan ASSETS.
+     * Tout sa ki pa /api/* ale nan ASSETS.
      *
-     * Sa vle di:
-     * /              -> index.html
-     * /index.html    -> index.html
-     * /styles.css    -> styles.css
-     * /script.js     -> script.js
-     * /sitemap.xml   -> sitemap.xml
-     * /robots.txt    -> robots.txt
-     * /images/...    -> images
+     * /
+     * /index.html
+     * /styles.css
+     * /brand.css
+     * /script.js
+     * /robots.txt
+     * /sitemap.xml
+     * /images/*
      */
+
+    if (!env.ASSETS) {
+      return new Response(
+        "ASSETS binding is not configured.",
+        {
+          status: 500,
+          headers: securityHeaders
+        }
+      );
+    }
 
     const response = await env.ASSETS.fetch(request);
 
     /*
-     * Add security headers without modifying
-     * the original asset response.
+     * Add security headers.
      */
 
     const newHeaders = new Headers(response.headers);
 
-    for (const [key, value] of Object.entries(headers)) {
+    for (const [key, value] of Object.entries(
+      securityHeaders
+    )) {
       newHeaders.set(key, value);
     }
 
@@ -95,41 +153,69 @@ export default {
  * =========================================================
  */
 
-async function handleAPI(request, env, url, securityHeaders) {
+async function handleAPI(
+  request,
+  env,
+  url,
+  headers
+) {
 
   /*
-   * -------------------------------------------------------
+   * =======================================================
    * GET /api/health
-   * -------------------------------------------------------
+   * =======================================================
    *
-   * Simple endpoint pou verifye Worker la ap mache.
+   * Verify Worker la ap fonksyone.
    */
 
-  if (url.pathname === "/api/health") {
+  if (
+    url.pathname === "/api/health" &&
+    request.method === "GET"
+  ) {
     return jsonResponse(
       {
         success: true,
-        service: "Wise.graphixdesign Worker",
+
+        service:
+          "Wise.graphixdesign Worker",
+
         status: "online",
-        payment: "not_configured",
-        storage: "not_configured"
+
+        website:
+          "Wise.graphixdesign",
+
+        payment: {
+          moncash: "not_configured",
+          natcash: "not_configured"
+        },
+
+        storage: {
+          r2: env.PAID_ASSETS
+            ? "configured"
+            : "not_configured"
+        },
+
+        timestamp:
+          new Date().toISOString()
       },
       200,
-      securityHeaders
+      headers
     );
   }
 
 
   /*
-   * -------------------------------------------------------
+   * =======================================================
    * POST /api/checkout
-   * -------------------------------------------------------
+   * =======================================================
    *
-   * Sa a se baz checkout la.
+   * Route sa a resevwa enfòmasyon pwodwi a.
    *
-   * MonCash poko konekte.
-   * Nou pap voye kliyan an nan okenn payment gateway
-   * jiskaske credentials/API yo konfigire.
+   * IMPORTANT:
+   * Nou PA fè payment reyèl toujou.
+   *
+   * Lè MonCash/NatCash credentials yo disponib,
+   * se isit la integration lan ap fèt.
    */
 
   if (
@@ -148,62 +234,150 @@ async function handleAPI(request, env, url, securityHeaders) {
           error: "Invalid JSON request."
         },
         400,
-        securityHeaders
+        headers
       );
     }
 
-    const productId = body?.productId;
-    const productName = body?.productName;
-    const price = body?.price;
+    const productId =
+      body?.productId;
+
+    const productName =
+      body?.productName || null;
+
+    const requestedPrice =
+      body?.price || null;
+
+    const paymentMethod =
+      body?.paymentMethod || null;
+
+
+    /*
+     * Product ID obligatwa.
+     */
 
     if (!productId) {
       return jsonResponse(
         {
           success: false,
-          error: "productId is required."
+          error:
+            "productId is required."
         },
         400,
-        securityHeaders
+        headers
       );
     }
 
+
     /*
-     * IMPORTANT:
-     *
-     * Pa konsidere price kliyan an voye kòm pri final la.
-     *
-     * Lè nou konekte database/product catalog la,
-     * Worker la ap verifye productId epi jwenn vrè pri a.
+     * Payment method si kliyan chwazi youn.
      */
+
+    const allowedPaymentMethods = [
+      "moncash",
+      "natcash"
+    ];
+
+    if (
+      paymentMethod &&
+      !allowedPaymentMethods.includes(
+        String(paymentMethod).toLowerCase()
+      )
+    ) {
+      return jsonResponse(
+        {
+          success: false,
+          error:
+            "Payment method not supported.",
+          allowedMethods:
+            allowedPaymentMethods
+        },
+        400,
+        headers
+      );
+    }
+
+
+    /*
+     * -----------------------------------------------------
+     * TEMPORARY CHECKOUT
+     * -----------------------------------------------------
+     *
+     * Sa pèmèt frontend ou a kominike ak Worker la
+     * menm anvan payment gateway yo konekte.
+     */
+
+    const orderId =
+      createOrderId();
+
+
+    /*
+     * -----------------------------------------------------
+     * PAYMENT STATUS
+     * -----------------------------------------------------
+     */
+
+    let paymentStatus =
+      "not_configured";
+
+    if (
+      paymentMethod === "moncash"
+    ) {
+      paymentStatus =
+        env.MONCASH_CLIENT_ID &&
+        env.MONCASH_CLIENT_SECRET
+          ? "credentials_configured"
+          : "not_configured";
+    }
+
+    if (
+      paymentMethod === "natcash"
+    ) {
+      paymentStatus =
+        env.NATCASH_API_KEY
+          ? "credentials_configured"
+          : "not_configured";
+    }
+
 
     return jsonResponse(
       {
         success: true,
-        status: "checkout_ready",
+
+        status:
+          "checkout_ready",
+
+        orderId,
+
         product: {
           id: productId,
-          name: productName || null,
-          requestedPrice: price || null
+          name: productName,
+          requestedPrice
         },
+
         payment: {
-          provider: "MonCash",
-          status: "not_configured"
+          method:
+            paymentMethod || "not_selected",
+
+          status:
+            paymentStatus
         },
+
         message:
-          "Checkout la pare. MonCash poko konekte."
+          "Checkout la pare. Payment gateway la poko aktive."
       },
       200,
-      securityHeaders
+      headers
     );
   }
 
 
   /*
-   * -------------------------------------------------------
+   * =======================================================
    * GET /api/payment-status
-   * -------------------------------------------------------
+   * =======================================================
    *
-   * Pita li pral verifye si transaction MonCash la reyisi.
+   * Pita:
+   * Worker la ap verifye transaction MonCash/NatCash.
    */
 
   if (
@@ -212,43 +386,65 @@ async function handleAPI(request, env, url, securityHeaders) {
   ) {
 
     const transactionId =
-      url.searchParams.get("transactionId");
+      url.searchParams.get(
+        "transactionId"
+      );
 
     if (!transactionId) {
       return jsonResponse(
         {
           success: false,
-          error: "transactionId is required."
+          error:
+            "transactionId is required."
         },
         400,
-        securityHeaders
+        headers
       );
     }
+
+
+    /*
+     * Payment poko konekte.
+     */
 
     return jsonResponse(
       {
         success: true,
+
         transactionId,
-        status: "not_configured",
+
+        status:
+          "not_configured",
+
+        paid: false,
+
         message:
-          "Payment verification poko konekte ak MonCash."
+          "Payment verification poko konekte."
       },
       200,
-      securityHeaders
+      headers
     );
   }
 
 
   /*
-   * -------------------------------------------------------
+   * =======================================================
    * GET /api/download
-   * -------------------------------------------------------
+   * =======================================================
    *
-   * Pita route sa a ap bay kliyan an yon download URL
-   * ki soti nan R2 apre payment la verifye.
+   * Route sa a ap pwoteje paid files yo.
    *
-   * PA mete fichye premium yo dirèkteman nan public images/
-   * si ou vle yo rete pwoteje.
+   * PA mete PSD premium yo nan:
+   *
+   *   images/
+   *
+   * si ou vle yo rete prive.
+   *
+   * Lè R2 aktive:
+   *
+   *   PAID_ASSETS
+   *
+   * ap sèvi pou storage premium yo.
    */
 
   if (
@@ -257,73 +453,181 @@ async function handleAPI(request, env, url, securityHeaders) {
   ) {
 
     const productId =
-      url.searchParams.get("productId");
+      url.searchParams.get(
+        "productId"
+      );
+
+    const transactionId =
+      url.searchParams.get(
+        "transactionId"
+      );
+
 
     if (!productId) {
       return jsonResponse(
         {
           success: false,
-          error: "productId is required."
+          error:
+            "productId is required."
         },
         400,
-        securityHeaders
+        headers
       );
     }
 
+
     /*
-     * R2 poko konekte.
+     * -----------------------------------------------------
+     * R2 PA KONFIGIRE
+     * -----------------------------------------------------
+     */
+
+    if (!env.PAID_ASSETS) {
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "not_configured",
+
+          productId,
+
+          message:
+            "Secure download poko aktive. R2 poko konekte."
+        },
+        503,
+        headers
+      );
+    }
+
+
+    /*
+     * -----------------------------------------------------
+     * PAYMENT VERIFICATION
+     * -----------------------------------------------------
+     *
+     * Pa bay PSD la jis paske moun nan rele
+     * /api/download.
+     *
+     * Pita nou pral verifye transactionId
+     * ak MonCash/NatCash anvan download.
+     */
+
+    if (!transactionId) {
+      return jsonResponse(
+        {
+          success: false,
+
+          error:
+            "transactionId is required.",
+
+          message:
+            "Payment verification nesesè anvan download."
+        },
+        403,
+        headers
+      );
+    }
+
+
+    /*
+     * -----------------------------------------------------
+     * PAYMENT PA KONFIME TOUJOU
+     * -----------------------------------------------------
+     *
+     * Pou kounye a, nou pap bay fichye a.
      */
 
     return jsonResponse(
       {
         success: false,
-        status: "not_configured",
+
+        status:
+          "payment_not_verified",
+
         productId,
+
+        transactionId,
+
         message:
-          "Secure download poko aktive. R2 + payment verification nesesè."
+          "Payment la poko verifye. Download la bloke."
       },
-      503,
-      securityHeaders
+      403,
+      headers
     );
   }
 
 
   /*
-   * -------------------------------------------------------
+   * =======================================================
    * API ROUTE NOT FOUND
-   * -------------------------------------------------------
+   * =======================================================
    */
 
   return jsonResponse(
     {
       success: false,
-      error: "API route not found."
+      error:
+        "API route not found."
     },
     404,
-    securityHeaders
+    headers
   );
 }
 
 
 /**
  * =========================================================
- * JSON RESPONSE HELPER
+ * CREATE ORDER ID
  * =========================================================
  */
 
-function jsonResponse(data, status = 200, extraHeaders = {}) {
+function createOrderId() {
 
-  const headers = new Headers({
-    "Content-Type": "application/json; charset=UTF-8",
-    "Cache-Control": "no-store",
-    ...extraHeaders
-  });
+  const random =
+    crypto.randomUUID()
+      .replaceAll("-", "")
+      .slice(0, 12)
+      .toUpperCase();
+
+  return `WGD-${Date.now()}-${random}`;
+}
+
+
+/**
+ * =========================================================
+ * JSON RESPONSE
+ * =========================================================
+ */
+
+function jsonResponse(
+  data,
+  status = 200,
+  extraHeaders = {}
+) {
+
+  const responseHeaders =
+    new Headers({
+      "Content-Type":
+        "application/json; charset=UTF-8",
+
+      "Cache-Control":
+        "no-store",
+
+      ...extraHeaders
+    });
+
 
   return new Response(
-    JSON.stringify(data, null, 2),
+    JSON.stringify(
+      data,
+      null,
+      2
+    ),
     {
       status,
-      headers
+      headers:
+        responseHeaders
     }
   );
 }
