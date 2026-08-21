@@ -3,7 +3,7 @@
  * WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER
  * =========================================================
  *
- * FRONTEND:
+ * Website:
  *   index.html
  *   styles.css
  *   brand.css
@@ -16,16 +16,11 @@
  *   GET  /api/payment-status
  *   GET  /api/download
  *
- * PAYMENT:
- *   MonCash  -> prepare
- *   NatCash  -> prepare
+ * Payment:
+ *   MonCash / NatCash — prepare
  *
- * STORAGE:
- *   Cloudflare R2 -> prepare
- *
- * IMPORTANT:
- *   Worker la mache menm si MonCash/NatCash/R2
- *   poko konekte.
+ * Storage:
+ *   Cloudflare R2 — prepare
  *
  * =========================================================
  */
@@ -56,11 +51,14 @@ export default {
 
     const corsHeaders = {
       "Access-Control-Allow-Origin": url.origin,
-      "Access-Control-Allow-Methods":
-        "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers":
-        "Content-Type",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
       "Access-Control-Max-Age": "86400"
+    };
+
+    const responseHeaders = {
+      ...securityHeaders,
+      ...corsHeaders
     };
 
     /*
@@ -72,16 +70,13 @@ export default {
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
-        headers: {
-          ...securityHeaders,
-          ...corsHeaders
-        }
+        headers: responseHeaders
       });
     }
 
     /*
      * -------------------------------------------------------
-     * API
+     * API ROUTES
      * -------------------------------------------------------
      */
 
@@ -90,10 +85,7 @@ export default {
         request,
         env,
         url,
-        {
-          ...securityHeaders,
-          ...corsHeaders
-        }
+        responseHeaders
       );
     }
 
@@ -130,7 +122,9 @@ export default {
      * Add security headers.
      */
 
-    const newHeaders = new Headers(response.headers);
+    const newHeaders = new Headers(
+      response.headers
+    );
 
     for (const [key, value] of Object.entries(
       securityHeaders
@@ -164,8 +158,6 @@ async function handleAPI(
    * =======================================================
    * GET /api/health
    * =======================================================
-   *
-   * Verify Worker la ap fonksyone.
    */
 
   if (
@@ -179,14 +171,18 @@ async function handleAPI(
         service:
           "Wise.graphixdesign Worker",
 
-        status: "online",
+        status:
+          "online",
 
         website:
           "Wise.graphixdesign",
 
         payment: {
-          moncash: "not_configured",
-          natcash: "not_configured"
+          moncash:
+            "not_configured",
+
+          natcash:
+            "not_configured"
         },
 
         storage: {
@@ -208,14 +204,6 @@ async function handleAPI(
    * =======================================================
    * POST /api/checkout
    * =======================================================
-   *
-   * Route sa a resevwa enfòmasyon pwodwi a.
-   *
-   * IMPORTANT:
-   * Nou PA fè payment reyèl toujou.
-   *
-   * Lè MonCash/NatCash credentials yo disponib,
-   * se isit la integration lan ap fèt.
    */
 
   if (
@@ -231,7 +219,8 @@ async function handleAPI(
       return jsonResponse(
         {
           success: false,
-          error: "Invalid JSON request."
+          error:
+            "Invalid JSON request."
         },
         400,
         headers
@@ -269,7 +258,7 @@ async function handleAPI(
 
 
     /*
-     * Payment method si kliyan chwazi youn.
+     * Payment methods ki aksepte.
      */
 
     const allowedPaymentMethods = [
@@ -277,17 +266,25 @@ async function handleAPI(
       "natcash"
     ];
 
+    const normalizedPaymentMethod =
+      paymentMethod
+        ? String(paymentMethod).toLowerCase()
+        : null;
+
+
     if (
-      paymentMethod &&
+      normalizedPaymentMethod &&
       !allowedPaymentMethods.includes(
-        String(paymentMethod).toLowerCase()
+        normalizedPaymentMethod
       )
     ) {
       return jsonResponse(
         {
           success: false,
+
           error:
             "Payment method not supported.",
+
           allowedMethods:
             allowedPaymentMethods
         },
@@ -298,12 +295,7 @@ async function handleAPI(
 
 
     /*
-     * -----------------------------------------------------
-     * TEMPORARY CHECKOUT
-     * -----------------------------------------------------
-     *
-     * Sa pèmèt frontend ou a kominike ak Worker la
-     * menm anvan payment gateway yo konekte.
+     * Kreye order ID.
      */
 
     const orderId =
@@ -311,16 +303,16 @@ async function handleAPI(
 
 
     /*
-     * -----------------------------------------------------
-     * PAYMENT STATUS
-     * -----------------------------------------------------
+     * Payment configuration status.
      */
 
     let paymentStatus =
       "not_configured";
 
+
     if (
-      paymentMethod === "moncash"
+      normalizedPaymentMethod ===
+      "moncash"
     ) {
       paymentStatus =
         env.MONCASH_CLIENT_ID &&
@@ -329,8 +321,10 @@ async function handleAPI(
           : "not_configured";
     }
 
+
     if (
-      paymentMethod === "natcash"
+      normalizedPaymentMethod ===
+      "natcash"
     ) {
       paymentStatus =
         env.NATCASH_API_KEY
@@ -349,14 +343,20 @@ async function handleAPI(
         orderId,
 
         product: {
-          id: productId,
-          name: productName,
-          requestedPrice
+          id:
+            productId,
+
+          name:
+            productName,
+
+          requestedPrice:
+            requestedPrice
         },
 
         payment: {
           method:
-            paymentMethod || "not_selected",
+            normalizedPaymentMethod ||
+            "not_selected",
 
           status:
             paymentStatus
@@ -375,9 +375,6 @@ async function handleAPI(
    * =======================================================
    * GET /api/payment-status
    * =======================================================
-   *
-   * Pita:
-   * Worker la ap verifye transaction MonCash/NatCash.
    */
 
   if (
@@ -390,10 +387,12 @@ async function handleAPI(
         "transactionId"
       );
 
+
     if (!transactionId) {
       return jsonResponse(
         {
           success: false,
+
           error:
             "transactionId is required."
         },
@@ -403,23 +402,22 @@ async function handleAPI(
     }
 
 
-    /*
-     * Payment poko konekte.
-     */
-
     return jsonResponse(
       {
         success: true,
 
-        transactionId,
+        transactionId:
+
+          transactionId,
 
         status:
           "not_configured",
 
-        paid: false,
+        paid:
+          false,
 
         message:
-          "Payment verification poko konekte."
+          "Payment verification poko konekte ak MonCash/NatCash."
       },
       200,
       headers
@@ -432,19 +430,7 @@ async function handleAPI(
    * GET /api/download
    * =======================================================
    *
-   * Route sa a ap pwoteje paid files yo.
-   *
-   * PA mete PSD premium yo nan:
-   *
-   *   images/
-   *
-   * si ou vle yo rete prive.
-   *
-   * Lè R2 aktive:
-   *
-   *   PAID_ASSETS
-   *
-   * ap sèvi pou storage premium yo.
+   * Route pou secure paid downloads.
    */
 
   if (
@@ -467,6 +453,7 @@ async function handleAPI(
       return jsonResponse(
         {
           success: false,
+
           error:
             "productId is required."
         },
@@ -477,9 +464,7 @@ async function handleAPI(
 
 
     /*
-     * -----------------------------------------------------
-     * R2 PA KONFIGIRE
-     * -----------------------------------------------------
+     * R2 poko konekte.
      */
 
     if (!env.PAID_ASSETS) {
@@ -490,7 +475,9 @@ async function handleAPI(
           status:
             "not_configured",
 
-          productId,
+          productId:
+
+            productId,
 
           message:
             "Secure download poko aktive. R2 poko konekte."
@@ -502,15 +489,7 @@ async function handleAPI(
 
 
     /*
-     * -----------------------------------------------------
-     * PAYMENT VERIFICATION
-     * -----------------------------------------------------
-     *
-     * Pa bay PSD la jis paske moun nan rele
-     * /api/download.
-     *
-     * Pita nou pral verifye transactionId
-     * ak MonCash/NatCash anvan download.
+     * Payment verification obligatwa.
      */
 
     if (!transactionId) {
@@ -531,11 +510,7 @@ async function handleAPI(
 
 
     /*
-     * -----------------------------------------------------
-     * PAYMENT PA KONFIME TOUJOU
-     * -----------------------------------------------------
-     *
-     * Pou kounye a, nou pap bay fichye a.
+     * Payment poko verifye.
      */
 
     return jsonResponse(
@@ -545,9 +520,11 @@ async function handleAPI(
         status:
           "payment_not_verified",
 
-        productId,
+        productId:
+          productId,
 
-        transactionId,
+        transactionId:
+          transactionId,
 
         message:
           "Payment la poko verifye. Download la bloke."
@@ -567,6 +544,7 @@ async function handleAPI(
   return jsonResponse(
     {
       success: false,
+
       error:
         "API route not found."
     },
@@ -625,7 +603,9 @@ function jsonResponse(
       2
     ),
     {
-      status,
+      status:
+        status,
+
       headers:
         responseHeaders
     }
