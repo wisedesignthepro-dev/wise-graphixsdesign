@@ -3,24 +3,30 @@
  * WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER
  * =========================================================
  *
- * Website:
- *   index.html
- *   styles.css
- *   brand.css
- *   script.js
- *   images/*
+ * FRONTEND:
+ * index.html
+ * styles.css
+ * brand.css
+ * script.js
+ * images/*
  *
  * API:
- *   GET  /api/health
- *   POST /api/checkout
- *   GET  /api/payment-status
- *   GET  /api/download
+ * GET  /api/health
+ * GET  /api/moncash-token
+ * POST /api/checkout
+ * GET  /api/payment-status
+ * GET  /api/download
  *
- * Payment:
- *   MonCash / NatCash — prepare
+ * PAYMENT:
+ * MonCash Sandbox -> CONNECTED FOR TOKEN TEST
+ * NatCash        -> PREPARE
  *
- * Storage:
- *   Cloudflare R2 — prepare
+ * STORAGE:
+ * Cloudflare R2 -> PREPARE
+ *
+ * IMPORTANT:
+ * Client ID / Client Secret yo pa ekri nan code la.
+ * Yo dwe rete nan Cloudflare Secrets.
  *
  * =========================================================
  */
@@ -56,11 +62,6 @@ export default {
       "Access-Control-Max-Age": "86400"
     };
 
-    const responseHeaders = {
-      ...securityHeaders,
-      ...corsHeaders
-    };
-
     /*
      * -------------------------------------------------------
      * OPTIONS / CORS PREFLIGHT
@@ -70,13 +71,16 @@ export default {
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
-        headers: responseHeaders
+        headers: {
+          ...securityHeaders,
+          ...corsHeaders
+        }
       });
     }
 
     /*
      * -------------------------------------------------------
-     * API ROUTES
+     * API
      * -------------------------------------------------------
      */
 
@@ -85,7 +89,10 @@ export default {
         request,
         env,
         url,
-        responseHeaders
+        {
+          ...securityHeaders,
+          ...corsHeaders
+        }
       );
     }
 
@@ -93,17 +100,6 @@ export default {
      * -------------------------------------------------------
      * STATIC WEBSITE
      * -------------------------------------------------------
-     *
-     * Tout sa ki pa /api/* ale nan ASSETS.
-     *
-     * /
-     * /index.html
-     * /styles.css
-     * /brand.css
-     * /script.js
-     * /robots.txt
-     * /sitemap.xml
-     * /images/*
      */
 
     if (!env.ASSETS) {
@@ -122,9 +118,7 @@ export default {
      * Add security headers.
      */
 
-    const newHeaders = new Headers(
-      response.headers
-    );
+    const newHeaders = new Headers(response.headers);
 
     for (const [key, value] of Object.entries(
       securityHeaders
@@ -179,16 +173,22 @@ async function handleAPI(
 
         payment: {
           moncash:
-            "not_configured",
+            env.MONCASH_CLIENT_ID &&
+            env.MONCASH_CLIENT_SECRET
+              ? "credentials_configured"
+              : "not_configured",
 
           natcash:
-            "not_configured"
+            env.NATCASH_API_KEY
+              ? "credentials_configured"
+              : "not_configured"
         },
 
         storage: {
-          r2: env.PAID_ASSETS
-            ? "configured"
-            : "not_configured"
+          r2:
+            env.PAID_ASSETS
+              ? "configured"
+              : "not_configured"
         },
 
         timestamp:
@@ -202,8 +202,229 @@ async function handleAPI(
 
   /*
    * =======================================================
+   * GET /api/moncash-token
+   * =======================================================
+   *
+   * TEST:
+   *
+   * Worker -> MonCash Sandbox -> Access Token
+   *
+   * IMPORTANT:
+   * Nou pa janm retounen Client Secret la.
+   */
+
+  if (
+    url.pathname === "/api/moncash-token" &&
+    request.method === "GET"
+  ) {
+
+    /*
+     * Verifye credentials yo egziste.
+     */
+
+    if (
+      !env.MONCASH_CLIENT_ID ||
+      !env.MONCASH_CLIENT_SECRET
+    ) {
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "credentials_missing",
+
+          message:
+            "MONCASH_CLIENT_ID oswa MONCASH_CLIENT_SECRET pa configured nan Cloudflare Secrets."
+        },
+        500,
+        headers
+      );
+    }
+
+
+    /*
+     * MonCash Sandbox API.
+     */
+
+    const tokenUrl =
+      "https://sandbox.moncashbutton.digicelgroup.com/Api/oauth/token";
+
+
+    /*
+     * Basic Authentication:
+     *
+     * username = Client ID
+     * password = Client Secret
+     */
+
+    const basicCredentials =
+      btoa(
+        `${env.MONCASH_CLIENT_ID}:${env.MONCASH_CLIENT_SECRET}`
+      );
+
+
+    try {
+
+      const tokenResponse =
+        await fetch(
+          tokenUrl,
+          {
+            method: "POST",
+
+            headers: {
+              "Authorization":
+                `Basic ${basicCredentials}`,
+
+              "Accept":
+                "application/json",
+
+              "Content-Type":
+                "application/x-www-form-urlencoded"
+            },
+
+            body:
+              "scope=read,write&grant_type=client_credentials"
+          }
+        );
+
+
+      /*
+       * Li repons MonCash la.
+       */
+
+      const rawText =
+        await tokenResponse.text();
+
+
+      let tokenData;
+
+      try {
+        tokenData =
+          JSON.parse(rawText);
+      } catch {
+        tokenData = {
+          raw: rawText
+        };
+      }
+
+
+      /*
+       * Si MonCash pa bay 2xx.
+       */
+
+      if (!tokenResponse.ok) {
+
+        return jsonResponse(
+          {
+            success: false,
+
+            status:
+              "moncash_auth_failed",
+
+            httpStatus:
+              tokenResponse.status,
+
+            message:
+              "MonCash Sandbox pa aksepte credentials yo.",
+
+            moncashResponse:
+              tokenData
+          },
+          502,
+          headers
+        );
+      }
+
+
+      /*
+       * Token jwenn.
+       *
+       * Pou sekirite, nou PA retounen token an
+       * nan repons browser la.
+       */
+
+      if (!tokenData?.access_token) {
+
+        return jsonResponse(
+          {
+            success: false,
+
+            status:
+              "token_missing",
+
+            message:
+              "MonCash reponn men pa gen access_token nan repons lan.",
+
+            moncashResponse:
+              tokenData
+          },
+          502,
+          headers
+        );
+      }
+
+
+      /*
+       * KONEKSYON MONCASH OK.
+       */
+
+      return jsonResponse(
+        {
+          success: true,
+
+          status:
+            "moncash_authenticated",
+
+          provider:
+            "MonCash Sandbox",
+
+          message:
+            "Worker la reyisi jwenn Access Token MonCash Sandbox la.",
+
+          tokenType:
+            tokenData.token_type || "bearer",
+
+          expiresIn:
+            tokenData.expires_in || null,
+
+          scope:
+            tokenData.scope || "read,write"
+        },
+        200,
+        headers
+      );
+
+    } catch (error) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "moncash_connection_error",
+
+          message:
+            "Worker la pa t kapab kontakte MonCash Sandbox.",
+
+          error:
+            error?.message || "Unknown error"
+        },
+        502,
+        headers
+      );
+    }
+  }
+
+
+  /*
+   * =======================================================
    * POST /api/checkout
    * =======================================================
+   *
+   * TEMPORARY CHECKOUT
+   *
+   * Payment reyèl poko fèt nan route sa a.
+   * Pwochen etap la se konekte CreatePayment.
    */
 
   if (
@@ -214,11 +435,14 @@ async function handleAPI(
     let body;
 
     try {
-      body = await request.json();
+      body =
+        await request.json();
     } catch {
+
       return jsonResponse(
         {
           success: false,
+
           error:
             "Invalid JSON request."
         },
@@ -226,6 +450,7 @@ async function handleAPI(
         headers
       );
     }
+
 
     const productId =
       body?.productId;
@@ -245,9 +470,11 @@ async function handleAPI(
      */
 
     if (!productId) {
+
       return jsonResponse(
         {
           success: false,
+
           error:
             "productId is required."
         },
@@ -258,7 +485,7 @@ async function handleAPI(
 
 
     /*
-     * Payment methods ki aksepte.
+     * Payment methods nou sipòte.
      */
 
     const allowedPaymentMethods = [
@@ -266,18 +493,14 @@ async function handleAPI(
       "natcash"
     ];
 
-    const normalizedPaymentMethod =
-      paymentMethod
-        ? String(paymentMethod).toLowerCase()
-        : null;
-
 
     if (
-      normalizedPaymentMethod &&
+      paymentMethod &&
       !allowedPaymentMethods.includes(
-        normalizedPaymentMethod
+        String(paymentMethod).toLowerCase()
       )
     ) {
+
       return jsonResponse(
         {
           success: false,
@@ -295,7 +518,7 @@ async function handleAPI(
 
 
     /*
-     * Kreye order ID.
+     * Order ID.
      */
 
     const orderId =
@@ -303,7 +526,7 @@ async function handleAPI(
 
 
     /*
-     * Payment configuration status.
+     * Payment status.
      */
 
     let paymentStatus =
@@ -311,9 +534,10 @@ async function handleAPI(
 
 
     if (
-      normalizedPaymentMethod ===
+      String(paymentMethod).toLowerCase() ===
       "moncash"
     ) {
+
       paymentStatus =
         env.MONCASH_CLIENT_ID &&
         env.MONCASH_CLIENT_SECRET
@@ -323,9 +547,10 @@ async function handleAPI(
 
 
     if (
-      normalizedPaymentMethod ===
+      String(paymentMethod).toLowerCase() ===
       "natcash"
     ) {
+
       paymentStatus =
         env.NATCASH_API_KEY
           ? "credentials_configured"
@@ -349,13 +574,12 @@ async function handleAPI(
           name:
             productName,
 
-          requestedPrice:
-            requestedPrice
+          requestedPrice
         },
 
         payment: {
           method:
-            normalizedPaymentMethod ||
+            paymentMethod ||
             "not_selected",
 
           status:
@@ -363,7 +587,7 @@ async function handleAPI(
         },
 
         message:
-          "Checkout la pare. Payment gateway la poko aktive."
+          "Checkout la pare. CreatePayment MonCash ap vini nan pwochen etap la."
       },
       200,
       headers
@@ -389,6 +613,7 @@ async function handleAPI(
 
 
     if (!transactionId) {
+
       return jsonResponse(
         {
           success: false,
@@ -406,9 +631,7 @@ async function handleAPI(
       {
         success: true,
 
-        transactionId:
-
-          transactionId,
+        transactionId,
 
         status:
           "not_configured",
@@ -417,7 +640,7 @@ async function handleAPI(
           false,
 
         message:
-          "Payment verification poko konekte ak MonCash/NatCash."
+          "Payment verification poko konekte."
       },
       200,
       headers
@@ -429,8 +652,6 @@ async function handleAPI(
    * =======================================================
    * GET /api/download
    * =======================================================
-   *
-   * Route pou secure paid downloads.
    */
 
   if (
@@ -450,6 +671,7 @@ async function handleAPI(
 
 
     if (!productId) {
+
       return jsonResponse(
         {
           success: false,
@@ -464,10 +686,11 @@ async function handleAPI(
 
 
     /*
-     * R2 poko konekte.
+     * R2 poko configured.
      */
 
     if (!env.PAID_ASSETS) {
+
       return jsonResponse(
         {
           success: false,
@@ -475,9 +698,7 @@ async function handleAPI(
           status:
             "not_configured",
 
-          productId:
-
-            productId,
+          productId,
 
           message:
             "Secure download poko aktive. R2 poko konekte."
@@ -493,6 +714,7 @@ async function handleAPI(
      */
 
     if (!transactionId) {
+
       return jsonResponse(
         {
           success: false,
@@ -510,7 +732,7 @@ async function handleAPI(
 
 
     /*
-     * Payment poko verifye.
+     * Poko bay fichye a.
      */
 
     return jsonResponse(
@@ -520,11 +742,9 @@ async function handleAPI(
         status:
           "payment_not_verified",
 
-        productId:
-          productId,
+        productId,
 
-        transactionId:
-          transactionId,
+        transactionId,
 
         message:
           "Payment la poko verifye. Download la bloke."
@@ -603,8 +823,7 @@ function jsonResponse(
       2
     ),
     {
-      status:
-        status,
+      status,
 
       headers:
         responseHeaders
