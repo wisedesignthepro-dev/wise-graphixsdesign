@@ -1,6 +1,7 @@
 /**
  * =========================================================
- * WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER FINAL
+ * WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER
+ * MONCASH SANDBOX
  * =========================================================
  *
  * FRONTEND:
@@ -18,17 +19,20 @@
  * GET  /api/download
  *
  * PAYMENT:
- * MonCash Sandbox -> Token test
- * NatCash        -> Prepare
+ * MonCash Sandbox
  *
  * STORAGE:
  * Cloudflare R2 -> PAID_ASSETS
  *
- * IMPORTANT:
+ * SECRETS:
  * MONCASH_CLIENT_ID
  * MONCASH_CLIENT_SECRET
  *
- * dwe rete nan Cloudflare Secrets.
+ * NATCASH:
+ * PA KONFIGIRE POU KOUNYE A
+ *
+ * IMPORTANT:
+ * Pa gen MONCASH_MODE ki nesesè.
  *
  * =========================================================
  */
@@ -56,9 +60,6 @@ export default {
        * =====================================================
        * CORS
        * =====================================================
-       *
-       * Nou itilize origin request la.
-       * Sa evite louvri API a pou tout sit.
        */
 
       const requestOrigin =
@@ -134,10 +135,6 @@ export default {
         );
       }
 
-      /*
-       * Cloudflare ASSETS
-       */
-
       const response =
         await env.ASSETS.fetch(request);
 
@@ -174,12 +171,6 @@ export default {
       );
 
     } catch (error) {
-
-      /*
-       * =====================================================
-       * GLOBAL ERROR
-       * =====================================================
-       */
 
       return new Response(
         JSON.stringify({
@@ -259,9 +250,7 @@ async function handleAPI(
           },
 
           natcash:
-            env.NATCASH_API_KEY
-              ? "credentials_configured"
-              : "not_configured"
+            "not_configured"
         },
 
         storage: {
@@ -288,26 +277,16 @@ async function handleAPI(
    * GET /api/moncash-token
    * =======================================================
    *
-   * TEST:
+   * TEST ONLY
    *
-   * Worker
-   *   ↓
-   * MonCash Sandbox
-   *   ↓
-   * Access Token
-   *
-   * Client Secret la PA JANM soti
-   * nan Worker la.
+   * Nou pa janm voye access_token
+   * bay browser la.
    */
 
   if (
     url.pathname === "/api/moncash-token" &&
     request.method === "GET"
   ) {
-
-    /*
-     * Verify Secrets yo.
-     */
 
     if (
       !env.MONCASH_CLIENT_ID ||
@@ -331,147 +310,10 @@ async function handleAPI(
       );
     }
 
-
-    /*
-     * MonCash Sandbox OAuth endpoint.
-     */
-
-    const tokenUrl =
-      "https://sandbox.moncashbutton.digicelgroup.com/Api/oauth/token";
-
-
-    /*
-     * Basic Authentication
-     *
-     * Client ID
-     * +
-     * Client Secret
-     */
-
-    const basicCredentials =
-      btoa(
-        `${env.MONCASH_CLIENT_ID}:${env.MONCASH_CLIENT_SECRET}`
-      );
-
-
     try {
 
-      const tokenResponse =
-        await fetch(
-          tokenUrl,
-          {
-            method:
-              "POST",
-
-            headers: {
-
-              "Authorization":
-                `Basic ${basicCredentials}`,
-
-              "Accept":
-                "application/json",
-
-              "Content-Type":
-                "application/x-www-form-urlencoded"
-            },
-
-            body:
-              "scope=read,write&grant_type=client_credentials"
-          }
-        );
-
-
-      /*
-       * Li repons lan kòm text
-       * anvan JSON parse.
-       */
-
-      const rawText =
-        await tokenResponse.text();
-
-
-      let tokenData;
-
-      try {
-
-        tokenData =
-          JSON.parse(rawText);
-
-      } catch {
-
-        tokenData = {
-          raw:
-            rawText
-        };
-      }
-
-
-      /*
-       * MonCash pa bay 2xx.
-       */
-
-      if (!tokenResponse.ok) {
-
-        return jsonResponse(
-          {
-            success: false,
-
-            status:
-              "moncash_auth_failed",
-
-            httpStatus:
-              tokenResponse.status,
-
-            message:
-              "MonCash Sandbox pa aksepte credentials yo.",
-
-            moncashResponse:
-              tokenData
-          },
-
-          502,
-
-          headers
-        );
-      }
-
-
-      /*
-       * Verify access_token.
-       */
-
-      if (
-        !tokenData ||
-        !tokenData.access_token
-      ) {
-
-        return jsonResponse(
-          {
-            success: false,
-
-            status:
-              "token_missing",
-
-            message:
-              "MonCash reponn men pa gen access_token nan repons lan.",
-
-            moncashResponse:
-              tokenData
-          },
-
-          502,
-
-          headers
-        );
-      }
-
-
-      /*
-       * SECURITY:
-       *
-       * Nou PA retounen access_token
-       * nan browser la.
-       */
+      const tokenData =
+        await getMonCashToken(env);
 
       return jsonResponse(
         {
@@ -484,7 +326,7 @@ async function handleAPI(
             "MonCash Sandbox",
 
           message:
-            "Worker la reyisi jwenn Access Token MonCash Sandbox la.",
+            "Worker la reyisi authenticate ak MonCash Sandbox.",
 
           tokenType:
             tokenData.token_type ||
@@ -511,14 +353,12 @@ async function handleAPI(
           success: false,
 
           status:
-            "moncash_connection_error",
+            error.code ||
+            "moncash_auth_failed",
 
           message:
-            "Worker la pa t kapab kontakte MonCash Sandbox.",
-
-          error:
-            error?.message ||
-            "Unknown error"
+            error.message ||
+            "MonCash authentication failed."
         },
 
         502,
@@ -534,10 +374,17 @@ async function handleAPI(
    * POST /api/checkout
    * =======================================================
    *
-   * Checkout preparasyon.
+   * WORKFLOW:
    *
-   * Sa poko fè CreatePayment.
-   * Li sèlman prepare order la.
+   * Browser
+   *   ↓
+   * Worker
+   *   ↓
+   * MonCash OAuth
+   *   ↓
+   * CreatePayment
+   *   ↓
+   * Payment Gateway URL
    */
 
   if (
@@ -546,10 +393,6 @@ async function handleAPI(
   ) {
 
     let body;
-
-    /*
-     * Parse JSON.
-     */
 
     try {
 
@@ -574,30 +417,37 @@ async function handleAPI(
 
 
     /*
-     * Product.
+     * Product information
      */
 
     const productId =
       body?.productId;
 
-
     const productName =
       body?.productName ||
       null;
 
-
     const requestedPrice =
-      body?.price ||
-      null;
-
-
-    const paymentMethod =
-      body?.paymentMethod ||
-      null;
+      body?.price;
 
 
     /*
-     * Product ID obligatwa.
+     * Payment method
+     */
+
+    const paymentMethod =
+      body?.paymentMethod ||
+      "moncash";
+
+
+    const normalizedPaymentMethod =
+      String(
+        paymentMethod
+      ).toLowerCase();
+
+
+    /*
+     * Product ID obligatwa
      */
 
     if (!productId) {
@@ -618,32 +468,14 @@ async function handleAPI(
 
 
     /*
-     * Payment methods.
-     */
-
-    const allowedPaymentMethods = [
-      "moncash",
-      "natcash"
-    ];
-
-
-    const normalizedPaymentMethod =
-      paymentMethod
-        ? String(
-            paymentMethod
-          ).toLowerCase()
-        : null;
-
-
-    /*
-     * Verify payment method.
+     * Pou kounye a nou aksepte sèlman MonCash.
+     *
+     * NatCash ap ajoute pita.
      */
 
     if (
-      normalizedPaymentMethod &&
-      !allowedPaymentMethods.includes(
-        normalizedPaymentMethod
-      )
+      normalizedPaymentMethod !==
+      "moncash"
     ) {
 
       return jsonResponse(
@@ -651,10 +483,10 @@ async function handleAPI(
           success: false,
 
           error:
-            "Payment method not supported.",
+            "Payment method not available yet.",
 
-          allowedMethods:
-            allowedPaymentMethods
+          availableMethods:
+            ["moncash"]
         },
 
         400,
@@ -665,7 +497,61 @@ async function handleAPI(
 
 
     /*
-     * Order ID.
+     * Verify amount
+     */
+
+    const amount =
+      Number(
+        requestedPrice
+      );
+
+
+    if (
+      !Number.isFinite(amount) ||
+      amount <= 0
+    ) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          error:
+            "A valid positive price is required."
+        },
+
+        400,
+
+        headers
+      );
+    }
+
+
+    /*
+     * MonCash itilize kantite lajan
+     * kòm amount.
+     */
+
+    if (
+      amount > 100000000
+    ) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          error:
+            "Amount is too large."
+        },
+
+        400,
+
+        headers
+      );
+    }
+
+
+    /*
+     * Order ID inik
      */
 
     const orderId =
@@ -673,92 +559,270 @@ async function handleAPI(
 
 
     /*
-     * Payment status.
-     */
-
-    let paymentStatus =
-      "not_configured";
-
-
-    /*
-     * MONCASH
+     * Verify MonCash credentials
      */
 
     if (
-      normalizedPaymentMethod ===
-      "moncash"
+      !env.MONCASH_CLIENT_ID ||
+      !env.MONCASH_CLIENT_SECRET
     ) {
 
-      paymentStatus =
-        env.MONCASH_CLIENT_ID &&
-        env.MONCASH_CLIENT_SECRET
-
-          ? "credentials_configured"
-
-          : "not_configured";
-    }
-
-
-    /*
-     * NATCASH
-     */
-
-    if (
-      normalizedPaymentMethod ===
-      "natcash"
-    ) {
-
-      paymentStatus =
-        env.NATCASH_API_KEY
-
-          ? "credentials_configured"
-
-          : "not_configured";
-    }
-
-
-    /*
-     * Response.
-     */
-
-    return jsonResponse(
-      {
-        success: true,
-
-        status:
-          "checkout_ready",
-
-        orderId,
-
-        product: {
-
-          id:
-            productId,
-
-          name:
-            productName,
-
-          requestedPrice
-        },
-
-        payment: {
-
-          method:
-            normalizedPaymentMethod ||
-            "not_selected",
+      return jsonResponse(
+        {
+          success: false,
 
           status:
-            paymentStatus
+            "credentials_missing",
+
+          message:
+            "MonCash credentials yo poko configured nan Cloudflare Secrets."
         },
 
-        message:
-          "Checkout la pare. CreatePayment MonCash ap vini nan pwochen etap la."
-      },
+        500,
 
-      200,
+        headers
+      );
+    }
 
-      headers
-    );
+
+    try {
+
+      /*
+       * ===================================================
+       * GET ACCESS TOKEN
+       * ===================================================
+       */
+
+      const tokenData =
+        await getMonCashToken(env);
+
+
+      const accessToken =
+        tokenData.access_token;
+
+
+      /*
+       * ===================================================
+       * CREATE PAYMENT
+       * ===================================================
+       */
+
+      const createPaymentUrl =
+        "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/CreatePayment";
+
+
+      const paymentResponse =
+        await fetch(
+          createPaymentUrl,
+          {
+            method:
+              "POST",
+
+            headers: {
+
+              "Authorization":
+                `Bearer ${accessToken}`,
+
+              "Accept":
+                "application/json",
+
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+                amount,
+                orderId
+              })
+          }
+        );
+
+
+      const rawPayment =
+        await paymentResponse.text();
+
+
+      let paymentData;
+
+      try {
+
+        paymentData =
+          JSON.parse(
+            rawPayment
+          );
+
+      } catch {
+
+        paymentData = {
+          raw:
+            rawPayment
+        };
+      }
+
+
+      /*
+       * CreatePayment failed
+       */
+
+      if (
+        !paymentResponse.ok
+      ) {
+
+        return jsonResponse(
+          {
+            success: false,
+
+            status:
+              "create_payment_failed",
+
+            httpStatus:
+              paymentResponse.status,
+
+            orderId,
+
+            message:
+              "MonCash pa t kapab kreye payment la.",
+
+            moncashResponse:
+              paymentData
+          },
+
+          502,
+
+          headers
+        );
+      }
+
+
+      /*
+       * Payment token
+       */
+
+      const paymentToken =
+        paymentData
+          ?.payment_token
+          ?.token;
+
+
+      if (!paymentToken) {
+
+        return jsonResponse(
+          {
+            success: false,
+
+            status:
+              "payment_token_missing",
+
+            orderId,
+
+            message:
+              "MonCash reponn men pa gen payment token.",
+
+            moncashResponse:
+              paymentData
+          },
+
+          502,
+
+          headers
+        );
+      }
+
+
+      /*
+       * MonCash Sandbox Gateway
+       */
+
+      const gatewayUrl =
+        "https://sandbox.moncashbutton.digicelgroup.com/Moncash-middleware/Payment/Redirect?token=" +
+        encodeURIComponent(
+          paymentToken
+        );
+
+
+      /*
+       * Response pou frontend
+       */
+
+      return jsonResponse(
+        {
+          success: true,
+
+          status:
+            "payment_created",
+
+          provider:
+            "MonCash Sandbox",
+
+          orderId,
+
+          product: {
+
+            id:
+              productId,
+
+            name:
+              productName,
+
+            price:
+              amount
+          },
+
+          payment: {
+
+            method:
+              "moncash",
+
+            status:
+              "created",
+
+            paymentTokenCreated:
+              true
+          },
+
+          /*
+           * Frontend lan ka itilize
+           * redirectUrl pou voye kliyan
+           * sou MonCash.
+           */
+
+          redirectUrl:
+            gatewayUrl,
+
+          paymentUrl:
+            gatewayUrl,
+
+          message:
+            "Payment MonCash la kreye. Redireksyon kliyan an sou MonCash."
+        },
+
+        200,
+
+        headers
+      );
+
+    } catch (error) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "moncash_checkout_error",
+
+          orderId,
+
+          message:
+            error?.message ||
+            "Worker la pa t kapab kreye payment MonCash la."
+        },
+
+        502,
+
+        headers
+      );
+    }
   }
 
 
@@ -766,6 +830,17 @@ async function handleAPI(
    * =======================================================
    * GET /api/payment-status
    * =======================================================
+   *
+   * Verifye yon transaction oswa order
+   * dirèkteman ak MonCash.
+   *
+   * Li sipòte:
+   *
+   * ?transactionId=XXXX
+   *
+   * oswa
+   *
+   * ?orderId=XXXX
    */
 
   if (
@@ -778,19 +853,23 @@ async function handleAPI(
         "transactionId"
       );
 
+    const orderId =
+      url.searchParams.get(
+        "orderId"
+      );
 
-    /*
-     * Transaction ID obligatwa.
-     */
 
-    if (!transactionId) {
+    if (
+      !transactionId &&
+      !orderId
+    ) {
 
       return jsonResponse(
         {
           success: false,
 
           error:
-            "transactionId is required."
+            "transactionId or orderId is required."
         },
 
         400,
@@ -800,31 +879,205 @@ async function handleAPI(
     }
 
 
-    /*
-     * Payment verification
-     * poko konekte.
-     */
+    if (
+      !env.MONCASH_CLIENT_ID ||
+      !env.MONCASH_CLIENT_SECRET
+    ) {
 
-    return jsonResponse(
-      {
-        success: true,
+      return jsonResponse(
+        {
+          success: false,
 
-        transactionId,
+          status:
+            "credentials_missing",
 
-        status:
-          "not_configured",
+          message:
+            "MonCash credentials yo poko configured."
+        },
 
-        paid:
-          false,
+        500,
 
-        message:
-          "Payment verification poko konekte."
-      },
+        headers
+      );
+    }
 
-      200,
 
-      headers
-    );
+    try {
+
+      const tokenData =
+        await getMonCashToken(env);
+
+
+      const accessToken =
+        tokenData.access_token;
+
+
+      let endpoint;
+
+      let requestBody;
+
+
+      /*
+       * Transaction ID
+       */
+
+      if (transactionId) {
+
+        endpoint =
+          "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment";
+
+        requestBody =
+          {
+            transactionId
+          };
+
+      } else {
+
+        /*
+         * Order ID
+         */
+
+        endpoint =
+          "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveOrderPayment";
+
+        requestBody =
+          {
+            orderId
+          };
+      }
+
+
+      const verifyResponse =
+        await fetch(
+          endpoint,
+          {
+            method:
+              "POST",
+
+            headers: {
+
+              "Authorization":
+                `Bearer ${accessToken}`,
+
+              "Accept":
+                "application/json",
+
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify(
+                requestBody
+              )
+          }
+        );
+
+
+      const rawVerify =
+        await verifyResponse.text();
+
+
+      let verifyData;
+
+      try {
+
+        verifyData =
+          JSON.parse(
+            rawVerify
+          );
+
+      } catch {
+
+        verifyData = {
+          raw:
+            rawVerify
+        };
+      }
+
+
+      /*
+       * MonCash response status
+       */
+
+      const payment =
+        verifyData?.payment ||
+        null;
+
+
+      const paymentMessage =
+        String(
+          payment?.message ||
+          ""
+        ).toLowerCase();
+
+
+      const isPaid =
+        verifyResponse.ok &&
+        (
+          paymentMessage ===
+          "successful"
+        );
+
+
+      return jsonResponse(
+        {
+          success:
+            true,
+
+          status:
+            isPaid
+              ? "paid"
+              : "not_paid",
+
+          paid:
+            isPaid,
+
+          orderId:
+            orderId ||
+            null,
+
+          transactionId:
+            transactionId ||
+            payment?.transaction_id ||
+            null,
+
+          payment:
+            payment,
+
+          moncashResponse:
+            verifyData,
+
+          message:
+            isPaid
+              ? "Payment MonCash verifye avèk siksè."
+              : "Payment la poko verifye kòm successful."
+        },
+
+        200,
+
+        headers
+      );
+
+    } catch (error) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "payment_verification_error",
+
+          message:
+            error?.message ||
+            "Worker la pa t kapab verifye payment la."
+        },
+
+        502,
+
+        headers
+      );
+    }
   }
 
 
@@ -833,8 +1086,22 @@ async function handleAPI(
    * GET /api/download
    * =======================================================
    *
-   * Download PAID asset yo
-   * dwe pase nan verification payment.
+   * IMPORTANT:
+   *
+   * Pa bay R2 file la sof si MonCash
+   * verifye payment la kòm successful.
+   *
+   * Paramèt:
+   *
+   * productId
+   * +
+   * transactionId
+   *
+   * oswa
+   *
+   * productId
+   * +
+   * orderId
    */
 
   if (
@@ -847,15 +1114,19 @@ async function handleAPI(
         "productId"
       );
 
-
     const transactionId =
       url.searchParams.get(
         "transactionId"
       );
 
+    const orderId =
+      url.searchParams.get(
+        "orderId"
+      );
+
 
     /*
-     * Product ID obligatwa.
+     * Product ID
      */
 
     if (!productId) {
@@ -876,7 +1147,7 @@ async function handleAPI(
 
 
     /*
-     * R2 pa configured.
+     * R2
      */
 
     if (!env.PAID_ASSETS) {
@@ -886,12 +1157,10 @@ async function handleAPI(
           success: false,
 
           status:
-            "not_configured",
-
-          productId,
+            "r2_not_configured",
 
           message:
-            "Secure download poko aktive. R2 poko konekte."
+            "PAID_ASSETS R2 binding poko configured."
         },
 
         503,
@@ -902,17 +1171,23 @@ async function handleAPI(
 
 
     /*
-     * Payment transaction obligatwa.
+     * Payment reference
      */
 
-    if (!transactionId) {
+    if (
+      !transactionId &&
+      !orderId
+    ) {
 
       return jsonResponse(
         {
           success: false,
 
+          status:
+            "payment_reference_missing",
+
           error:
-            "transactionId is required.",
+            "transactionId or orderId is required.",
 
           message:
             "Payment verification nesesè anvan download."
@@ -926,31 +1201,299 @@ async function handleAPI(
 
 
     /*
-     * Payment verification
-     * poko konekte.
-     *
-     * Pa janm bay R2 file la
-     * anvan payment verifye.
+     * Verify payment BEFORE R2.
      */
 
-    return jsonResponse(
+    let paymentCheck;
+
+    try {
+
+      const tokenData =
+        await getMonCashToken(env);
+
+
+      const accessToken =
+        tokenData.access_token;
+
+
+      let endpoint;
+
+      let requestBody;
+
+
+      if (transactionId) {
+
+        endpoint =
+          "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment";
+
+        requestBody =
+          {
+            transactionId
+          };
+
+      } else {
+
+        endpoint =
+          "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveOrderPayment";
+
+        requestBody =
+          {
+            orderId
+          };
+      }
+
+
+      const verifyResponse =
+        await fetch(
+          endpoint,
+          {
+            method:
+              "POST",
+
+            headers: {
+
+              "Authorization":
+                `Bearer ${accessToken}`,
+
+              "Accept":
+                "application/json",
+
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify(
+                requestBody
+              )
+          }
+        );
+
+
+      const rawVerify =
+        await verifyResponse.text();
+
+
+      let verifyData;
+
+      try {
+
+        verifyData =
+          JSON.parse(
+            rawVerify
+          );
+
+      } catch {
+
+        verifyData = {
+          raw:
+            rawVerify
+        };
+      }
+
+
+      const payment =
+        verifyData?.payment ||
+        null;
+
+
+      const paymentMessage =
+        String(
+          payment?.message ||
+          ""
+        ).toLowerCase();
+
+
+      const paid =
+        verifyResponse.ok &&
+        paymentMessage ===
+        "successful";
+
+
+      paymentCheck = {
+        paid,
+        payment,
+        response:
+          verifyData
+      };
+
+    } catch (error) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "payment_verification_error",
+
+          message:
+            "Payment la pa t kapab verifye anvan download.",
+
+          error:
+            error?.message ||
+            "Unknown error"
+        },
+
+        502,
+
+        headers
+      );
+    }
+
+
+    /*
+     * NEVER serve R2 before payment success.
+     */
+
+    if (
+      !paymentCheck.paid
+    ) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "payment_not_verified",
+
+          paid:
+            false,
+
+          productId,
+
+          transactionId:
+            transactionId ||
+            paymentCheck
+              ?.payment
+              ?.transaction_id ||
+            null,
+
+          orderId:
+            orderId ||
+            null,
+
+          message:
+            "Payment la poko verifye kòm successful. Download la bloke."
+        },
+
+        403,
+
+        headers
+      );
+    }
+
+
+    /*
+     * =====================================================
+     * R2 OBJECT KEY
+     * =====================================================
+     *
+     * IMPORTANT:
+     * ProductId la dwe koresponn ak non
+     * fichye PSD ou mete nan R2.
+     *
+     * Egzanp:
+     *
+     * productId = flyer-01.psd
+     *
+     * R2 object = flyer-01.psd
+     *
+     * Si pita ou itilize yon lòt estrikti
+     * folder, nou ka chanje SA sèlman.
+     */
+
+    const safeProductId =
+      sanitizeR2Key(
+        productId
+      );
+
+
+    if (!safeProductId) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          error:
+            "Invalid productId."
+        },
+
+        400,
+
+        headers
+      );
+    }
+
+
+    /*
+     * R2 lookup
+     */
+
+    const object =
+      await env.PAID_ASSETS.get(
+        safeProductId
+      );
+
+
+    if (!object) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "file_not_found",
+
+          productId,
+
+          message:
+            "Payment verifye, men fichye PSD la pa jwenn nan R2."
+        },
+
+        404,
+
+        headers
+      );
+    }
+
+
+    /*
+     * Download headers
+     */
+
+    const downloadHeaders = {
+      ...headers,
+
+      "Content-Type":
+        object.httpMetadata?.contentType ||
+        "application/octet-stream",
+
+      "Content-Disposition":
+        `attachment; filename="${safeDownloadFilename(
+          safeProductId
+        )}"`,
+
+      "Cache-Control":
+        "private, no-store, max-age=0",
+
+      "X-Payment-Verified":
+        "true"
+    };
+
+
+    /*
+     * R2 file
+     */
+
+    return new Response(
+      object.body,
       {
-        success: false,
-
         status:
-          "payment_not_verified",
+          200,
 
-        productId,
-
-        transactionId,
-
-        message:
-          "Payment la poko verifye. Download la bloke."
-      },
-
-      403,
-
-      headers
+        headers:
+          downloadHeaders
+      }
     );
   }
 
@@ -978,6 +1521,133 @@ async function handleAPI(
 
 /**
  * =========================================================
+ * MONCASH TOKEN
+ * =========================================================
+ */
+
+async function getMonCashToken(
+  env
+) {
+
+  if (
+    !env.MONCASH_CLIENT_ID ||
+    !env.MONCASH_CLIENT_SECRET
+  ) {
+
+    const error =
+      new Error(
+        "MONCASH_CLIENT_ID oswa MONCASH_CLIENT_SECRET pa configured."
+      );
+
+    error.code =
+      "credentials_missing";
+
+    throw error;
+  }
+
+
+  const tokenUrl =
+    "https://sandbox.moncashbutton.digicelgroup.com/Api/oauth/token";
+
+
+  const basicCredentials =
+    btoa(
+      `${env.MONCASH_CLIENT_ID}:${env.MONCASH_CLIENT_SECRET}`
+    );
+
+
+  const response =
+    await fetch(
+      tokenUrl,
+      {
+        method:
+          "POST",
+
+        headers: {
+
+          "Authorization":
+            `Basic ${basicCredentials}`,
+
+          "Accept":
+            "application/json",
+
+          "Content-Type":
+            "application/x-www-form-urlencoded"
+        },
+
+        body:
+          "scope=read,write&grant_type=client_credentials"
+      }
+    );
+
+
+  const rawText =
+    await response.text();
+
+
+  let data;
+
+  try {
+
+    data =
+      JSON.parse(
+        rawText
+      );
+
+  } catch {
+
+    data = {
+      raw:
+        rawText
+    };
+  }
+
+
+  if (
+    !response.ok
+  ) {
+
+    const error =
+      new Error(
+        "MonCash Sandbox pa aksepte credentials yo."
+      );
+
+    error.code =
+      "moncash_auth_failed";
+
+    error.details =
+      data;
+
+    throw error;
+  }
+
+
+  if (
+    !data ||
+    !data.access_token
+  ) {
+
+    const error =
+      new Error(
+        "MonCash pa retounen access_token."
+      );
+
+    error.code =
+      "token_missing";
+
+    error.details =
+      data;
+
+    throw error;
+  }
+
+
+  return data;
+}
+
+
+/**
+ * =========================================================
  * CREATE ORDER ID
  * =========================================================
  */
@@ -986,12 +1656,119 @@ function createOrderId() {
 
   const random =
     crypto.randomUUID()
-      .replaceAll("-", "")
-      .slice(0, 12)
+      .replaceAll(
+        "-",
+        ""
+      )
+      .slice(
+        0,
+        12
+      )
       .toUpperCase();
 
 
-  return `WGD-${Date.now()}-${random}`;
+  return (
+    `WGD-${Date.now()}-${random}`
+  );
+}
+
+
+/**
+ * =========================================================
+ * SANITIZE R2 KEY
+ * =========================================================
+ */
+
+function sanitizeR2Key(
+  value
+) {
+
+  let key =
+    String(
+      value || ""
+    ).trim();
+
+
+  if (!key) {
+    return null;
+  }
+
+
+  /*
+   * Pa pèmèt:
+   *
+   * ../
+   * /
+   * backslash
+   *
+   * pou evite path traversal.
+   */
+
+  if (
+    key.includes("..") ||
+    key.includes("\\") ||
+    key.startsWith("/")
+  ) {
+
+    return null;
+  }
+
+
+  /*
+   * Pa pèmèt control characters.
+   */
+
+  if (
+    /[\u0000-\u001F\u007F]/.test(
+      key
+    )
+  ) {
+
+    return null;
+  }
+
+
+  /*
+   * Limite longè key.
+   */
+
+  if (
+    key.length > 500
+  ) {
+
+    return null;
+  }
+
+
+  return key;
+}
+
+
+/**
+ * =========================================================
+ * DOWNLOAD FILENAME
+ * =========================================================
+ */
+
+function safeDownloadFilename(
+  key
+) {
+
+  const parts =
+    key.split("/");
+
+  const filename =
+    parts[
+      parts.length - 1
+    ] ||
+    "download";
+
+
+  return filename
+    .replace(
+      /["\r\n\\]/g,
+      "_"
+    );
 }
 
 
