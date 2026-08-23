@@ -18,14 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
      CONFIGURATION
   ======================================================= */
 
-  /*
-   * Si sit la ak Worker la sou menm domain:
-   *   /api/checkout
-   *
-   * Si pita ou mete Worker sou yon lòt domain,
-   * chanje API_BASE_URL la sèlman.
-   */
-
   const API_BASE_URL = "";
 
   const API = {
@@ -62,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
 
-
     mainNav
       .querySelectorAll("a")
       .forEach(link => {
@@ -71,9 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
           "click",
           () => {
 
-            mainNav.classList.remove(
-              "open"
-            );
+            mainNav.classList.remove("open");
 
             menuButton.setAttribute(
               "aria-expanded",
@@ -110,9 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         event.stopPropagation();
 
         const open =
-          languageMenu.classList.toggle(
-            "open"
-          );
+          languageMenu.classList.toggle("open");
 
         languageButton.setAttribute(
           "aria-expanded",
@@ -121,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       }
     );
-
 
     languageMenu
       .querySelectorAll("[data-lang]")
@@ -136,9 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setLanguage(language);
 
-            languageMenu.classList.remove(
-              "open"
-            );
+            languageMenu.classList.remove("open");
 
             languageButton.setAttribute(
               "aria-expanded",
@@ -150,23 +134,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       });
 
-
     document.addEventListener(
       "click",
       event => {
 
         if (
-          !languageMenu.contains(
-            event.target
-          ) &&
-          !languageButton.contains(
-            event.target
-          )
+          !languageMenu.contains(event.target) &&
+          !languageButton.contains(event.target)
         ) {
 
-          languageMenu.classList.remove(
-            "open"
-          );
+          languageMenu.classList.remove("open");
 
           languageButton.setAttribute(
             "aria-expanded",
@@ -189,20 +166,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     ht: {
 
-      navWork:
-        "Travay mwen yo",
+      navWork: "Travay mwen yo",
 
-      navStore:
-        "Boutik PSD",
+      navStore: "Boutik PSD",
 
-      navFree:
-        "Asset gratis",
+      navFree: "Asset gratis",
 
-      navServices:
-        "Sèvis",
+      navServices: "Sèvis",
 
-      heroEyebrow:
-        "STIDYO DESIGN KREYATIF",
+      heroEyebrow: "STIDYO DESIGN KREYATIF",
 
       heroTitle:
         "Design ki<br><em>fè moun sonje w.</em>",
@@ -769,26 +741,20 @@ document.addEventListener("DOMContentLoaded", () => {
       translations[language] ||
       translations.ht;
 
-
     currentLanguage =
       translations[language]
         ? language
         : "ht";
 
-
     document.documentElement.lang =
       currentLanguage;
 
-
     document
-      .querySelectorAll(
-        "[data-i18n]"
-      )
+      .querySelectorAll("[data-i18n]")
       .forEach(element => {
 
         const key =
           element.dataset.i18n;
-
 
         if (
           Object.prototype.hasOwnProperty.call(
@@ -804,16 +770,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       });
 
-
     document
-      .querySelectorAll(
-        "[data-i18n-html]"
-      )
+      .querySelectorAll("[data-i18n-html]")
       .forEach(element => {
 
         const key =
           element.dataset.i18nHtml;
-
 
         if (
           Object.prototype.hasOwnProperty.call(
@@ -829,12 +791,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       });
 
-
     const selectedLanguage =
       document.querySelector(
         `[data-lang="${currentLanguage}"]`
       );
-
 
     if (
       selectedLanguage &&
@@ -847,12 +807,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     localStorage.setItem(
       "wiseLanguage",
       currentLanguage
     );
-
 
     updateAllButtonLanguages();
 
@@ -870,7 +828,6 @@ document.addEventListener("DOMContentLoaded", () => {
       )
     );
 
-
   const dots =
     Array.from(
       document.querySelectorAll(
@@ -878,10 +835,8 @@ document.addEventListener("DOMContentLoaded", () => {
       )
     );
 
-
   let currentSlide = 0;
   let slideshowTimer = null;
-
 
   function showSlide(index) {
 
@@ -889,11 +844,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-
     currentSlide =
       (index + slides.length) %
       slides.length;
-
 
     slides.forEach(
       (slide, i) => {
@@ -905,7 +858,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       }
     );
-
 
     dots.forEach(
       (dot, i) => {
@@ -920,7 +872,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
-
   function startSlideshow() {
 
     if (
@@ -931,11 +882,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     clearInterval(
       slideshowTimer
     );
-
 
     slideshowTimer =
       setInterval(
@@ -950,7 +899,6 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
   }
-
 
   dots.forEach(
     (dot, index) => {
@@ -968,7 +916,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
-
   showSlide(0);
   startSlideshow();
 
@@ -982,12 +929,10 @@ document.addEventListener("DOMContentLoaded", () => {
       ".filters [data-filter]"
     );
 
-
   const portfolioCards =
     document.querySelectorAll(
       ".portfolio-grid .portfolio-card"
     );
-
 
   portfolioFilters.forEach(
     button => {
@@ -999,7 +944,6 @@ document.addEventListener("DOMContentLoaded", () => {
           const selectedFilter =
             button.dataset.filter;
 
-
           portfolioFilters.forEach(
             btn => {
 
@@ -1010,18 +954,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           );
 
-
           button.classList.add(
             "active"
           );
-
 
           portfolioCards.forEach(
             card => {
 
               const category =
                 card.dataset.category;
-
 
               if (
                 selectedFilter === "all" ||
@@ -1073,7 +1014,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "psd-free/psd01.psd"
     },
 
-
     {
       id:
         "psd-free-02",
@@ -1116,7 +1056,6 @@ document.addEventListener("DOMContentLoaded", () => {
       price:
         5
     },
-
 
     {
       id:
@@ -1164,7 +1103,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "assets/free/png/png01.png"
     },
 
-
     {
       id:
         "free-background-01",
@@ -1185,7 +1123,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "assets/free/background/background01.jpg"
     },
 
-
     {
       id:
         "free-texture-01",
@@ -1205,7 +1142,6 @@ document.addEventListener("DOMContentLoaded", () => {
       download:
         "assets/free/texture/texture01.jpg"
     },
-
 
     {
       id:
@@ -1256,7 +1192,6 @@ document.addEventListener("DOMContentLoaded", () => {
         5
     },
 
-
     {
       id:
         "paid-background-01",
@@ -1277,7 +1212,6 @@ document.addEventListener("DOMContentLoaded", () => {
         5
     },
 
-
     {
       id:
         "paid-texture-01",
@@ -1297,7 +1231,6 @@ document.addEventListener("DOMContentLoaded", () => {
       price:
         5
     },
-
 
     {
       id:
@@ -1331,24 +1264,20 @@ document.addEventListener("DOMContentLoaded", () => {
       "free-psd-grid"
     );
 
-
   const paidPSDGrid =
     document.getElementById(
       "paid-psd-grid"
     );
-
 
   const freeAssetGrid =
     document.getElementById(
       "free-assets-grid"
     );
 
-
   const paidAssetGrid =
     document.getElementById(
       "paid-assets-grid"
     );
-
 
   const oldAssetGrid =
     document.getElementById(
@@ -1363,7 +1292,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentFreeAssetType =
     "png";
 
-
   let currentPaidAssetType =
     "png";
 
@@ -1377,7 +1305,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const dictionary =
       translations[currentLanguage] ||
       translations.ht;
-
 
     const names = {
 
@@ -1399,7 +1326,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     };
 
-
     return (
       names[type] ||
       type
@@ -1418,7 +1344,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const text =
       await response.text();
-
 
     try {
 
@@ -1443,22 +1368,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     PAID CHECKOUT
+     PAID CHECKOUT — FINAL
   ======================================================= */
 
-  async function startCheckout(
-    item,
-    type
-  ) {
+  async function startCheckout(item, type) {
 
     const dictionary =
       translations[currentLanguage] ||
       translations.ht;
-
-
-    /*
-     * Verify item.
-     */
 
     if (!item) {
 
@@ -1466,14 +1383,9 @@ document.addEventListener("DOMContentLoaded", () => {
         dictionary.paymentError
       );
 
-      return;
+      return null;
 
     }
-
-
-    /*
-     * Product ID.
-     */
 
     const productId =
       item.id ||
@@ -1488,28 +1400,13 @@ document.addEventListener("DOMContentLoaded", () => {
           ""
         );
 
-
-    /*
-     * Pou kounye a,
-     * default payment method
-     * se MonCash.
-     *
-     * Worker la verifye credentials yo.
-     */
-
     const paymentMethod =
       "moncash";
-
-
-    /*
-     * Evite double click.
-     */
 
     const buttons =
       document.querySelectorAll(
         '[data-asset-button="buy"]'
       );
-
 
     buttons.forEach(
       button => {
@@ -1524,7 +1421,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       }
     );
-
 
     try {
 
@@ -1543,30 +1439,31 @@ document.addEventListener("DOMContentLoaded", () => {
             body:
               JSON.stringify({
 
-                productId,
+                productId:
+                  productId,
 
                 productName:
                   item.name,
 
                 price:
-                  item.price,
+                  Number(item.price),
 
-                paymentMethod
+                paymentMethod:
+                  paymentMethod
 
               })
           }
         );
-
 
       const data =
         await getWorkerResponse(
           response
         );
 
-
-      /*
-       * Server error.
-       */
+      console.log(
+        "WISE CHECKOUT RESPONSE:",
+        data
+      );
 
       if (
         !response.ok ||
@@ -1581,12 +1478,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
       }
 
+      const redirectUrl =
+        data.redirectUrl ||
+        data.payment?.redirectUrl ||
+        data.payment?.redirect_url;
 
-      /*
-       * Worker checkout pare,
-       * men CreatePayment poko
-       * aktive nan backend la.
-       */
+      if (redirectUrl) {
+
+        window.location.href =
+          redirectUrl;
+
+        return data;
+
+      }
 
       if (
         data.payment &&
@@ -1596,164 +1500,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
         alert(
           `${dictionary.checkoutReady}\n\n` +
-          `Order: ${data.orderId}\n` +
-          `${data.message}`
+          `Order: ${data.orderId || "N/A"}`
         );
 
-      } else {
-
-        alert(
-          dictionary.paymentNotConnected
-        );
+        return data;
 
       }
 
-/* =======================================================
-   PAID CHECKOUT — FINAL
-======================================================= */
-
-async function startCheckout(item, type) {
-
-  const dictionary =
-    translations[currentLanguage] ||
-    translations.ht;
-
-  if (!item) {
-    alert(dictionary.paymentError);
-    return null;
-  }
-
-  const productId =
-    item.id ||
-    `${type}-${item.name}`
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-
-  const paymentMethod = "moncash";
-
-  const buttons =
-    document.querySelectorAll(
-      '[data-asset-button="buy"]'
-    );
-
-  buttons.forEach(button => {
-    button.disabled = true;
-    button.setAttribute("aria-busy", "true");
-  });
-
-  try {
-
-    const response = await fetch(
-      API.checkout,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-          productId: productId,
-          productName: item.name,
-          price: Number(item.price),
-          paymentMethod: paymentMethod
-        })
-      }
-    );
-
-    const data =
-      await getWorkerResponse(response);
-
-    console.log(
-      "WISE CHECKOUT RESPONSE:",
-      data
-    );
-
-    if (
-      !response.ok ||
-      !data.success
-    ) {
       throw new Error(
         data.message ||
-        data.error ||
-        dictionary.paymentError
+        dictionary.paymentNotConnected
       );
-    }
 
-    /*
-     * Worker la dwe retounen redirectUrl
-     * pou MonCash Sandbox.
-     */
-    const redirectUrl =
-      data.redirectUrl ||
-      data.payment?.redirectUrl ||
-      data.payment?.redirect_url;
+    } catch (error) {
 
-    if (redirectUrl) {
-
-      window.location.href =
-        redirectUrl;
-
-      return data;
-
-    }
-
-    /*
-     * Si Worker la konfime credentials
-     * men li pa retounen URL MonCash.
-     */
-    if (
-      data.payment &&
-      data.payment.status ===
-        "credentials_configured"
-    ) {
+      console.error(
+        "WISE CHECKOUT ERROR:",
+        error
+      );
 
       alert(
-        `${dictionary.checkoutReady}\n\n` +
-        `Order: ${data.orderId || "N/A"}`
+        error?.message ||
+        dictionary.paymentError
       );
 
-      return data;
+      return null;
+
+    } finally {
+
+      buttons.forEach(
+        button => {
+
+          button.disabled =
+            false;
+
+          button.removeAttribute(
+            "aria-busy"
+          );
+
+        }
+      );
+
     }
 
-    /*
-     * Pa gen redirect URL.
-     */
-    throw new Error(
-      data.message ||
-      dictionary.paymentNotConnected
-    );
-
-  } catch (error) {
-
-    console.error(
-      "WISE CHECKOUT ERROR:",
-      error
-    );
-
-    alert(
-      error?.message ||
-      dictionary.paymentError
-    );
-
-    return null;
-
-  } finally {
-
-    buttons.forEach(button => {
-
-      button.disabled = false;
-
-      button.removeAttribute(
-        "aria-busy"
-      );
-
-    });
-
   }
-
-}
 
 
   /* =======================================================
@@ -1770,67 +1560,44 @@ async function startCheckout(item, type) {
         "article"
       );
 
-
     card.className =
       "asset-card psd-card";
-
-
-    /*
-     * IMAGE
-     */
 
     const image =
       document.createElement(
         "img"
       );
 
-
     image.src =
       item.image || "";
-
 
     image.alt =
       item.name ||
       "PSD";
 
-
     image.loading =
       "lazy";
 
-
     image.className =
       "asset-image";
-
-
-    /*
-     * TITLE
-     */
 
     const title =
       document.createElement(
         "h3"
       );
 
-
     title.textContent =
       item.name ||
       "PSD";
-
-
-    /*
-     * DESCRIPTION
-     */
 
     const description =
       document.createElement(
         "p"
       );
 
-
     description.textContent =
       item.description ||
       "PSD";
-
 
     card.appendChild(
       image
@@ -1845,11 +1612,9 @@ async function startCheckout(item, type) {
     );
 
 
-    /*
-     * =====================================================
-     * PAID PSD
-     * =====================================================
-     */
+    /* =====================================================
+       PAID PSD
+    ===================================================== */
 
     if (paid) {
 
@@ -1858,10 +1623,8 @@ async function startCheckout(item, type) {
           "strong"
         );
 
-
       price.className =
         "asset-price";
-
 
       price.textContent =
         item.price ||
@@ -1869,35 +1632,28 @@ async function startCheckout(item, type) {
           currentLanguage
         ].paid;
 
-
       card.appendChild(
         price
       );
-
 
       const buy =
         document.createElement(
           "button"
         );
 
-
       buy.type =
         "button";
-
 
       buy.className =
         "buy";
 
-
       buy.dataset.assetButton =
         "buy";
-
 
       buy.textContent =
         translations[
           currentLanguage
         ].buyNow;
-
 
       buy.addEventListener(
         "click",
@@ -1911,42 +1667,34 @@ async function startCheckout(item, type) {
         }
       );
 
-
       card.appendChild(
         buy
       );
 
     } else {
 
-      /*
-       * ===================================================
-       * FREE PSD
-       * ===================================================
-       */
+      /* ===================================================
+         FREE PSD
+      =================================================== */
 
       const download =
         document.createElement(
           "button"
         );
 
-
       download.type =
         "button";
-
 
       download.className =
         "download";
 
-
       download.dataset.assetButton =
         "download";
-
 
       download.textContent =
         translations[
           currentLanguage
         ].downloadFree;
-
 
       download.addEventListener(
         "click",
@@ -1962,29 +1710,22 @@ async function startCheckout(item, type) {
                 "a"
               );
 
-
             link.href =
               item.download;
-
 
             link.download =
               "";
 
-
             link.rel =
               "noopener";
-
 
             document.body.appendChild(
               link
             );
 
-
             link.click();
 
-
             link.remove();
-
 
             showDownloadModal();
 
@@ -2001,13 +1742,11 @@ async function startCheckout(item, type) {
         }
       );
 
-
       card.appendChild(
         download
       );
 
     }
-
 
     return card;
 
@@ -2028,29 +1767,20 @@ async function startCheckout(item, type) {
         "article"
       );
 
-
     card.className =
       "asset-card";
-
 
     card.dataset.assetType =
       asset.type ||
       "png";
-
-
-    /*
-     * IMAGE
-     */
 
     const image =
       document.createElement(
         "img"
       );
 
-
     image.src =
       asset.image || "";
-
 
     image.alt =
       asset.name ||
@@ -2058,46 +1788,31 @@ async function startCheckout(item, type) {
         asset.type
       );
 
-
     image.loading =
       "lazy";
 
-
     image.className =
       "asset-image";
-
-
-    /*
-     * TITLE
-     */
 
     const title =
       document.createElement(
         "h3"
       );
 
-
     title.textContent =
       asset.name ||
       "Digital Asset";
-
-
-    /*
-     * DESCRIPTION
-     */
 
     const description =
       document.createElement(
         "p"
       );
 
-
     description.textContent =
       asset.description ||
       assetTypeName(
         asset.type
       );
-
 
     card.appendChild(
       image
@@ -2112,11 +1827,9 @@ async function startCheckout(item, type) {
     );
 
 
-    /*
-     * =====================================================
-     * PAID ASSET
-     * =====================================================
-     */
+    /* =====================================================
+       PAID ASSET
+    ===================================================== */
 
     if (paid) {
 
@@ -2125,10 +1838,8 @@ async function startCheckout(item, type) {
           "strong"
         );
 
-
       price.className =
         "asset-price";
-
 
       price.textContent =
         asset.price ||
@@ -2136,35 +1847,28 @@ async function startCheckout(item, type) {
           currentLanguage
         ].paid;
 
-
       card.appendChild(
         price
       );
-
 
       const buy =
         document.createElement(
           "button"
         );
 
-
       buy.type =
         "button";
-
 
       buy.className =
         "buy";
 
-
       buy.dataset.assetButton =
         "buy";
-
 
       buy.textContent =
         translations[
           currentLanguage
         ].buyNow;
-
 
       buy.addEventListener(
         "click",
@@ -2178,42 +1882,34 @@ async function startCheckout(item, type) {
         }
       );
 
-
       card.appendChild(
         buy
       );
 
     } else {
 
-      /*
-       * ===================================================
-       * FREE ASSET
-       * ===================================================
-       */
+      /* ===================================================
+         FREE ASSET
+      =================================================== */
 
       const download =
         document.createElement(
           "button"
         );
 
-
       download.type =
         "button";
-
 
       download.className =
         "download";
 
-
       download.dataset.assetButton =
         "download";
-
 
       download.textContent =
         translations[
           currentLanguage
         ].downloadFree;
-
 
       download.addEventListener(
         "click",
@@ -2229,29 +1925,22 @@ async function startCheckout(item, type) {
                 "a"
               );
 
-
             link.href =
               asset.download;
-
 
             link.download =
               "";
 
-
             link.rel =
               "noopener";
-
 
             document.body.appendChild(
               link
             );
 
-
             link.click();
 
-
             link.remove();
-
 
             showDownloadModal();
 
@@ -2268,13 +1957,11 @@ async function startCheckout(item, type) {
         }
       );
 
-
       card.appendChild(
         download
       );
 
     }
-
 
     return card;
 
@@ -2293,7 +1980,6 @@ async function startCheckout(item, type) {
       ] ||
       translations.ht;
 
-
     document
       .querySelectorAll(
         '[data-asset-button="download"]'
@@ -2306,7 +1992,6 @@ async function startCheckout(item, type) {
 
         }
       );
-
 
     document
       .querySelectorAll(
@@ -2338,10 +2023,8 @@ async function startCheckout(item, type) {
       return;
     }
 
-
     grid.innerHTML =
       "";
-
 
     items.forEach(
       item => {
@@ -2374,10 +2057,8 @@ async function startCheckout(item, type) {
       return;
     }
 
-
     grid.innerHTML =
       "";
-
 
     const filtered =
       assets.filter(
@@ -2390,7 +2071,6 @@ async function startCheckout(item, type) {
 
         }
       );
-
 
     filtered.forEach(
       asset => {
@@ -2414,27 +2094,17 @@ async function startCheckout(item, type) {
 
   function renderAllAssets() {
 
-    /*
-     * PSD
-     */
-
     renderPSD(
       freePSD,
       freePSDGrid,
       false
     );
 
-
     renderPSD(
       paidPSD,
       paidPSDGrid,
       true
     );
-
-
-    /*
-     * ASSETS
-     */
 
     renderAssets(
       freeAssets,
@@ -2443,19 +2113,12 @@ async function startCheckout(item, type) {
       currentFreeAssetType
     );
 
-
     renderAssets(
       paidAssets,
       paidAssetGrid,
       true,
       currentPaidAssetType
     );
-
-
-    /*
-     * Old asset grid
-     * si HTML la genyen li.
-     */
 
     if (oldAssetGrid) {
 
@@ -2467,7 +2130,6 @@ async function startCheckout(item, type) {
       );
 
     }
-
 
     prepareImages();
 
@@ -2483,7 +2145,6 @@ async function startCheckout(item, type) {
       ".free-asset-types [data-asset-type]"
     );
 
-
   freeAssetButtons.forEach(
     button => {
 
@@ -2494,19 +2155,15 @@ async function startCheckout(item, type) {
           event.preventDefault();
           event.stopPropagation();
 
-
           const selectedType =
             button.dataset.assetType;
-
 
           if (!selectedType) {
             return;
           }
 
-
           currentFreeAssetType =
             selectedType;
-
 
           freeAssetButtons.forEach(
             btn => {
@@ -2523,17 +2180,14 @@ async function startCheckout(item, type) {
             }
           );
 
-
           button.classList.add(
             "active"
           );
-
 
           button.setAttribute(
             "aria-selected",
             "true"
           );
-
 
           renderAssets(
             freeAssets,
@@ -2541,7 +2195,6 @@ async function startCheckout(item, type) {
             false,
             currentFreeAssetType
           );
-
 
           prepareImages();
 
@@ -2561,7 +2214,6 @@ async function startCheckout(item, type) {
       ".paid-asset-types [data-paid-asset-type]"
     );
 
-
   paidAssetButtons.forEach(
     button => {
 
@@ -2572,19 +2224,15 @@ async function startCheckout(item, type) {
           event.preventDefault();
           event.stopPropagation();
 
-
           const selectedType =
             button.dataset.paidAssetType;
-
 
           if (!selectedType) {
             return;
           }
 
-
           currentPaidAssetType =
             selectedType;
-
 
           paidAssetButtons.forEach(
             btn => {
@@ -2601,17 +2249,14 @@ async function startCheckout(item, type) {
             }
           );
 
-
           button.classList.add(
             "active"
           );
-
 
           button.setAttribute(
             "aria-selected",
             "true"
           );
-
 
           renderAssets(
             paidAssets,
@@ -2619,7 +2264,6 @@ async function startCheckout(item, type) {
             true,
             currentPaidAssetType
           );
-
 
           prepareImages();
 
@@ -2639,12 +2283,10 @@ async function startCheckout(item, type) {
       "download-modal"
     );
 
-
   const modalClose =
     document.getElementById(
       "modal-close"
     );
-
 
   function showDownloadModal() {
 
@@ -2652,10 +2294,8 @@ async function startCheckout(item, type) {
       return;
     }
 
-
     downloadModal.hidden =
       false;
-
 
     document.body.classList.add(
       "lightbox-open"
@@ -2663,24 +2303,20 @@ async function startCheckout(item, type) {
 
   }
 
-
   function hideDownloadModal() {
 
     if (!downloadModal) {
       return;
     }
 
-
     downloadModal.hidden =
       true;
-
 
     document.body.classList.remove(
       "lightbox-open"
     );
 
   }
-
 
   if (modalClose) {
 
@@ -2690,7 +2326,6 @@ async function startCheckout(item, type) {
     );
 
   }
-
 
   if (downloadModal) {
 
@@ -2722,48 +2357,40 @@ async function startCheckout(item, type) {
       "image-lightbox"
     );
 
-
   const lightboxImage =
     document.getElementById(
       "lightbox-image"
     );
-
 
   const lightboxClose =
     document.getElementById(
       "lightbox-close"
     );
 
-
   const lightboxPrev =
     document.getElementById(
       "lightbox-prev"
     );
-
 
   const lightboxNext =
     document.getElementById(
       "lightbox-next"
     );
 
-
   const zoomIn =
     document.getElementById(
       "zoom-in"
     );
-
 
   const zoomOut =
     document.getElementById(
       "zoom-out"
     );
 
-
   const zoomReset =
     document.getElementById(
       "zoom-reset"
     );
-
 
   let lightboxImages = [];
 
@@ -2784,10 +2411,6 @@ async function startCheckout(item, type) {
     sourceImage = null
   ) {
 
-    /*
-     * PORTFOLIO
-     */
-
     if (
       sourceImage &&
       sourceImage.closest(
@@ -2800,10 +2423,8 @@ async function startCheckout(item, type) {
           ".portfolio-card"
         );
 
-
       const category =
         portfolioCard.dataset.category;
-
 
       lightboxImages =
         Array.from(
@@ -2822,15 +2443,10 @@ async function startCheckout(item, type) {
           }
         );
 
-
       return;
 
     }
 
-
-    /*
-     * FREE ASSETS
-     */
 
     if (
       sourceImage &&
@@ -2844,10 +2460,8 @@ async function startCheckout(item, type) {
           ".asset-card"
         );
 
-
       const assetType =
         assetCard?.dataset.assetType;
-
 
       if (assetType) {
 
@@ -2868,17 +2482,12 @@ async function startCheckout(item, type) {
             }
           );
 
-
         return;
 
       }
 
     }
 
-
-    /*
-     * PAID ASSETS
-     */
 
     if (
       sourceImage &&
@@ -2892,10 +2501,8 @@ async function startCheckout(item, type) {
           ".asset-card"
         );
 
-
       const assetType =
         assetCard?.dataset.assetType;
-
 
       if (assetType) {
 
@@ -2916,17 +2523,12 @@ async function startCheckout(item, type) {
             }
           );
 
-
         return;
 
       }
 
     }
 
-
-    /*
-     * PSD FREE
-     */
 
     if (
       sourceImage &&
@@ -2952,15 +2554,10 @@ async function startCheckout(item, type) {
           }
         );
 
-
       return;
 
     }
 
-
-    /*
-     * PSD PAID
-     */
 
     if (
       sourceImage &&
@@ -2986,15 +2583,10 @@ async function startCheckout(item, type) {
           }
         );
 
-
       return;
 
     }
 
-
-    /*
-     * DEFAULT
-     */
 
     lightboxImages =
       Array.from(
@@ -3026,10 +2618,8 @@ async function startCheckout(item, type) {
       return;
     }
 
-
     lightboxImage.style.transform =
       `translate3d(${moveX}px, ${moveY}px, 0) scale(${zoomLevel})`;
-
 
     if (zoomReset) {
 
@@ -3061,7 +2651,6 @@ async function startCheckout(item, type) {
 
     }
 
-
     lightboxIndex =
       (
         index +
@@ -3069,22 +2658,18 @@ async function startCheckout(item, type) {
       ) %
       lightboxImages.length;
 
-
     const source =
       lightboxImages[
         lightboxIndex
       ];
 
-
     lightboxImage.src =
       source.currentSrc ||
       source.src;
 
-
     lightboxImage.alt =
       source.alt ||
       "";
-
 
     zoomLevel = 1;
 
@@ -3092,13 +2677,10 @@ async function startCheckout(item, type) {
 
     moveY = 0;
 
-
     updateZoom();
-
 
     lightbox.hidden =
       false;
-
 
     document.body.classList.add(
       "lightbox-open"
@@ -3117,15 +2699,12 @@ async function startCheckout(item, type) {
       return;
     }
 
-
     lightbox.hidden =
       true;
-
 
     document.body.classList.remove(
       "lightbox-open"
     );
-
 
     if (lightboxImage) {
 
@@ -3152,7 +2731,6 @@ async function startCheckout(item, type) {
 
   }
 
-
   function previousImage() {
 
     openLightbox(
@@ -3174,11 +2752,9 @@ async function startCheckout(item, type) {
         4
       );
 
-
     updateZoom();
 
   }
-
 
   function zoomMinus() {
 
@@ -3188,11 +2764,9 @@ async function startCheckout(item, type) {
         0.5
       );
 
-
     updateZoom();
 
   }
-
 
   function resetZoom() {
 
@@ -3201,7 +2775,6 @@ async function startCheckout(item, type) {
     moveX = 0;
 
     moveY = 0;
-
 
     updateZoom();
 
@@ -3219,7 +2792,6 @@ async function startCheckout(item, type) {
         ".portfolio-grid img, #free-assets-grid img, #paid-assets-grid img, #free-psd-grid img, #paid-psd-grid img"
       );
 
-
     images.forEach(
       image => {
 
@@ -3232,14 +2804,11 @@ async function startCheckout(item, type) {
 
         }
 
-
         image.dataset.lightboxReady =
           "true";
 
-
         image.style.cursor =
           "zoom-in";
-
 
         image.addEventListener(
           "click",
@@ -3255,17 +2824,14 @@ async function startCheckout(item, type) {
 
             }
 
-
             collectLightboxImages(
               image
             );
-
 
             const newIndex =
               lightboxImages.indexOf(
                 image
               );
-
 
             openLightbox(
               newIndex >= 0
@@ -3295,7 +2861,6 @@ async function startCheckout(item, type) {
 
   }
 
-
   if (lightboxPrev) {
 
     lightboxPrev.addEventListener(
@@ -3304,7 +2869,6 @@ async function startCheckout(item, type) {
     );
 
   }
-
 
   if (lightboxNext) {
 
@@ -3315,7 +2879,6 @@ async function startCheckout(item, type) {
 
   }
 
-
   if (zoomIn) {
 
     zoomIn.addEventListener(
@@ -3324,7 +2887,6 @@ async function startCheckout(item, type) {
     );
 
   }
-
 
   if (zoomOut) {
 
@@ -3335,7 +2897,6 @@ async function startCheckout(item, type) {
 
   }
 
-
   if (zoomReset) {
 
     zoomReset.addEventListener(
@@ -3344,7 +2905,6 @@ async function startCheckout(item, type) {
     );
 
   }
-
 
   if (lightbox) {
 
@@ -3384,7 +2944,6 @@ async function startCheckout(item, type) {
 
       }
 
-
       if (
         event.key ===
         "Escape"
@@ -3396,7 +2955,6 @@ async function startCheckout(item, type) {
 
       }
 
-
       if (
         event.key ===
         "ArrowRight"
@@ -3405,7 +2963,6 @@ async function startCheckout(item, type) {
         nextImage();
 
       }
-
 
       if (
         event.key ===
@@ -3416,7 +2973,6 @@ async function startCheckout(item, type) {
 
       }
 
-
       if (
         event.key === "+" ||
         event.key === "="
@@ -3426,7 +2982,6 @@ async function startCheckout(item, type) {
 
       }
 
-
       if (
         event.key === "-"
       ) {
@@ -3434,7 +2989,6 @@ async function startCheckout(item, type) {
         zoomMinus();
 
       }
-
 
       if (
         event.key === "0"
@@ -3467,9 +3021,7 @@ async function startCheckout(item, type) {
 
         }
 
-
         event.preventDefault();
-
 
         if (
           event.deltaY < 0
@@ -3502,7 +3054,6 @@ async function startCheckout(item, type) {
 
   let startY = 0;
 
-
   if (lightboxImage) {
 
     lightboxImage.addEventListener(
@@ -3517,24 +3068,19 @@ async function startCheckout(item, type) {
 
         }
 
-
         dragging = true;
-
 
         startX =
           event.clientX -
           moveX;
 
-
         startY =
           event.clientY -
           moveY;
 
-
         lightboxImage.classList.add(
           "dragging"
         );
-
 
         if (
           lightboxImage.setPointerCapture
@@ -3546,12 +3092,10 @@ async function startCheckout(item, type) {
 
         }
 
-
         event.preventDefault();
 
       }
     );
-
 
     lightboxImage.addEventListener(
       "pointermove",
@@ -3561,26 +3105,21 @@ async function startCheckout(item, type) {
           return;
         }
 
-
         moveX =
           event.clientX -
           startX;
-
 
         moveY =
           event.clientY -
           startY;
 
-
         lightboxImage.style.transform =
           `translate3d(${moveX}px, ${moveY}px, 0) scale(${zoomLevel})`;
-
 
         event.preventDefault();
 
       }
     );
-
 
     function stopDragging(
       event
@@ -3590,14 +3129,11 @@ async function startCheckout(item, type) {
         return;
       }
 
-
       dragging = false;
-
 
       lightboxImage.classList.remove(
         "dragging"
       );
-
 
       if (
         event &&
@@ -3615,18 +3151,15 @@ async function startCheckout(item, type) {
 
     }
 
-
     lightboxImage.addEventListener(
       "pointerup",
       stopDragging
     );
 
-
     lightboxImage.addEventListener(
       "pointercancel",
       stopDragging
     );
-
 
     lightboxImage.addEventListener(
       "lostpointercapture",
@@ -3644,7 +3177,6 @@ async function startCheckout(item, type) {
     document.querySelectorAll(
       ".reveal"
     );
-
 
   if (
     "IntersectionObserver" in window
@@ -3665,7 +3197,6 @@ async function startCheckout(item, type) {
                   "visible"
                 );
 
-
                 observer.unobserve(
                   entry.target
                 );
@@ -3681,7 +3212,6 @@ async function startCheckout(item, type) {
             0.12
         }
       );
-
 
     revealElements.forEach(
       element =>
@@ -3715,7 +3245,6 @@ async function startCheckout(item, type) {
       }
     );
 
-
   if (freeAssetGrid) {
 
     assetObserver.observe(
@@ -3727,7 +3256,6 @@ async function startCheckout(item, type) {
     );
 
   }
-
 
   if (paidAssetGrid) {
 
@@ -3741,7 +3269,6 @@ async function startCheckout(item, type) {
 
   }
 
-
   if (freePSDGrid) {
 
     assetObserver.observe(
@@ -3754,7 +3281,6 @@ async function startCheckout(item, type) {
 
   }
 
-
   if (paidPSDGrid) {
 
     assetObserver.observe(
@@ -3766,7 +3292,6 @@ async function startCheckout(item, type) {
     );
 
   }
-
 
   if (oldAssetGrid) {
 
