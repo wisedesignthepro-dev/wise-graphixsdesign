@@ -1114,7 +1114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "images/psd/paid/psd01.jpg",
 
       price:
-        "$5"
+        5
     },
 
 
@@ -1132,7 +1132,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "images/psd/paid/psd02.jpg",
 
       price:
-        "$7"
+        7
     }
 
   ];
@@ -1253,7 +1253,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "images/assets/paid/png/png01.png",
 
       price:
-        "$5"
+        5
     },
 
 
@@ -1274,7 +1274,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "images/assets/paid/background/background01.jpg",
 
       price:
-        "$5"
+        5
     },
 
 
@@ -1295,7 +1295,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "images/assets/paid/texture/texture01.jpg",
 
       price:
-        "$5"
+        5
     },
 
 
@@ -1316,7 +1316,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "images/assets/paid/mockup/mockup01.jpg",
 
       price:
-        "$7"
+        5
     }
 
   ];
