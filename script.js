@@ -1608,47 +1608,152 @@ document.addEventListener("DOMContentLoaded", () => {
 
       }
 
+/* =======================================================
+   PAID CHECKOUT — FINAL
+======================================================= */
 
-      /*
-       * Retounen order la pou
-       * pwochen etap payment la.
-       */
+async function startCheckout(item, type) {
+
+  const dictionary =
+    translations[currentLanguage] ||
+    translations.ht;
+
+  if (!item) {
+    alert(dictionary.paymentError);
+    return null;
+  }
+
+  const productId =
+    item.id ||
+    `${type}-${item.name}`
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+  const paymentMethod = "moncash";
+
+  const buttons =
+    document.querySelectorAll(
+      '[data-asset-button="buy"]'
+    );
+
+  buttons.forEach(button => {
+    button.disabled = true;
+    button.setAttribute("aria-busy", "true");
+  });
+
+  try {
+
+    const response = await fetch(
+      API.checkout,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          productId: productId,
+          productName: item.name,
+          price: Number(item.price),
+          paymentMethod: paymentMethod
+        })
+      }
+    );
+
+    const data =
+      await getWorkerResponse(response);
+
+    console.log(
+      "WISE CHECKOUT RESPONSE:",
+      data
+    );
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+      throw new Error(
+        data.message ||
+        data.error ||
+        dictionary.paymentError
+      );
+    }
+
+    /*
+     * Worker la dwe retounen redirectUrl
+     * pou MonCash Sandbox.
+     */
+    const redirectUrl =
+      data.redirectUrl ||
+      data.payment?.redirectUrl ||
+      data.payment?.redirect_url;
+
+    if (redirectUrl) {
+
+      window.location.href =
+        redirectUrl;
 
       return data;
 
-    } catch (error) {
-
-      console.error(
-        "WISE CHECKOUT ERROR:",
-        error
-      );
-
-
-      alert(
-        error?.message ||
-        dictionary.paymentError
-      );
-
-      return null;
-
-    } finally {
-
-      buttons.forEach(
-        button => {
-
-          button.disabled =
-            false;
-
-          button.removeAttribute(
-            "aria-busy"
-          );
-
-        }
-      );
-
     }
 
+    /*
+     * Si Worker la konfime credentials
+     * men li pa retounen URL MonCash.
+     */
+    if (
+      data.payment &&
+      data.payment.status ===
+        "credentials_configured"
+    ) {
+
+      alert(
+        `${dictionary.checkoutReady}\n\n` +
+        `Order: ${data.orderId || "N/A"}`
+      );
+
+      return data;
+    }
+
+    /*
+     * Pa gen redirect URL.
+     */
+    throw new Error(
+      data.message ||
+      dictionary.paymentNotConnected
+    );
+
+  } catch (error) {
+
+    console.error(
+      "WISE CHECKOUT ERROR:",
+      error
+    );
+
+    alert(
+      error?.message ||
+      dictionary.paymentError
+    );
+
+    return null;
+
+  } finally {
+
+    buttons.forEach(button => {
+
+      button.disabled = false;
+
+      button.removeAttribute(
+        "aria-busy"
+      );
+
+    });
+
   }
+
+}
 
 
   /* =======================================================
