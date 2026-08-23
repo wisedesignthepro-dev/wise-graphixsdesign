@@ -1,7 +1,7 @@
 /**
  * =========================================================
- * WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER
- * MONCASH SANDBOX
+ * WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER FINAL
+ * MONCASH SANDBOX + D1 + R2
  * =========================================================
  *
  * FRONTEND:
@@ -21,8 +21,20 @@
  * PAYMENT:
  * MonCash Sandbox
  *
+ * DATABASE:
+ * Cloudflare D1
+ * Binding:
+ * DB
+ *
  * STORAGE:
- * Cloudflare R2 -> PAID_ASSETS
+ * Cloudflare R2
+ * Binding:
+ * PAID_ASSETS
+ *
+ * ASSETS:
+ * Cloudflare Pages/Worker Assets
+ * Binding:
+ * ASSETS
  *
  * SECRETS:
  * MONCASH_CLIENT_ID
@@ -30,9 +42,6 @@
  *
  * NATCASH:
  * PA KONFIGIRE POU KOUNYE A
- *
- * IMPORTANT:
- * Pa gen MONCASH_MODE ki nesesè.
  *
  * =========================================================
  */
@@ -94,6 +103,7 @@ export default {
       if (request.method === "OPTIONS") {
         return new Response(null, {
           status: 204,
+
           headers: {
             ...securityHeaders,
             ...corsHeaders
@@ -175,8 +185,10 @@ export default {
       return new Response(
         JSON.stringify({
           success: false,
+
           error:
             "Worker internal error.",
+
           message:
             error?.message ||
             "Unknown error"
@@ -251,6 +263,14 @@ async function handleAPI(
 
           natcash:
             "not_configured"
+        },
+
+        database: {
+
+          d1:
+            env.DB
+              ? "configured"
+              : "not_configured"
         },
 
         storage: {
@@ -380,6 +400,10 @@ async function handleAPI(
    *   ↓
    * Worker
    *   ↓
+   * Validate product
+   *   ↓
+   * Create order in D1
+   *   ↓
    * MonCash OAuth
    *   ↓
    * CreatePayment
@@ -468,9 +492,7 @@ async function handleAPI(
 
 
     /*
-     * Pou kounye a nou aksepte sèlman MonCash.
-     *
-     * NatCash ap ajoute pita.
+     * Aksepte sèlman MonCash pou kounye a.
      */
 
     if (
@@ -526,11 +548,6 @@ async function handleAPI(
     }
 
 
-    /*
-     * MonCash itilize kantite lajan
-     * kòm amount.
-     */
-
     if (
       amount > 100000000
     ) {
@@ -551,11 +568,27 @@ async function handleAPI(
 
 
     /*
-     * Order ID inik
+     * Verify D1
      */
 
-    const orderId =
-      createOrderId();
+    if (!env.DB) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "d1_not_configured",
+
+          message:
+            "D1 binding DB poko configured."
+        },
+
+        503,
+
+        headers
+      );
+    }
 
 
     /*
@@ -585,12 +618,85 @@ async function handleAPI(
     }
 
 
+    /*
+     * Order ID inik
+     */
+
+    const orderId =
+      createOrderId();
+
+
+    /*
+     * =====================================================
+     * CREATE ORDER IN D1
+     * =====================================================
+     */
+
+    try {
+
+      await env.DB.prepare(
+        `
+        INSERT INTO orders (
+          order_id,
+          product_id,
+          product_name,
+          amount,
+          payment_method,
+          payment_status,
+          created_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        `
+      )
+      .bind(
+        orderId,
+        String(productId),
+        productName
+          ? String(productName)
+          : null,
+        amount,
+        normalizedPaymentMethod,
+        "pending",
+        new Date().toISOString()
+      )
+      .run();
+
+    } catch (error) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "d1_order_create_failed",
+
+          orderId,
+
+          message:
+            "Worker la pa kapab kreye order la nan D1.",
+
+          error:
+            error?.message ||
+            "D1 error"
+        },
+
+        500,
+
+        headers
+      );
+    }
+
+
+    /*
+     * =====================================================
+     * MONCASH PAYMENT
+     * =====================================================
+     */
+
     try {
 
       /*
-       * ===================================================
        * GET ACCESS TOKEN
-       * ===================================================
        */
 
       const tokenData =
@@ -602,9 +708,7 @@ async function handleAPI(
 
 
       /*
-       * ===================================================
        * CREATE PAYMENT
-       * ===================================================
        */
 
       const createPaymentUrl =
@@ -669,6 +773,13 @@ async function handleAPI(
         !paymentResponse.ok
       ) {
 
+        await updateOrderStatus(
+          env,
+          orderId,
+          "failed",
+          null
+        );
+
         return jsonResponse(
           {
             success: false,
@@ -706,6 +817,13 @@ async function handleAPI(
 
 
       if (!paymentToken) {
+
+        await updateOrderStatus(
+          env,
+          orderId,
+          "failed",
+          null
+        );
 
         return jsonResponse(
           {
@@ -781,12 +899,6 @@ async function handleAPI(
               true
           },
 
-          /*
-           * Frontend lan ka itilize
-           * redirectUrl pou voye kliyan
-           * sou MonCash.
-           */
-
           redirectUrl:
             gatewayUrl,
 
@@ -803,6 +915,13 @@ async function handleAPI(
       );
 
     } catch (error) {
+
+      await updateOrderStatus(
+        env,
+        orderId,
+        "failed",
+        null
+      );
 
       return jsonResponse(
         {
@@ -831,10 +950,8 @@ async function handleAPI(
    * GET /api/payment-status
    * =======================================================
    *
-   * Verifye yon transaction oswa order
-   * dirèkteman ak MonCash.
-   *
-   * Li sipòte:
+   * Verifye payment ak MonCash
+   * epi mete rezilta a nan D1.
    *
    * ?transactionId=XXXX
    *
@@ -879,6 +996,26 @@ async function handleAPI(
     }
 
 
+    if (!env.DB) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "d1_not_configured",
+
+          message:
+            "D1 binding DB poko configured."
+        },
+
+        503,
+
+        headers
+      );
+    }
+
+
     if (
       !env.MONCASH_CLIENT_ID ||
       !env.MONCASH_CLIENT_SECRET
@@ -903,6 +1040,44 @@ async function handleAPI(
 
 
     try {
+
+      /*
+       * Si orderId la disponib,
+       * verifye li nan D1 anvan.
+       */
+
+      let dbOrder = null;
+
+      if (orderId) {
+
+        dbOrder =
+          await getOrderByOrderId(
+            env,
+            orderId
+          );
+
+        if (!dbOrder) {
+
+          return jsonResponse(
+            {
+              success: false,
+
+              status:
+                "order_not_found",
+
+              orderId,
+
+              message:
+                "Order sa a pa jwenn nan D1."
+            },
+
+            404,
+
+            headers
+          );
+        }
+      }
+
 
       const tokenData =
         await getMonCashToken(env);
@@ -997,7 +1172,7 @@ async function handleAPI(
 
 
       /*
-       * MonCash response status
+       * MonCash response
        */
 
       const payment =
@@ -1014,16 +1189,39 @@ async function handleAPI(
 
       const isPaid =
         verifyResponse.ok &&
-        (
-          paymentMessage ===
-          "successful"
+        paymentMessage ===
+        "successful";
+
+
+      const finalTransactionId =
+        transactionId ||
+        payment?.transaction_id ||
+        payment?.transactionId ||
+        null;
+
+
+      /*
+       * =====================================================
+       * UPDATE D1
+       * =====================================================
+       */
+
+      if (orderId) {
+
+        await updateOrderStatus(
+          env,
+          orderId,
+          isPaid
+            ? "paid"
+            : "pending",
+          finalTransactionId
         );
+      }
 
 
       return jsonResponse(
         {
-          success:
-            true,
+          success: true,
 
           status:
             isPaid
@@ -1038,9 +1236,7 @@ async function handleAPI(
             null,
 
           transactionId:
-            transactionId ||
-            payment?.transaction_id ||
-            null,
+            finalTransactionId,
 
           payment:
             payment,
@@ -1050,7 +1246,7 @@ async function handleAPI(
 
           message:
             isPaid
-              ? "Payment MonCash verifye avèk siksè."
+              ? "Payment MonCash verifye avèk siksè epi D1 mete ajou."
               : "Payment la poko verifye kòm successful."
         },
 
@@ -1086,22 +1282,13 @@ async function handleAPI(
    * GET /api/download
    * =======================================================
    *
-   * IMPORTANT:
+   * Payment dwe successful.
    *
-   * Pa bay R2 file la sof si MonCash
-   * verifye payment la kòm successful.
-   *
-   * Paramèt:
-   *
-   * productId
-   * +
-   * transactionId
+   * Product ID + orderId
    *
    * oswa
    *
-   * productId
-   * +
-   * orderId
+   * Product ID + transactionId
    */
 
   if (
@@ -1171,6 +1358,30 @@ async function handleAPI(
 
 
     /*
+     * D1
+     */
+
+    if (!env.DB) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "d1_not_configured",
+
+          message:
+            "D1 binding DB poko configured."
+        },
+
+        503,
+
+        headers
+      );
+    }
+
+
+    /*
      * Payment reference
      */
 
@@ -1201,7 +1412,77 @@ async function handleAPI(
 
 
     /*
-     * Verify payment BEFORE R2.
+     * =====================================================
+     * D1 ORDER CHECK
+     * =====================================================
+     */
+
+    let dbOrder = null;
+
+    if (orderId) {
+
+      dbOrder =
+        await getOrderByOrderId(
+          env,
+          orderId
+        );
+
+      if (!dbOrder) {
+
+        return jsonResponse(
+          {
+            success: false,
+
+            status:
+              "order_not_found",
+
+            message:
+              "Order sa a pa jwenn nan D1."
+          },
+
+          404,
+
+          headers
+        );
+      }
+
+
+      /*
+       * Product dwe menm ak order la.
+       */
+
+      if (
+        String(
+          dbOrder.product_id
+        ) !==
+        String(
+          productId
+        )
+      ) {
+
+        return jsonResponse(
+          {
+            success: false,
+
+            status:
+              "product_mismatch",
+
+            message:
+              "Product la pa koresponn ak order sa a."
+          },
+
+          403,
+
+          headers
+        );
+      }
+    }
+
+
+    /*
+     * =====================================================
+     * VERIFY PAYMENT BEFORE R2
+     * =====================================================
      */
 
     let paymentCheck;
@@ -1310,12 +1591,43 @@ async function handleAPI(
         "successful";
 
 
+      const finalTransactionId =
+        transactionId ||
+        payment?.transaction_id ||
+        payment?.transactionId ||
+        null;
+
+
       paymentCheck = {
         paid,
+
         payment,
+
+        transactionId:
+          finalTransactionId,
+
         response:
           verifyData
       };
+
+
+      /*
+       * =====================================================
+       * UPDATE D1 AFTER VERIFICATION
+       * =====================================================
+       */
+
+      if (orderId) {
+
+        await updateOrderStatus(
+          env,
+          orderId,
+          paid
+            ? "paid"
+            : "pending",
+          finalTransactionId
+        );
+      }
 
     } catch (error) {
 
@@ -1362,10 +1674,8 @@ async function handleAPI(
           productId,
 
           transactionId:
-            transactionId ||
             paymentCheck
-              ?.payment
-              ?.transaction_id ||
+              ?.transactionId ||
             null,
 
           orderId:
@@ -1385,21 +1695,58 @@ async function handleAPI(
 
     /*
      * =====================================================
+     * VERIFY D1 PAYMENT STATE
+     * =====================================================
+     *
+     * Si orderId disponib, D1 dwe montre paid.
+     */
+
+    if (orderId) {
+
+      const latestOrder =
+        await getOrderByOrderId(
+          env,
+          orderId
+        );
+
+      if (
+        !latestOrder ||
+        latestOrder.payment_status !==
+        "paid"
+      ) {
+
+        return jsonResponse(
+          {
+            success: false,
+
+            status:
+              "d1_payment_not_confirmed",
+
+            message:
+              "MonCash verifye payment la men D1 poko konfime li."
+          },
+
+          403,
+
+          headers
+        );
+      }
+    }
+
+
+    /*
+     * =====================================================
      * R2 OBJECT KEY
      * =====================================================
      *
-     * IMPORTANT:
-     * ProductId la dwe koresponn ak non
-     * fichye PSD ou mete nan R2.
+     * ProductId la dwe koresponn ak
+     * non fichye PSD la nan R2.
      *
      * Egzanp:
      *
      * productId = flyer-01.psd
      *
      * R2 object = flyer-01.psd
-     *
-     * Si pita ou itilize yon lòt estrikti
-     * folder, nou ka chanje SA sèlman.
      */
 
     const safeProductId =
@@ -1516,6 +1863,132 @@ async function handleAPI(
 
     headers
   );
+}
+
+
+/**
+ * =========================================================
+ * D1 — GET ORDER
+ * =========================================================
+ */
+
+async function getOrderByOrderId(
+  env,
+  orderId
+) {
+
+  if (!env.DB) {
+    return null;
+  }
+
+  const result =
+    await env.DB.prepare(
+      `
+      SELECT
+        id,
+        order_id,
+        product_id,
+        product_name,
+        amount,
+        payment_method,
+        payment_status,
+        transaction_id,
+        created_at,
+        paid_at
+      FROM orders
+      WHERE order_id = ?
+      LIMIT 1
+      `
+    )
+    .bind(
+      orderId
+    )
+    .first();
+
+  return result || null;
+}
+
+
+/**
+ * =========================================================
+ * D1 — UPDATE ORDER STATUS
+ * =========================================================
+ */
+
+async function updateOrderStatus(
+  env,
+  orderId,
+  status,
+  transactionId
+) {
+
+  if (!env.DB || !orderId) {
+    return;
+  }
+
+  if (status === "paid") {
+
+    await env.DB.prepare(
+      `
+      UPDATE orders
+      SET
+        payment_status = ?,
+        transaction_id = COALESCE(?, transaction_id),
+        paid_at = COALESCE(paid_at, ?)
+      WHERE order_id = ?
+      `
+    )
+    .bind(
+      "paid",
+      transactionId || null,
+      new Date().toISOString(),
+      orderId
+    )
+    .run();
+
+    return;
+  }
+
+
+  if (status === "failed") {
+
+    await env.DB.prepare(
+      `
+      UPDATE orders
+      SET
+        payment_status = ?
+      WHERE order_id = ?
+      `
+    )
+    .bind(
+      "failed",
+      orderId
+    )
+    .run();
+
+    return;
+  }
+
+
+  /*
+   * Pending / lòt status
+   */
+
+  await env.DB.prepare(
+    `
+    UPDATE orders
+    SET
+      payment_status = ?,
+      transaction_id = COALESCE(?, transaction_id)
+    WHERE order_id = ?
+    `
+  )
+  .bind(
+    status,
+    transactionId || null,
+    orderId
+  )
+  .run();
 }
 
 
@@ -1695,13 +2168,7 @@ function sanitizeR2Key(
 
 
   /*
-   * Pa pèmèt:
-   *
-   * ../
-   * /
-   * backslash
-   *
-   * pou evite path traversal.
+   * Pa pèmèt path traversal.
    */
 
   if (
