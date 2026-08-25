@@ -1,49 +1,48 @@
 /*
-=========================================================
-WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER FINAL
-MONCASH SANDBOX + D1 + BACKBLAZE B2
-=========================================================
-
-FRONTEND:
-- index.html
-- styles.css
-- brand.css
-- script.js
-- images/*
-
-API:
-GET  /api/health
-GET  /api/moncash-token
-POST /api/checkout
-GET  /api/payment-status
-GET  /api/file-info
-GET  /api/download
-
-PAYMENT:
-MonCash Sandbox
-
-DATABASE:
-Cloudflare D1
-Binding:
-DB
-
-STORAGE:
-Backblaze B2 S3-Compatible API
-
-SECRETS:
-MONCASH_CLIENT_ID
-MONCASH_CLIENT_SECRET
-
-B2:
-B2_BUCKET_NAME
-B2_ENDPOINT
-B2_KEY_ID
-B2_APPLICATION_KEY
-
-NATCASH:
-PA KONFIGIRE POU KOUNYE A
-=========================================================
-*/
+ * =========================================================
+ * WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER FINAL
+ * MONCASH SANDBOX + D1 + BACKBLAZE B2 + ASSETS
+ * =========================================================
+ *
+ * FRONTEND:
+ * index.html
+ * styles.css
+ * brand.css
+ * script.js
+ * images/*
+ *
+ * API:
+ * GET  /api/health
+ * GET  /api/moncash-token
+ * POST /api/checkout
+ * GET  /api/payment-status
+ * GET  /api/product-info
+ * GET  /api/download
+ *
+ * PAYMENT:
+ * MonCash Sandbox
+ *
+ * DATABASE:
+ * Cloudflare D1
+ * Binding:
+ * DB
+ *
+ * STORAGE:
+ * Backblaze B2
+ *
+ * SECRETS:
+ * MONCASH_CLIENT_ID
+ * MONCASH_CLIENT_SECRET
+ * B2_APPLICATION_KEY
+ * B2_BUCKET_NAME
+ * B2_ENDPOINT
+ * B2_KEY_ID
+ *
+ * NATCASH:
+ * PA KONFIGIRE POU KOUNYE A
+ *
+ * =========================================================
+ */
 
 export default {
   async fetch(request, env) {
@@ -102,6 +101,7 @@ export default {
       if (request.method === "OPTIONS") {
         return new Response(null, {
           status: 204,
+
           headers: {
             ...securityHeaders,
             ...corsHeaders
@@ -146,6 +146,11 @@ export default {
       const response =
         await env.ASSETS.fetch(request);
 
+      /*
+       * Ajoute security headers
+       * san modifye kontni sit la.
+       */
+
       const newHeaders =
         new Headers(response.headers);
 
@@ -153,32 +158,46 @@ export default {
         const [key, value]
         of Object.entries(securityHeaders)
       ) {
-        newHeaders.set(key, value);
+        newHeaders.set(
+          key,
+          value
+        );
       }
 
       return new Response(
         response.body,
         {
-          status: response.status,
-          statusText: response.statusText,
-          headers: newHeaders
+          status:
+            response.status,
+
+          statusText:
+            response.statusText,
+
+          headers:
+            newHeaders
         }
       );
 
     } catch (error) {
+
       return new Response(
         JSON.stringify({
           success: false,
-          error: "Worker internal error.",
+
+          error:
+            "Worker internal error.",
+
           message:
             error?.message ||
             "Unknown error"
         }),
         {
           status: 500,
+
           headers: {
             "Content-Type":
               "application/json; charset=UTF-8",
+
             "Cache-Control":
               "no-store"
           }
@@ -190,10 +209,10 @@ export default {
 
 
 /*
-=========================================================
-API HANDLER
-=========================================================
-*/
+ * =========================================================
+ * API HANDLER
+ * =========================================================
+ */
 
 async function handleAPI(
   request,
@@ -227,6 +246,7 @@ async function handleAPI(
           "Wise.graphixdesign",
 
         payment: {
+
           moncash: {
             clientId:
               Boolean(
@@ -244,6 +264,7 @@ async function handleAPI(
         },
 
         database: {
+
           d1:
             env.DB
               ? "configured"
@@ -251,10 +272,30 @@ async function handleAPI(
         },
 
         storage: {
+
           backblaze:
-            hasB2Config(env)
+            hasBackblazeConfig(env)
               ? "configured"
               : "not_configured"
+        },
+
+        features: {
+
+          downloadCounter:
+            env.DB
+              ? "enabled"
+              : "disabled",
+
+          fileSize:
+            hasBackblazeConfig(env)
+              ? "enabled"
+              : "disabled",
+
+          paidDownloads:
+            env.DB &&
+            hasBackblazeConfig(env)
+              ? "protected"
+              : "disabled"
         },
 
         timestamp:
@@ -262,6 +303,7 @@ async function handleAPI(
       },
 
       200,
+
       headers
     );
   }
@@ -271,6 +313,11 @@ async function handleAPI(
    * =======================================================
    * GET /api/moncash-token
    * =======================================================
+   *
+   * TEST ONLY
+   *
+   * Nou pa janm voye access_token
+   * bay browser la.
    */
 
   if (
@@ -286,11 +333,16 @@ async function handleAPI(
       return jsonResponse(
         {
           success: false,
-          status: "credentials_missing",
+
+          status:
+            "credentials_missing",
+
           message:
-            "MONCASH_CLIENT_ID oswa MONCASH_CLIENT_SECRET pa configured."
+            "MONCASH_CLIENT_ID oswa MONCASH_CLIENT_SECRET pa configured nan Cloudflare Secrets."
         },
+
         500,
+
         headers
       );
     }
@@ -303,23 +355,31 @@ async function handleAPI(
       return jsonResponse(
         {
           success: true,
+
           status:
             "moncash_authenticated",
+
           provider:
             "MonCash Sandbox",
+
           message:
             "Worker la reyisi authenticate ak MonCash Sandbox.",
+
           tokenType:
             tokenData.token_type ||
             "bearer",
+
           expiresIn:
             tokenData.expires_in ||
             null,
+
           scope:
             tokenData.scope ||
             "read,write"
         },
+
         200,
+
         headers
       );
 
@@ -328,14 +388,18 @@ async function handleAPI(
       return jsonResponse(
         {
           success: false,
+
           status:
             error.code ||
             "moncash_auth_failed",
+
           message:
             error.message ||
             "MonCash authentication failed."
         },
+
         502,
+
         headers
       );
     }
@@ -356,19 +420,26 @@ async function handleAPI(
     let body;
 
     try {
+
       body =
         await request.json();
+
     } catch {
+
       return jsonResponse(
         {
           success: false,
+
           error:
             "Invalid JSON request."
         },
+
         400,
+
         headers
       );
     }
+
 
     const productId =
       body?.productId;
@@ -389,102 +460,144 @@ async function handleAPI(
         paymentMethod
       ).toLowerCase();
 
+
     if (!productId) {
+
       return jsonResponse(
         {
           success: false,
+
           error:
             "productId is required."
         },
+
         400,
+
         headers
       );
     }
+
 
     if (
       normalizedPaymentMethod !==
       "moncash"
     ) {
+
       return jsonResponse(
         {
           success: false,
+
           error:
             "Payment method not available yet.",
+
           availableMethods:
             ["moncash"]
         },
+
         400,
+
         headers
       );
     }
+
 
     const amount =
       Number(
         requestedPrice
       );
 
+
     if (
       !Number.isFinite(amount) ||
       amount <= 0
     ) {
+
       return jsonResponse(
         {
           success: false,
+
           error:
             "A valid positive price is required."
         },
+
         400,
+
         headers
       );
     }
+
 
     if (
       amount > 100000000
     ) {
+
       return jsonResponse(
         {
           success: false,
+
           error:
             "Amount is too large."
         },
+
         400,
+
         headers
       );
     }
 
+
     if (!env.DB) {
+
       return jsonResponse(
         {
           success: false,
+
           status:
             "d1_not_configured",
+
           message:
             "D1 binding DB poko configured."
         },
+
         503,
+
         headers
       );
     }
+
 
     if (
       !env.MONCASH_CLIENT_ID ||
       !env.MONCASH_CLIENT_SECRET
     ) {
+
       return jsonResponse(
         {
           success: false,
+
           status:
             "credentials_missing",
+
           message:
-            "MonCash credentials yo poko configured."
+            "MonCash credentials yo poko configured nan Cloudflare Secrets."
         },
+
         500,
+
         headers
       );
     }
 
+
     const orderId =
       createOrderId();
+
+
+    /*
+     * =====================================================
+     * CREATE ORDER IN D1
+     * =====================================================
+     */
 
     try {
 
@@ -520,19 +633,32 @@ async function handleAPI(
       return jsonResponse(
         {
           success: false,
+
           status:
             "d1_order_create_failed",
+
           orderId,
+
           message:
             "Worker la pa kapab kreye order la nan D1.",
+
           error:
             error?.message ||
             "D1 error"
         },
+
         500,
+
         headers
       );
     }
+
+
+    /*
+     * =====================================================
+     * MONCASH PAYMENT
+     * =====================================================
+     */
 
     try {
 
@@ -542,16 +668,20 @@ async function handleAPI(
       const accessToken =
         tokenData.access_token;
 
+
       const createPaymentUrl =
         "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/CreatePayment";
+
 
       const paymentResponse =
         await fetch(
           createPaymentUrl,
           {
-            method: "POST",
+            method:
+              "POST",
 
             headers: {
+
               "Authorization":
                 `Bearer ${accessToken}`,
 
@@ -570,22 +700,28 @@ async function handleAPI(
           }
         );
 
+
       const rawPayment =
         await paymentResponse.text();
+
 
       let paymentData;
 
       try {
+
         paymentData =
           JSON.parse(
             rawPayment
           );
+
       } catch {
+
         paymentData = {
           raw:
             rawPayment
         };
       }
+
 
       if (
         !paymentResponse.ok
@@ -601,25 +737,34 @@ async function handleAPI(
         return jsonResponse(
           {
             success: false,
+
             status:
               "create_payment_failed",
+
             httpStatus:
               paymentResponse.status,
+
             orderId,
+
             message:
               "MonCash pa t kapab kreye payment la.",
+
             moncashResponse:
               paymentData
           },
+
           502,
+
           headers
         );
       }
+
 
       const paymentToken =
         paymentData
           ?.payment_token
           ?.token;
+
 
       if (!paymentToken) {
 
@@ -633,18 +778,25 @@ async function handleAPI(
         return jsonResponse(
           {
             success: false,
+
             status:
               "payment_token_missing",
+
             orderId,
+
             message:
               "MonCash reponn men pa gen payment token.",
+
             moncashResponse:
               paymentData
           },
+
           502,
+
           headers
         );
       }
+
 
       const gatewayUrl =
         "https://sandbox.moncashbutton.digicelgroup.com/Moncash-middleware/Payment/Redirect?token=" +
@@ -652,29 +804,39 @@ async function handleAPI(
           paymentToken
         );
 
+
       return jsonResponse(
         {
           success: true,
+
           status:
             "payment_created",
+
           provider:
             "MonCash Sandbox",
+
           orderId,
 
           product: {
+
             id:
               productId,
+
             name:
               productName,
+
             price:
               amount
           },
 
           payment: {
+
             method:
               "moncash",
+
             status:
               "created",
+
             paymentTokenCreated:
               true
           },
@@ -686,9 +848,11 @@ async function handleAPI(
             gatewayUrl,
 
           message:
-            "Payment MonCash la kreye."
+            "Payment MonCash la kreye. Redireksyon kliyan an sou MonCash."
         },
+
         200,
+
         headers
       );
 
@@ -704,14 +868,19 @@ async function handleAPI(
       return jsonResponse(
         {
           success: false,
+
           status:
             "moncash_checkout_error",
+
           orderId,
+
           message:
             error?.message ||
             "Worker la pa t kapab kreye payment MonCash la."
         },
+
         502,
+
         headers
       );
     }
@@ -739,47 +908,69 @@ async function handleAPI(
         "orderId"
       );
 
+
     if (
       !transactionId &&
       !orderId
     ) {
+
       return jsonResponse(
         {
           success: false,
+
           error:
             "transactionId or orderId is required."
         },
+
         400,
+
         headers
       );
     }
 
+
     if (!env.DB) {
+
       return jsonResponse(
         {
           success: false,
+
           status:
-            "d1_not_configured"
+            "d1_not_configured",
+
+          message:
+            "D1 binding DB poko configured."
         },
+
         503,
+
         headers
       );
     }
+
 
     if (
       !env.MONCASH_CLIENT_ID ||
       !env.MONCASH_CLIENT_SECRET
     ) {
+
       return jsonResponse(
         {
           success: false,
+
           status:
-            "credentials_missing"
+            "credentials_missing",
+
+          message:
+            "MonCash credentials yo poko configured."
         },
+
         500,
+
         headers
       );
     }
+
 
     try {
 
@@ -794,20 +985,29 @@ async function handleAPI(
           );
 
         if (!dbOrder) {
+
           return jsonResponse(
             {
               success: false,
+
               status:
                 "order_not_found",
-              orderId
+
+              orderId,
+
+              message:
+                "Order sa a pa jwenn nan D1."
             },
+
             404,
+
             headers
           );
         }
       }
 
-      const paymentResult =
+
+      const verification =
         await verifyMonCashPayment(
           env,
           {
@@ -816,48 +1016,53 @@ async function handleAPI(
           }
         );
 
+
       if (orderId) {
 
         await updateOrderStatus(
           env,
           orderId,
-          paymentResult.paid
+          verification.paid
             ? "paid"
             : "pending",
-          paymentResult.transactionId
+          verification.transactionId
         );
       }
+
 
       return jsonResponse(
         {
           success: true,
 
           status:
-            paymentResult.paid
+            verification.paid
               ? "paid"
               : "not_paid",
 
           paid:
-            paymentResult.paid,
+            verification.paid,
 
           orderId:
-            orderId || null,
+            orderId ||
+            null,
 
           transactionId:
-            paymentResult.transactionId,
+            verification.transactionId,
 
           payment:
-            paymentResult.payment,
+            verification.payment,
 
           moncashResponse:
-            paymentResult.response,
+            verification.response,
 
           message:
-            paymentResult.paid
-              ? "Payment verifye avèk siksè."
+            verification.paid
+              ? "Payment MonCash verifye avèk siksè epi D1 mete ajou."
               : "Payment la poko verifye kòm successful."
         },
+
         200,
+
         headers
       );
 
@@ -866,13 +1071,17 @@ async function handleAPI(
       return jsonResponse(
         {
           success: false,
+
           status:
             "payment_verification_error",
+
           message:
             error?.message ||
-            "Payment verification failed."
+            "Worker la pa t kapab verifye payment la."
         },
+
         502,
+
         headers
       );
     }
@@ -881,22 +1090,23 @@ async function handleAPI(
 
   /*
    * =======================================================
-   * GET /api/file-info
+   * GET /api/product-info
    * =======================================================
    *
-   * Sa se nouvo API pou frontend lan.
+   * Retounen:
    *
-   * Egzanp:
+   * productId
+   * productType
+   * fileSizeBytes
+   * fileSize
+   * downloadCount
    *
-   * /api/file-info?productId=flyer-01.psd
-   *
-   * oswa:
-   *
-   * /api/file-info?productId=asset-01.png
+   * Worker la verifye size fichye a
+   * dirèkteman nan Backblaze.
    */
 
   if (
-    url.pathname === "/api/file-info" &&
+    url.pathname === "/api/product-info" &&
     request.method === "GET"
   ) {
 
@@ -905,124 +1115,148 @@ async function handleAPI(
         "productId"
       );
 
+
     if (!productId) {
+
       return jsonResponse(
         {
           success: false,
+
           error:
             "productId is required."
         },
+
         400,
+
         headers
       );
     }
+
 
     if (!env.DB) {
+
       return jsonResponse(
         {
           success: false,
+
           status:
-            "d1_not_configured"
+            "d1_not_configured",
+
+          message:
+            "D1 binding DB poko configured."
         },
+
         503,
+
         headers
       );
     }
 
-    if (!hasB2Config(env)) {
+
+    if (
+      !hasBackblazeConfig(env)
+    ) {
+
       return jsonResponse(
         {
           success: false,
+
           status:
-            "backblaze_not_configured"
+            "backblaze_not_configured",
+
+          message:
+            "Backblaze secrets yo poko configured."
         },
+
         503,
+
         headers
       );
     }
+
+
+    const product =
+      await getProductFile(
+        env,
+        productId
+      );
+
+
+    if (!product) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "product_not_found",
+
+          productId,
+
+          message:
+            "Product sa a poko anrejistre nan product_files."
+        },
+
+        404,
+
+        headers
+      );
+    }
+
 
     try {
 
-      const file =
-        await getFileRecord(
+      const b2Info =
+        await getBackblazeFileInfo(
           env,
-          productId
+          product.storage_key
         );
 
-      if (!file) {
-        return jsonResponse(
-          {
-            success: false,
-            status:
-              "file_not_registered",
-            productId,
-            message:
-              "Fichye sa a poko anrejistre nan D1."
-          },
-          404,
-          headers
-        );
-      }
 
-      const metadata =
-        await b2HeadObject(
-          env,
-          file.object_key
-        );
-
-      if (!metadata.exists) {
-        return jsonResponse(
-          {
-            success: false,
-            status:
-              "file_not_found",
-            productId,
-            message:
-              "Fichye a pa jwenn nan Backblaze B2."
-          },
-          404,
-          headers
-        );
-      }
-
-      await updateFileSize(
+      await updateProductFileSize(
         env,
         productId,
-        metadata.size
+        b2Info.size
       );
 
-      const latest =
-        await getFileRecord(
+
+      const latestProduct =
+        await getProductFile(
           env,
           productId
         );
+
 
       return jsonResponse(
         {
           success: true,
 
-          productId,
+          productId:
+            latestProduct.product_id,
 
-          fileType:
-            latest.file_type,
+          productType:
+            latestProduct.product_type,
 
-          accessType:
-            latest.access_type,
+          fileSizeBytes:
+            b2Info.size,
 
           fileSize:
-            metadata.size,
-
-          fileSizeFormatted:
             formatFileSize(
-              metadata.size
+              b2Info.size
             ),
 
           downloadCount:
             Number(
-              latest.download_count || 0
-            )
+              latestProduct.download_count ||
+              0
+            ),
+
+          storage:
+            "backblaze"
         },
+
         200,
+
         headers
       );
 
@@ -1031,13 +1265,19 @@ async function handleAPI(
       return jsonResponse(
         {
           success: false,
+
           status:
-            "file_info_error",
+            "backblaze_file_info_error",
+
+          productId,
+
           message:
             error?.message ||
-            "Unable to read file information."
+            "Worker la pa kapab jwenn size fichye a nan Backblaze."
         },
+
         502,
+
         headers
       );
     }
@@ -1050,12 +1290,14 @@ async function handleAPI(
    * =======================================================
    *
    * FREE:
-   * /api/download?productId=xxx
+   *   ?productId=...
    *
    * PAID:
-   * /api/download?productId=xxx&orderId=xxx
+   *   ?productId=...
+   *   &orderId=...
    *
-   * Paid yo verifye ak MonCash.
+   * transactionId kapab sèvi ansanm
+   * ak orderId pou verification.
    */
 
   if (
@@ -1078,92 +1320,222 @@ async function handleAPI(
         "orderId"
       );
 
+
     if (!productId) {
+
       return jsonResponse(
         {
           success: false,
+
           error:
             "productId is required."
         },
+
         400,
+
         headers
       );
     }
+
 
     if (!env.DB) {
+
       return jsonResponse(
         {
           success: false,
+
           status:
-            "d1_not_configured"
+            "d1_not_configured",
+
+          message:
+            "D1 binding DB poko configured."
         },
+
         503,
+
         headers
       );
     }
 
-    if (!hasB2Config(env)) {
+
+    if (
+      !hasBackblazeConfig(env)
+    ) {
+
       return jsonResponse(
         {
           success: false,
+
           status:
-            "backblaze_not_configured"
+            "backblaze_not_configured",
+
+          message:
+            "Backblaze secrets yo poko configured."
         },
+
         503,
+
         headers
       );
     }
 
-    try {
 
-      const file =
-        await getFileRecord(
-          env,
-          productId
-        );
+    /*
+     * =====================================================
+     * GET PRODUCT
+     * =====================================================
+     */
 
-      if (!file) {
+    const product =
+      await getProductFile(
+        env,
+        productId
+      );
+
+
+    if (!product) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "product_not_found",
+
+          productId,
+
+          message:
+            "Product sa a pa jwenn nan product_files."
+        },
+
+        404,
+
+        headers
+      );
+    }
+
+
+    const productType =
+      String(
+        product.product_type ||
+        ""
+      ).toLowerCase();
+
+
+    const isPaid =
+      productType.includes(
+        "paid"
+      );
+
+
+    /*
+     * =====================================================
+     * PAID PRODUCT
+     * =====================================================
+     */
+
+    if (isPaid) {
+
+      /*
+       * Pou PAID, orderId obligatwa.
+       *
+       * Sa anpeche yon moun voye
+       * yon transactionId pou yon
+       * lòt product.
+       */
+
+      if (!orderId) {
+
         return jsonResponse(
           {
             success: false,
+
             status:
-              "file_not_registered",
+              "order_id_required",
+
             message:
-              "Fichye sa a poko anrejistre nan D1."
+              "Pou yon product peye, orderId obligatwa pou verifye payment ak product la."
           },
-          404,
+
+          403,
+
           headers
         );
       }
 
+
+      const dbOrder =
+        await getOrderByOrderId(
+          env,
+          orderId
+        );
+
+
+      if (!dbOrder) {
+
+        return jsonResponse(
+          {
+            success: false,
+
+            status:
+              "order_not_found",
+
+            orderId,
+
+            message:
+              "Order sa a pa jwenn nan D1."
+          },
+
+          404,
+
+          headers
+        );
+      }
+
+
       /*
-       * ===================================================
-       * PAID FILE
-       * ===================================================
+       * Product dwe koresponn
+       * ak order la.
        */
 
       if (
-        file.access_type === "paid"
+        String(
+          dbOrder.product_id
+        ) !==
+        String(
+          productId
+        )
       ) {
 
-        if (
-          !transactionId &&
-          !orderId
-        ) {
-          return jsonResponse(
-            {
-              success: false,
-              status:
-                "payment_reference_missing",
-              message:
-                "Payment verification nesesè."
-            },
-            403,
-            headers
-          );
-        }
+        return jsonResponse(
+          {
+            success: false,
 
-        const paymentResult =
+            status:
+              "product_mismatch",
+
+            message:
+              "Product la pa koresponn ak order sa a."
+          },
+
+          403,
+
+          headers
+        );
+      }
+
+
+      /*
+       * ===================================================
+       * VERIFY MONCASH
+       * ===================================================
+       */
+
+      let verification;
+
+      try {
+
+        verification =
           await verifyMonCashPayment(
             env,
             {
@@ -1172,211 +1544,348 @@ async function handleAPI(
             }
           );
 
-        if (!paymentResult.paid) {
-          return jsonResponse(
-            {
-              success: false,
-              status:
-                "payment_not_verified",
-              paid:
-                false,
-              productId,
-              orderId:
-                orderId || null,
-              transactionId:
-                paymentResult.transactionId,
-              message:
-                "Payment la poko verifye kòm successful."
-            },
-            403,
-            headers
-          );
-        }
-
-        /*
-         * Si orderId disponib,
-         * verifye product la.
-         */
-
-        if (orderId) {
-
-          const dbOrder =
-            await getOrderByOrderId(
-              env,
-              orderId
-            );
-
-          if (!dbOrder) {
-            return jsonResponse(
-              {
-                success: false,
-                status:
-                  "order_not_found"
-              },
-              404,
-              headers
-            );
-          }
-
-          if (
-            String(
-              dbOrder.product_id
-            ) !==
-            String(
-              productId
-            )
-          ) {
-            return jsonResponse(
-              {
-                success: false,
-                status:
-                  "product_mismatch",
-                message:
-                  "Product la pa koresponn ak order la."
-              },
-              403,
-              headers
-            );
-          }
-
-          await updateOrderStatus(
-            env,
-            orderId,
-            "paid",
-            paymentResult.transactionId
-          );
-        }
-      }
-
-
-      /*
-       * ===================================================
-       * GET FILE FROM BACKBLAZE
-       * ===================================================
-       */
-
-      const b2Response =
-        await b2GetObject(
-          env,
-          file.object_key
-        );
-
-      if (!b2Response.ok) {
+      } catch (error) {
 
         return jsonResponse(
           {
             success: false,
+
             status:
-              "file_not_found",
+              "payment_verification_error",
+
             message:
-              "Fichye a pa jwenn nan Backblaze B2."
+              "Payment la pa t kapab verifye anvan download.",
+
+            error:
+              error?.message ||
+              "Unknown error"
           },
-          404,
+
+          502,
+
           headers
         );
       }
 
-      const contentType =
-        b2Response.headers.get(
-          "Content-Type"
-        ) ||
-        "application/octet-stream";
 
-      const contentLength =
-        b2Response.headers.get(
-          "Content-Length"
-        );
+      if (!verification.paid) {
 
-      /*
-       * Mete size nan D1.
-       */
+        return jsonResponse(
+          {
+            success: false,
 
-      if (contentLength) {
+            status:
+              "payment_not_verified",
 
-        await updateFileSize(
-          env,
-          productId,
-          Number(
-            contentLength
-          )
-        );
-      }
+            paid:
+              false,
 
-      /*
-       * Counter +1.
-       */
+            productId,
 
-      const updated =
-        await incrementDownloadCount(
-          env,
-          productId
-        );
+            transactionId:
+              verification.transactionId,
 
-      const downloadHeaders =
-        new Headers(headers);
+            orderId,
 
-      downloadHeaders.set(
-        "Content-Type",
-        contentType
-      );
+            message:
+              "Payment la poko verifye kòm successful. Download la bloke."
+          },
 
-      if (contentLength) {
-        downloadHeaders.set(
-          "Content-Length",
-          contentLength
+          403,
+
+          headers
         );
       }
 
-      downloadHeaders.set(
-        "Content-Disposition",
-        `attachment; filename="${safeDownloadFilename(
-          file.object_key
-        )}"`
+
+      /*
+       * Mete order paid nan D1.
+       */
+
+      await updateOrderStatus(
+        env,
+        orderId,
+        "paid",
+        verification.transactionId
       );
 
-      downloadHeaders.set(
-        "Cache-Control",
-        "private, no-store, max-age=0"
-      );
 
-      downloadHeaders.set(
-        "X-Payment-Verified",
-        file.access_type === "paid"
-          ? "true"
-          : "not_required"
-      );
+      /*
+       * Verifye D1 ankò.
+       */
 
-      downloadHeaders.set(
-        "X-Download-Count",
-        String(
-          updated.downloadCount
-        )
-      );
+      const latestOrder =
+        await getOrderByOrderId(
+          env,
+          orderId
+        );
 
-      return new Response(
-        b2Response.body,
-        {
-          status: 200,
-          headers:
-            downloadHeaders
-        }
-      );
+
+      if (
+        !latestOrder ||
+        latestOrder.payment_status !==
+        "paid"
+      ) {
+
+        return jsonResponse(
+          {
+            success: false,
+
+            status:
+              "d1_payment_not_confirmed",
+
+            message:
+              "MonCash verifye payment la men D1 poko konfime li."
+          },
+
+          403,
+
+          headers
+        );
+      }
+    }
+
+
+    /*
+     * =====================================================
+     * GET FILE FROM BACKBLAZE
+     * =====================================================
+     */
+
+    let fileResponse;
+
+    let fileInfo;
+
+    try {
+
+      fileInfo =
+        await getBackblazeFileInfo(
+          env,
+          product.storage_key
+        );
+
+
+      /*
+       * Pa fè download anvan
+       * nou verifye fichye a.
+       */
+
+      fileResponse =
+        await downloadBackblazeFile(
+          request,
+          env,
+          product.storage_key
+        );
 
     } catch (error) {
 
       return jsonResponse(
         {
           success: false,
+
           status:
-            "download_error",
+            "backblaze_download_error",
+
+          productId,
+
           message:
             error?.message ||
-            "Download failed."
+            "Worker la pa kapab jwenn fichye a nan Backblaze."
         },
+
         502,
+
         headers
       );
     }
+
+
+    if (!fileResponse.ok) {
+
+      return jsonResponse(
+        {
+          success: false,
+
+          status:
+            "file_not_found",
+
+          productId,
+
+          httpStatus:
+            fileResponse.status,
+
+          message:
+            "Fichye a pa jwenn nan Backblaze."
+        },
+
+        fileResponse.status === 404
+          ? 404
+          : 502,
+
+        headers
+      );
+    }
+
+
+    /*
+     * =====================================================
+     * UPDATE FILE SIZE
+     * =====================================================
+     */
+
+    await updateProductFileSize(
+      env,
+      productId,
+      fileInfo.size
+    );
+
+
+    /*
+     * =====================================================
+     * DOWNLOAD COUNTER
+     * =====================================================
+     *
+     * Nou pa konte RANGE request kòm
+     * nouvo download pou evite double count.
+     */
+
+    const hasRange =
+      Boolean(
+        request.headers.get(
+          "Range"
+        )
+      );
+
+
+    let finalDownloadCount =
+      Number(
+        product.download_count ||
+        0
+      );
+
+
+    if (!hasRange) {
+
+      finalDownloadCount =
+        await incrementDownloadCount(
+          env,
+          productId
+        );
+    }
+
+
+    /*
+     * =====================================================
+     * DOWNLOAD HEADERS
+     * =====================================================
+     */
+
+    const downloadHeaders =
+      new Headers(headers);
+
+
+    downloadHeaders.set(
+      "Content-Type",
+      fileResponse.headers.get(
+        "Content-Type"
+      ) ||
+      "application/octet-stream"
+    );
+
+
+    const contentLength =
+      fileResponse.headers.get(
+        "Content-Length"
+      );
+
+
+    if (contentLength) {
+
+      downloadHeaders.set(
+        "Content-Length",
+        contentLength
+      );
+    }
+
+
+    const contentRange =
+      fileResponse.headers.get(
+        "Content-Range"
+      );
+
+
+    if (contentRange) {
+
+      downloadHeaders.set(
+        "Content-Range",
+        contentRange
+      );
+    }
+
+
+    downloadHeaders.set(
+      "Accept-Ranges",
+      "bytes"
+    );
+
+
+    downloadHeaders.set(
+      "Content-Disposition",
+      `attachment; filename="${safeDownloadFilename(
+        product.storage_key
+      )}"`
+    );
+
+
+    downloadHeaders.set(
+      "Cache-Control",
+      "private, no-store, max-age=0"
+    );
+
+
+    downloadHeaders.set(
+      "X-Payment-Verified",
+      isPaid
+        ? "true"
+        : "not_required"
+    );
+
+
+    downloadHeaders.set(
+      "X-Download-Count",
+      String(
+        finalDownloadCount
+      )
+    );
+
+
+    downloadHeaders.set(
+      "X-File-Size",
+      String(
+        fileInfo.size
+      )
+    );
+
+
+    /*
+     * =====================================================
+     * RETURN BACKBLAZE FILE
+     * =====================================================
+     */
+
+    return new Response(
+      fileResponse.body,
+      {
+        status:
+          fileResponse.status,
+
+        statusText:
+          fileResponse.statusText,
+
+        headers:
+          downloadHeaders
+      }
+    );
   }
 
 
@@ -1389,505 +1898,23 @@ async function handleAPI(
   return jsonResponse(
     {
       success: false,
+
       error:
         "API route not found."
     },
+
     404,
+
     headers
   );
 }
 
 
 /*
-=========================================================
-BACKBLAZE CONFIG
-=========================================================
-*/
-
-function hasB2Config(env) {
-  return Boolean(
-    env.B2_BUCKET_NAME &&
-    env.B2_ENDPOINT &&
-    env.B2_KEY_ID &&
-    env.B2_APPLICATION_KEY
-  );
-}
-
-
-/*
-=========================================================
-BACKBLAZE S3 HEAD OBJECT
-=========================================================
-*/
-
-async function b2HeadObject(
-  env,
-  objectKey
-) {
-
-  const result =
-    await b2SignedRequest(
-      env,
-      "HEAD",
-      objectKey
-    );
-
-  if (
-    result.status === 404
-  ) {
-    return {
-      exists: false,
-      size: 0
-    };
-  }
-
-  if (!result.ok) {
-    throw new Error(
-      `Backblaze HEAD failed: HTTP ${result.status}`
-    );
-  }
-
-  return {
-    exists: true,
-
-    size:
-      Number(
-        result.headers.get(
-          "Content-Length"
-        ) || 0
-      )
-  };
-}
-
-
-/*
-=========================================================
-BACKBLAZE S3 GET OBJECT
-=========================================================
-*/
-
-async function b2GetObject(
-  env,
-  objectKey
-) {
-
-  return b2SignedRequest(
-    env,
-    "GET",
-    objectKey
-  );
-}
-
-
-/*
-=========================================================
-BACKBLAZE AWS SIGV4 REQUEST
-=========================================================
-*/
-
-async function b2SignedRequest(
-  env,
-  method,
-  objectKey
-) {
-
-  const endpoint =
-    String(
-      env.B2_ENDPOINT
-    )
-    .replace(
-      /\/+$/,
-      ""
-    );
-
-  const endpointUrl =
-    new URL(endpoint);
-
-  const host =
-    endpointUrl.host;
-
-  const region =
-    extractB2Region(
-      endpointUrl
-    );
-
-  const encodedKey =
-    encodeS3Path(
-      objectKey
-    );
-
-  const targetUrl =
-    `${endpoint}/${env.B2_BUCKET_NAME}/${encodedKey}`;
-
-  const now =
-    new Date();
-
-  const amzDate =
-    toAmzDate(now);
-
-  const dateStamp =
-    amzDate.slice(
-      0,
-      8
-    );
-
-  const service =
-    "s3";
-
-  const payloadHash =
-    await sha256Hex("");
-
-  const canonicalHeaders =
-    `host:${host}\n` +
-    `x-amz-content-sha256:${payloadHash}\n` +
-    `x-amz-date:${amzDate}\n`;
-
-  const signedHeaders =
-    "host;x-amz-content-sha256;x-amz-date";
-
-  const canonicalRequest =
-    [
-      method,
-      `/${env.B2_BUCKET_NAME}/${encodedKey}`,
-      "",
-      canonicalHeaders,
-      signedHeaders,
-      payloadHash
-    ].join("\n");
-
-  const credentialScope =
-    `${dateStamp}/${region}/${service}/aws4_request`;
-
-  const canonicalRequestHash =
-    await sha256Hex(
-      canonicalRequest
-    );
-
-  const stringToSign =
-    [
-      "AWS4-HMAC-SHA256",
-      amzDate,
-      credentialScope,
-      canonicalRequestHash
-    ].join("\n");
-
-  const signingKey =
-    await getSignatureKey(
-      env.B2_APPLICATION_KEY,
-      dateStamp,
-      region,
-      service
-    );
-
-  const signature =
-    await hmacHex(
-      signingKey,
-      stringToSign
-    );
-
-  const authorization =
-    `AWS4-HMAC-SHA256 Credential=${env.B2_KEY_ID}/${credentialScope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
-
-  return fetch(
-    targetUrl,
-    {
-      method,
-
-      headers: {
-        "Host":
-          host,
-
-        "x-amz-content-sha256":
-          payloadHash,
-
-        "x-amz-date":
-          amzDate,
-
-        "Authorization":
-          authorization
-      }
-    }
-  );
-}
-
-
-/*
-=========================================================
-AWS SIGNATURE HELPERS
-=========================================================
-*/
-
-async function sha256Hex(
-  value
-) {
-
-  const data =
-    new TextEncoder().encode(
-      value
-    );
-
-  const hash =
-    await crypto.subtle.digest(
-      "SHA-256",
-      data
-    );
-
-  return bytesToHex(
-    new Uint8Array(
-      hash
-    )
-  );
-}
-
-
-async function hmac(
-  key,
-  data
-) {
-
-  const cryptoKey =
-    await crypto.subtle.importKey(
-      "raw",
-      key,
-      {
-        name:
-          "HMAC",
-        hash:
-          "SHA-256"
-      },
-      false,
-      ["sign"]
-    );
-
-  return new Uint8Array(
-    await crypto.subtle.sign(
-      "HMAC",
-      cryptoKey,
-      new TextEncoder().encode(
-        data
-      )
-    )
-  );
-}
-
-
-async function hmacHex(
-  key,
-  data
-) {
-
-  return bytesToHex(
-    await hmac(
-      key,
-      data
-    )
-  );
-}
-
-
-async function getSignatureKey(
-  secret,
-  dateStamp,
-  region,
-  service
-) {
-
-  const kDate =
-    await hmac(
-      new TextEncoder().encode(
-        "AWS4" + secret
-      ),
-      dateStamp
-    );
-
-  const kRegion =
-    await hmac(
-      kDate,
-      region
-    );
-
-  const kService =
-    await hmac(
-      kRegion,
-      service
-    );
-
-  return hmac(
-    kService,
-    "aws4_request"
-  );
-}
-
-
-function bytesToHex(
-  bytes
-) {
-
-  return Array.from(
-    bytes
-  )
-  .map(
-    byte =>
-      byte
-        .toString(16)
-        .padStart(2, "0")
-  )
-  .join("");
-}
-
-
-/*
-=========================================================
-BACKBLAZE HELPERS
-=========================================================
-*/
-
-function extractB2Region(
-  endpointUrl
-) {
-
-  const host =
-    endpointUrl.hostname;
-
-  const match =
-    host.match(
-      /^s3\.([^.]+)\.backblazeb2\.com$/i
-    );
-
-  if (match) {
-    return match[1];
-  }
-
-  /*
-   * Si endpoint la gen yon lòt fòm,
-   * itilize region sa a kòm fallback.
-   */
-
-  return "us-west-004";
-}
-
-
-function encodeS3Path(
-  key
-) {
-
-  return String(
-    key
-  )
-  .split("/")
-  .map(
-    part =>
-      encodeURIComponent(
-        part
-      )
-  )
-  .join("/");
-}
-
-
-/*
-=========================================================
-D1 FILE RECORD
-=========================================================
-*/
-
-async function getFileRecord(
-  env,
-  productId
-) {
-
-  return (
-    await env.DB.prepare(
-      `
-      SELECT
-        product_id,
-        product_name,
-        file_type,
-        access_type,
-        object_key,
-        file_size,
-        download_count,
-        created_at,
-        updated_at
-      FROM files
-      WHERE product_id = ?
-      LIMIT 1
-      `
-    )
-    .bind(
-      String(productId)
-    )
-    .first()
-  ) || null;
-}
-
-
-async function updateFileSize(
-  env,
-  productId,
-  fileSize
-) {
-
-  await env.DB.prepare(
-    `
-    UPDATE files
-    SET
-      file_size = ?,
-      updated_at = ?
-    WHERE product_id = ?
-    `
-  )
-  .bind(
-    Number(fileSize) || 0,
-    new Date().toISOString(),
-    String(productId)
-  )
-  .run();
-}
-
-
-async function incrementDownloadCount(
-  env,
-  productId
-) {
-
-  await env.DB.prepare(
-    `
-    UPDATE files
-    SET
-      download_count =
-        download_count + 1,
-      updated_at = ?
-    WHERE product_id = ?
-    `
-  )
-  .bind(
-    new Date().toISOString(),
-    String(productId)
-  )
-  .run();
-
-  const file =
-    await getFileRecord(
-      env,
-      productId
-    );
-
-  return {
-    downloadCount:
-      Number(
-        file?.download_count ||
-        0
-      )
-  };
-}
-
-
-/*
-=========================================================
-D1 — GET ORDER
-=========================================================
-*/
+ * =========================================================
+ * D1 — GET ORDER
+ * =========================================================
+ */
 
 async function getOrderByOrderId(
   env,
@@ -1898,7 +1925,7 @@ async function getOrderByOrderId(
     return null;
   }
 
-  return (
+  const result =
     await env.DB.prepare(
       `
       SELECT
@@ -1920,16 +1947,17 @@ async function getOrderByOrderId(
     .bind(
       orderId
     )
-    .first()
-  ) || null;
+    .first();
+
+  return result || null;
 }
 
 
 /*
-=========================================================
-D1 — UPDATE ORDER STATUS
-=========================================================
-*/
+ * =========================================================
+ * D1 — UPDATE ORDER STATUS
+ * =========================================================
+ */
 
 async function updateOrderStatus(
   env,
@@ -1949,16 +1977,8 @@ async function updateOrderStatus(
       UPDATE orders
       SET
         payment_status = ?,
-        transaction_id =
-          COALESCE(
-            ?,
-            transaction_id
-          ),
-        paid_at =
-          COALESCE(
-            paid_at,
-            ?
-          )
+        transaction_id = COALESCE(?, transaction_id),
+        paid_at = COALESCE(paid_at, ?)
       WHERE order_id = ?
       `
     )
@@ -1972,6 +1992,7 @@ async function updateOrderStatus(
 
     return;
   }
+
 
   if (status === "failed") {
 
@@ -1992,16 +2013,13 @@ async function updateOrderStatus(
     return;
   }
 
+
   await env.DB.prepare(
     `
     UPDATE orders
     SET
       payment_status = ?,
-      transaction_id =
-        COALESCE(
-          ?,
-          transaction_id
-        )
+      transaction_id = COALESCE(?, transaction_id)
     WHERE order_id = ?
     `
   )
@@ -2015,131 +2033,152 @@ async function updateOrderStatus(
 
 
 /*
-=========================================================
-MONCASH PAYMENT VERIFICATION
-=========================================================
-*/
+ * =========================================================
+ * D1 — PRODUCT FILE
+ * =========================================================
+ */
 
-async function verifyMonCashPayment(
+async function getProductFile(
   env,
-  {
-    transactionId,
-    orderId
-  }
+  productId
 ) {
 
-  const tokenData =
-    await getMonCashToken(
-      env
-    );
-
-  const accessToken =
-    tokenData.access_token;
-
-  let endpoint;
-  let requestBody;
-
-  if (transactionId) {
-
-    endpoint =
-      "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment";
-
-    requestBody = {
-      transactionId
-    };
-
-  } else {
-
-    endpoint =
-      "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveOrderPayment";
-
-    requestBody = {
-      orderId
-    };
+  if (!env.DB) {
+    return null;
   }
 
-  const verifyResponse =
-    await fetch(
-      endpoint,
-      {
-        method:
-          "POST",
+  const result =
+    await env.DB.prepare(
+      `
+      SELECT
+        product_id,
+        product_type,
+        storage_key,
+        file_size_bytes,
+        download_count,
+        created_at,
+        updated_at
+      FROM product_files
+      WHERE product_id = ?
+      LIMIT 1
+      `
+    )
+    .bind(
+      productId
+    )
+    .first();
 
-        headers: {
-          "Authorization":
-            `Bearer ${accessToken}`,
-
-          "Accept":
-            "application/json",
-
-          "Content-Type":
-            "application/json"
-        },
-
-        body:
-          JSON.stringify(
-            requestBody
-          )
-      }
-    );
-
-  const rawVerify =
-    await verifyResponse.text();
-
-  let verifyData;
-
-  try {
-    verifyData =
-      JSON.parse(
-        rawVerify
-      );
-  } catch {
-    verifyData = {
-      raw:
-        rawVerify
-    };
-  }
-
-  const payment =
-    verifyData?.payment ||
-    null;
-
-  const paymentMessage =
-    String(
-      payment?.message ||
-      ""
-    ).toLowerCase();
-
-  const paid =
-    verifyResponse.ok &&
-    paymentMessage ===
-      "successful";
-
-  const finalTransactionId =
-    transactionId ||
-    payment?.transaction_id ||
-    payment?.transactionId ||
-    null;
-
-  return {
-    paid,
-
-    payment,
-
-    transactionId:
-      finalTransactionId,
-
-    response:
-      verifyData
-  };
+  return result || null;
 }
 
 
 /*
-=========================================================
-MONCASH TOKEN
-=========================================================
-*/
+ * =========================================================
+ * D1 — UPDATE FILE SIZE
+ * =========================================================
+ */
+
+async function updateProductFileSize(
+  env,
+  productId,
+  size
+) {
+
+  if (!env.DB || !productId) {
+    return;
+  }
+
+  const safeSize =
+    Number.isFinite(
+      Number(size)
+    )
+      ? Math.max(
+          0,
+          Math.floor(
+            Number(size)
+          )
+        )
+      : 0;
+
+
+  await env.DB.prepare(
+    `
+    UPDATE product_files
+    SET
+      file_size_bytes = ?,
+      updated_at = ?
+    WHERE product_id = ?
+    `
+  )
+  .bind(
+    safeSize,
+    new Date().toISOString(),
+    productId
+  )
+  .run();
+}
+
+
+/*
+ * =========================================================
+ * D1 — INCREMENT DOWNLOAD COUNT
+ * =========================================================
+ */
+
+async function incrementDownloadCount(
+  env,
+  productId
+) {
+
+  if (!env.DB || !productId) {
+    return 0;
+  }
+
+
+  await env.DB.prepare(
+    `
+    UPDATE product_files
+    SET
+      download_count = download_count + 1,
+      updated_at = ?
+    WHERE product_id = ?
+    `
+  )
+  .bind(
+    new Date().toISOString(),
+    productId
+  )
+  .run();
+
+
+  const result =
+    await env.DB.prepare(
+      `
+      SELECT
+        download_count
+      FROM product_files
+      WHERE product_id = ?
+      LIMIT 1
+      `
+    )
+    .bind(
+      productId
+    )
+    .first();
+
+
+  return Number(
+    result?.download_count ||
+    0
+  );
+}
+
+
+/*
+ * =========================================================
+ * MONCASH TOKEN
+ * =========================================================
+ */
 
 async function getMonCashToken(
   env
@@ -2161,13 +2200,16 @@ async function getMonCashToken(
     throw error;
   }
 
+
   const tokenUrl =
     "https://sandbox.moncashbutton.digicelgroup.com/Api/oauth/token";
+
 
   const basicCredentials =
     btoa(
       `${env.MONCASH_CLIENT_ID}:${env.MONCASH_CLIENT_SECRET}`
     );
+
 
   const response =
     await fetch(
@@ -2177,6 +2219,7 @@ async function getMonCashToken(
           "POST",
 
         headers: {
+
           "Authorization":
             `Basic ${basicCredentials}`,
 
@@ -2192,22 +2235,28 @@ async function getMonCashToken(
       }
     );
 
+
   const rawText =
     await response.text();
+
 
   let data;
 
   try {
+
     data =
       JSON.parse(
         rawText
       );
+
   } catch {
+
     data = {
       raw:
         rawText
     };
   }
+
 
   if (
     !response.ok
@@ -2226,6 +2275,7 @@ async function getMonCashToken(
 
     throw error;
   }
+
 
   if (
     !data ||
@@ -2246,15 +2296,719 @@ async function getMonCashToken(
     throw error;
   }
 
+
   return data;
 }
 
 
 /*
-=========================================================
-CREATE ORDER ID
-=========================================================
-*/
+ * =========================================================
+ * MONCASH PAYMENT VERIFICATION
+ * =========================================================
+ */
+
+async function verifyMonCashPayment(
+  env,
+  {
+    transactionId = null,
+    orderId = null
+  } = {}
+) {
+
+  if (
+    !transactionId &&
+    !orderId
+  ) {
+
+    throw new Error(
+      "transactionId or orderId is required."
+    );
+  }
+
+
+  const tokenData =
+    await getMonCashToken(env);
+
+
+  const accessToken =
+    tokenData.access_token;
+
+
+  let endpoint;
+
+  let requestBody;
+
+
+  if (transactionId) {
+
+    endpoint =
+      "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment";
+
+    requestBody = {
+      transactionId
+    };
+
+  } else {
+
+    endpoint =
+      "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveOrderPayment";
+
+    requestBody = {
+      orderId
+    };
+  }
+
+
+  const verifyResponse =
+    await fetch(
+      endpoint,
+      {
+        method:
+          "POST",
+
+        headers: {
+
+          "Authorization":
+            `Bearer ${accessToken}`,
+
+          "Accept":
+            "application/json",
+
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(
+            requestBody
+          )
+      }
+    );
+
+
+  const rawVerify =
+    await verifyResponse.text();
+
+
+  let verifyData;
+
+  try {
+
+    verifyData =
+      JSON.parse(
+        rawVerify
+      );
+
+  } catch {
+
+    verifyData = {
+      raw:
+        rawVerify
+    };
+  }
+
+
+  const payment =
+    verifyData?.payment ||
+    null;
+
+
+  const paymentMessage =
+    String(
+      payment?.message ||
+      ""
+    ).toLowerCase();
+
+
+  const paid =
+    verifyResponse.ok &&
+    paymentMessage ===
+    "successful";
+
+
+  const finalTransactionId =
+    transactionId ||
+    payment?.transaction_id ||
+    payment?.transactionId ||
+    null;
+
+
+  return {
+
+    paid,
+
+    payment,
+
+    transactionId:
+      finalTransactionId,
+
+    response:
+      verifyData
+  };
+}
+
+
+/*
+ * =========================================================
+ * BACKBLAZE CONFIG
+ * =========================================================
+ */
+
+function hasBackblazeConfig(
+  env
+) {
+
+  return Boolean(
+    env.B2_APPLICATION_KEY &&
+    env.B2_BUCKET_NAME &&
+    env.B2_KEY_ID
+  );
+}
+
+
+/*
+ * =========================================================
+ * BACKBLAZE AUTHORIZATION
+ * =========================================================
+ *
+ * Backblaze B2 Native API v4.
+ */
+
+let backblazeAuthCache =
+  null;
+
+
+async function getBackblazeAuth(
+  env
+) {
+
+  if (
+    !hasBackblazeConfig(env)
+  ) {
+
+    const error =
+      new Error(
+        "Backblaze secrets yo poko configured."
+      );
+
+    error.code =
+      "backblaze_credentials_missing";
+
+    throw error;
+  }
+
+
+  /*
+   * Reuse token pandan anviwon
+   * 20 èdtan pou limite auth calls.
+   */
+
+  if (
+    backblazeAuthCache &&
+    backblazeAuthCache.expiresAt >
+      Date.now()
+  ) {
+
+    return backblazeAuthCache.data;
+  }
+
+
+  const basicCredentials =
+    btoa(
+      `${env.B2_KEY_ID}:${env.B2_APPLICATION_KEY}`
+    );
+
+
+  const authUrl =
+    "https://api.backblazeb2.com/b2api/v4/b2_authorize_account";
+
+
+  const response =
+    await fetch(
+      authUrl,
+      {
+        method:
+          "GET",
+
+        headers: {
+
+          "Authorization":
+            `Basic ${basicCredentials}`,
+
+          "Accept":
+            "application/json"
+        }
+      }
+    );
+
+
+  const rawText =
+    await response.text();
+
+
+  let data;
+
+  try {
+
+    data =
+      JSON.parse(
+        rawText
+      );
+
+  } catch {
+
+    data = {
+      raw:
+        rawText
+    };
+  }
+
+
+  if (
+    !response.ok
+  ) {
+
+    const error =
+      new Error(
+        data?.message ||
+        "Backblaze authentication failed."
+      );
+
+    error.code =
+      data?.code ||
+      "backblaze_auth_failed";
+
+    error.details =
+      data;
+
+    throw error;
+  }
+
+
+  const storageApi =
+    data?.apiInfo?.storageApi ||
+    data?.storageApi ||
+    null;
+
+
+  const downloadUrl =
+    storageApi?.downloadUrl ||
+    data?.downloadUrl ||
+    null;
+
+
+  const apiUrl =
+    storageApi?.apiUrl ||
+    data?.apiUrl ||
+    null;
+
+
+  const authorizationToken =
+    data?.authorizationToken ||
+    null;
+
+
+  if (
+    !downloadUrl ||
+    !authorizationToken
+  ) {
+
+    const error =
+      new Error(
+        "Backblaze pa retounen authorizationToken oswa downloadUrl."
+      );
+
+    error.code =
+      "backblaze_auth_response_invalid";
+
+    error.details =
+      data;
+
+    throw error;
+  }
+
+
+  const authData = {
+
+    accountId:
+      data?.accountId ||
+      null,
+
+    authorizationToken,
+
+    downloadUrl:
+      String(
+        downloadUrl
+      ).replace(
+        /\/$/,
+        ""
+      ),
+
+    apiUrl:
+      apiUrl
+        ? String(
+            apiUrl
+          ).replace(
+            /\/$/,
+            ""
+          )
+        : null,
+
+    allowed:
+      data?.allowed ||
+      null
+  };
+
+
+  backblazeAuthCache = {
+
+    data:
+      authData,
+
+    expiresAt:
+      Date.now() +
+      20 *
+      60 *
+      60 *
+      1000
+  };
+
+
+  return authData;
+}
+
+
+/*
+ * =========================================================
+ * BACKBLAZE FILE INFO
+ * =========================================================
+ *
+ * HEAD request la pèmèt nou pran:
+ *
+ * Content-Length
+ * Content-Type
+ *
+ * san nou pa telechaje fichye a.
+ */
+
+async function getBackblazeFileInfo(
+  env,
+  storageKey
+) {
+
+  const key =
+    sanitizeStorageKey(
+      storageKey
+    );
+
+
+  if (!key) {
+
+    throw new Error(
+      "Invalid Backblaze storage key."
+    );
+  }
+
+
+  const auth =
+    await getBackblazeAuth(
+      env
+    );
+
+
+  const fileUrl =
+    buildBackblazeDownloadUrl(
+      auth.downloadUrl,
+      env.B2_BUCKET_NAME,
+      key
+    );
+
+
+  const response =
+    await fetch(
+      fileUrl,
+      {
+        method:
+          "HEAD",
+
+        headers: {
+
+          "Authorization":
+            auth.authorizationToken
+        }
+      }
+    );
+
+
+  if (!response.ok) {
+
+    const text =
+      await response.text();
+
+
+    const error =
+      new Error(
+        `Backblaze file info failed (${response.status}).`
+      );
+
+    error.code =
+      "backblaze_file_info_failed";
+
+    error.details =
+      text;
+
+    throw error;
+  }
+
+
+  const contentLength =
+    Number(
+      response.headers.get(
+        "Content-Length"
+      ) ||
+      0
+    );
+
+
+  return {
+
+    size:
+      Number.isFinite(
+        contentLength
+      )
+        ? contentLength
+        : 0,
+
+    contentType:
+      response.headers.get(
+        "Content-Type"
+      ) ||
+      "application/octet-stream",
+
+    fileName:
+      response.headers.get(
+        "X-Bz-File-Name"
+      ) ||
+      key
+  };
+}
+
+
+/*
+ * =========================================================
+ * BACKBLAZE DOWNLOAD
+ * =========================================================
+ */
+
+async function downloadBackblazeFile(
+  request,
+  env,
+  storageKey
+) {
+
+  const key =
+    sanitizeStorageKey(
+      storageKey
+    );
+
+
+  if (!key) {
+
+    throw new Error(
+      "Invalid Backblaze storage key."
+    );
+  }
+
+
+  const auth =
+    await getBackblazeAuth(
+      env
+    );
+
+
+  const fileUrl =
+    buildBackblazeDownloadUrl(
+      auth.downloadUrl,
+      env.B2_BUCKET_NAME,
+      key
+    );
+
+
+  const downloadHeaders =
+    new Headers();
+
+
+  downloadHeaders.set(
+    "Authorization",
+    auth.authorizationToken
+  );
+
+
+  /*
+   * Preserve Range header pou
+   * gwo fichye yo.
+   */
+
+  const range =
+    request.headers.get(
+      "Range"
+    );
+
+
+  if (range) {
+
+    downloadHeaders.set(
+      "Range",
+      range
+    );
+  }
+
+
+  const response =
+    await fetch(
+      fileUrl,
+      {
+        method:
+          "GET",
+
+        headers:
+          downloadHeaders
+      }
+    );
+
+
+  return response;
+}
+
+
+/*
+ * =========================================================
+ * BACKBLAZE DOWNLOAD URL
+ * =========================================================
+ */
+
+function buildBackblazeDownloadUrl(
+  downloadUrl,
+  bucketName,
+  storageKey
+) {
+
+  const bucket =
+    encodeURIComponent(
+      bucketName
+    );
+
+
+  const key =
+    storageKey
+      .split("/")
+      .map(
+        segment =>
+          encodeURIComponent(
+            segment
+          )
+      )
+      .join("/");
+
+
+  return (
+    `${downloadUrl}/file/${bucket}/${key}`
+  );
+}
+
+
+/*
+ * =========================================================
+ * STORAGE KEY SANITIZE
+ * =========================================================
+ */
+
+function sanitizeStorageKey(
+  value
+) {
+
+  let key =
+    String(
+      value ||
+      ""
+    ).trim();
+
+
+  if (!key) {
+    return null;
+  }
+
+
+  if (
+    key.includes("..") ||
+    key.includes("\\") ||
+    key.startsWith("/")
+  ) {
+    return null;
+  }
+
+
+  if (
+    /[\u0000-\u001F\u007F]/.test(
+      key
+    )
+  ) {
+    return null;
+  }
+
+
+  if (
+    key.length > 1000
+  ) {
+    return null;
+  }
+
+
+  return key;
+}
+
+
+/*
+ * =========================================================
+ * DOWNLOAD FILENAME
+ * =========================================================
+ */
+
+function safeDownloadFilename(
+  key
+) {
+
+  const parts =
+    String(
+      key ||
+      ""
+    ).split("/");
+
+
+  const filename =
+    parts[
+      parts.length - 1
+    ] ||
+    "download";
+
+
+  return filename
+    .replace(
+      /["\r\n\\]/g,
+      "_"
+    )
+    .replace(
+      /[\u0000-\u001F\u007F]/g,
+      "_"
+    );
+}
+
+
+/*
+ * =========================================================
+ * CREATE ORDER ID
+ * =========================================================
+ */
 
 function createOrderId() {
 
@@ -2270,6 +3024,7 @@ function createOrderId() {
       )
       .toUpperCase();
 
+
   return (
     `WGD-${Date.now()}-${random}`
   );
@@ -2277,72 +3032,77 @@ function createOrderId() {
 
 
 /*
-=========================================================
-DOWNLOAD FILENAME
-=========================================================
-*/
-
-function safeDownloadFilename(
-  key
-) {
-
-  const parts =
-    String(key)
-      .split("/");
-
-  const filename =
-    parts[
-      parts.length - 1
-    ] ||
-    "download";
-
-  return filename.replace(
-    /["\r\n\\]/g,
-    "_"
-  );
-}
-
-
-/*
-=========================================================
-FILE SIZE
-=========================================================
-*/
+ * =========================================================
+ * FORMAT FILE SIZE
+ * =========================================================
+ */
 
 function formatFileSize(
   bytes
 ) {
 
+  const size =
+    Number(
+      bytes
+    );
+
+
+  if (
+    !Number.isFinite(size) ||
+    size <= 0
+  ) {
+    return "0 B";
+  }
+
+
+  const units = [
+    "B",
+    "KB",
+    "MB",
+    "GB",
+    "TB"
+  ];
+
+
+  const index =
+    Math.min(
+      Math.floor(
+        Math.log(size) /
+        Math.log(1024)
+      ),
+      units.length - 1
+    );
+
+
   const value =
-    Number(bytes) || 0;
+    size /
+    Math.pow(
+      1024,
+      index
+    );
 
-  if (value < 1024) {
-    return `${value} B`;
-  }
 
-  if (value < 1024 ** 2) {
-    return `${(
-      value / 1024
-    ).toFixed(1)} KB`;
-  }
+  const decimals =
+    index === 0
+      ? 0
+      : value >= 100
+        ? 0
+        : value >= 10
+          ? 1
+          : 2;
 
-  if (value < 1024 ** 3) {
-    return `${(
-      value / (1024 ** 2)
-    ).toFixed(1)} MB`;
-  }
 
-  return `${(
-    value / (1024 ** 3)
-  ).toFixed(2)} GB`;
+  return (
+    `${value.toFixed(decimals)} ${units[index]}`
+  );
 }
 
 
 /*
-=========================================================
-JSON RESPONSE
-=========================================================
-*/
+ * =========================================================
+ * JSON RESPONSE
+ * =========================================================
+ */
 
 function jsonResponse(
   data,
@@ -2352,6 +3112,7 @@ function jsonResponse(
 
   const responseHeaders =
     new Headers({
+
       "Content-Type":
         "application/json; charset=UTF-8",
 
@@ -2361,6 +3122,7 @@ function jsonResponse(
       ...extraHeaders
     });
 
+
   return new Response(
     JSON.stringify(
       data,
@@ -2369,6 +3131,7 @@ function jsonResponse(
     ),
     {
       status,
+
       headers:
         responseHeaders
     }
