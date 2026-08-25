@@ -1084,24 +1084,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const freeAssets = [
 
     {
-      id:
-        "free-png-01",
-
-      type:
-        "png",
-
-      name:
-        "PNG 01",
-
-      description:
-        "PNG gratis",
-
-      image:
-        "images/assets/free/png/png01.png",
-
-      download:
-        "assets/free/png/png01.png"
-    },
+       id:
+    "free-png-star-2",
+ type:
+    "png",
+ name:
+    "STAR 2",
+description:
+    "PNG gratis",
+image:
+    "images/asset-gratis/png/STAR%202.png",
+       download:
+    "images/asset-gratis/png/STAR%202.png"
+},
+     
 
     {
       id:
