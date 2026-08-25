@@ -10,7 +10,7 @@ LIGHTBOX
 SLIDESHOW
 DOWNLOAD MODAL
 CLOUDFLARE WORKER CHECKOUT
-SIZE + DOWNLOAD COUNTER
+DOWNLOAD SIZE + DOWNLOAD COUNTER
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -164,13 +164,17 @@ const translations = {
 
   ht: {
 
-    navWork: "Travay mwen yo",
+    navWork:
+      "Travay mwen yo",
 
-    navStore: "Boutik PSD",
+    navStore:
+      "Boutik PSD",
 
-    navFree: "Asset gratis",
+    navFree:
+      "Asset gratis",
 
-    navServices: "Sèvis",
+    navServices:
+      "Sèvis",
 
     heroEyebrow:
       "STIDYO DESIGN KREYATIF",
@@ -853,6 +857,7 @@ const dots =
   );
 
 let currentSlide = 0;
+
 let slideshowTimer = null;
 
 function showSlide(index) {
@@ -925,6 +930,7 @@ dots.forEach(
       () => {
 
         showSlide(index);
+
         startSlideshow();
 
       }
@@ -934,6 +940,7 @@ dots.forEach(
 );
 
 showSlide(0);
+
 startSlideshow();
 
 /* =======================================================
@@ -1113,7 +1120,13 @@ const freeAssets = [
       "images/asset-gratis/png/STAR%202.png",
 
     download:
-      "images/asset-gratis/png/STAR%202.png"
+      "images/asset-gratis/png/STAR%202.png",
+
+    size:
+      "—",
+
+    downloads:
+      1
   },
 
   {
@@ -1133,7 +1146,13 @@ const freeAssets = [
       "images/assets/free/background/background01.jpg",
 
     download:
-      "assets/free/background/background01.jpg"
+      "assets/free/background/background01.jpg",
+
+    size:
+      "—",
+
+    downloads:
+      0
   },
 
   {
@@ -1153,7 +1172,13 @@ const freeAssets = [
       "images/assets/free/texture/texture01.jpg",
 
     download:
-      "assets/free/texture/texture01.jpg"
+      "assets/free/texture/texture01.jpg",
+
+    size:
+      "—",
+
+    downloads:
+      0
   },
 
   {
@@ -1173,7 +1198,13 @@ const freeAssets = [
       "images/assets/free/mockup/mockup01.jpg",
 
     download:
-      "assets/free/mockup/mockup01.jpg"
+      "assets/free/mockup/mockup01.jpg",
+
+    size:
+      "—",
+
+    downloads:
+      0
   }
 
 ];
@@ -1201,7 +1232,13 @@ const paidAssets = [
       "images/assets/paid/png/png01.png",
 
     price:
-      5
+      5,
+
+    size:
+      "—",
+
+    downloads:
+      0
   },
 
   {
@@ -1221,7 +1258,13 @@ const paidAssets = [
       "images/assets/paid/background/background01.jpg",
 
     price:
-      5
+      5,
+
+    size:
+      "—",
+
+    downloads:
+      0
   },
 
   {
@@ -1241,7 +1284,13 @@ const paidAssets = [
       "images/assets/paid/texture/texture01.jpg",
 
     price:
-      5
+      5,
+
+    size:
+      "—",
+
+    downloads:
+      0
   },
 
   {
@@ -1261,7 +1310,13 @@ const paidAssets = [
       "images/assets/paid/mockup/mockup01.jpg",
 
     price:
-      5
+      5,
+
+    size:
+      "—",
+
+    downloads:
+      0
   }
 
 ];
@@ -1343,116 +1398,37 @@ function assetTypeName(type) {
 }
 
 /* =======================================================
-SIZE + DOWNLOAD COUNTER
+FORMAT FILE SIZE
 ======================================================= */
 
-const DOWNLOAD_COUNT_PREFIX =
-  "wiseAssetDownloads:";
-
-function getAssetKey(item) {
-
-  return String(
-    item.id ||
-    item.download ||
-    item.image ||
-    item.name ||
-    "asset"
-  ).trim();
-
-}
-
-function getStoredDownloadCount(item) {
-
-  const key =
-    DOWNLOAD_COUNT_PREFIX +
-    getAssetKey(item);
-
-  try {
-
-    const saved =
-      localStorage.getItem(key);
-
-    if (
-      saved !== null &&
-      !Number.isNaN(
-        Number(saved)
-      )
-    ) {
-
-      return Math.max(
-        0,
-        Number(saved)
-      );
-
-    }
-
-  } catch (error) {
-
-    console.warn(
-      "WISE DOWNLOAD COUNT READ ERROR:",
-      error
-    );
-
-  }
-
-  return Math.max(
-    0,
-    Number(item.downloads || 0)
-  );
-
-}
-
-function saveDownloadCount(
-  item,
-  count
-) {
-
-  const key =
-    DOWNLOAD_COUNT_PREFIX +
-    getAssetKey(item);
-
-  try {
-
-    localStorage.setItem(
-      key,
-      String(count)
-    );
-
-  } catch (error) {
-
-    console.warn(
-      "WISE DOWNLOAD COUNT SAVE ERROR:",
-      error
-    );
-
-  }
-
-}
-
-function incrementDownloadCount(
-  item
-) {
-
-  const next =
-    getStoredDownloadCount(item) + 1;
-
-  saveDownloadCount(
-    item,
-    next
-  );
-
-  return next;
-
-}
-
-function formatFileSize(bytes) {
-
-  const value =
-    Number(bytes);
+function formatFileSize(size) {
 
   if (
-    !Number.isFinite(value) ||
-    value <= 0
+    size === null ||
+    size === undefined ||
+    size === "" ||
+    size === "-"
+  ) {
+
+    return "—";
+
+  }
+
+  if (
+    typeof size === "string" &&
+    size.trim() !== ""
+  ) {
+
+    return size;
+
+  }
+
+  const bytes =
+    Number(size);
+
+  if (
+    !Number.isFinite(bytes) ||
+    bytes <= 0
   ) {
 
     return "—";
@@ -1463,44 +1439,67 @@ function formatFileSize(bytes) {
     "B",
     "KB",
     "MB",
-    "GB",
-    "TB"
+    "GB"
   ];
 
-  const index =
-    Math.min(
-      Math.floor(
-        Math.log(value) /
-        Math.log(1024)
-      ),
+  let value =
+    bytes;
+
+  let unitIndex =
+    0;
+
+  while (
+    value >= 1024 &&
+    unitIndex <
       units.length - 1
-    );
+  ) {
 
-  const size =
-    value /
-    Math.pow(
-      1024,
-      index
-    );
+    value /= 1024;
 
-  return `${
-    size >= 10 || index === 0
-      ? size.toFixed(0)
-      : size.toFixed(1)
-  } ${units[index]}`;
+    unitIndex++;
+
+  }
+
+  return (
+    `${value.toFixed(
+      value >= 10 ||
+      unitIndex === 0
+        ? 0
+        : 1
+    )} ${units[unitIndex]}`
+  );
 
 }
 
-async function detectFileSize(
-  url
+/* =======================================================
+GET ASSET SIZE
+======================================================= */
+
+async function getAssetSize(
+  item
 ) {
 
+  if (!item) {
+    return "—";
+  }
+
   if (
-    !url ||
-    url === "#"
+    item.size &&
+    item.size !== "—"
   ) {
 
-    return null;
+    return formatFileSize(
+      item.size
+    );
+
+  }
+
+  if (
+    !item.download ||
+    item.download === "#"
+  ) {
+
+    return "—";
 
   }
 
@@ -1508,226 +1507,266 @@ async function detectFileSize(
 
     const response =
       await fetch(
-        url,
+        item.download,
         {
           method:
-            "HEAD",
-
-          cache:
-            "no-store"
+            "HEAD"
         }
       );
 
-    const length =
+    if (
+      !response.ok
+    ) {
+
+      return "—";
+
+    }
+
+    const contentLength =
       response.headers.get(
         "content-length"
       );
 
-    if (
-      response.ok &&
-      length
-    ) {
+    if (!contentLength) {
 
-      return Number(
-        length
-      );
+      return "—";
 
     }
 
-  } catch (error) {
-
-    console.warn(
-      "WISE FILE SIZE ERROR:",
-      error
+    return formatFileSize(
+      contentLength
     );
 
-  }
+  } catch {
 
-  return null;
+    return "—";
+
+  }
 
 }
 
-function injectAssetMetaStyle() {
+/* =======================================================
+DOWNLOAD COUNTER
+======================================================= */
+
+function getDownloadCount(
+  item
+) {
+
+  if (!item) {
+    return 0;
+  }
+
+  const stored =
+    localStorage.getItem(
+      `wiseDownloads:${item.id}`
+    );
 
   if (
-    document.getElementById(
-      "wise-asset-meta-style"
-    )
+    stored !== null
   ) {
 
-    return;
+    const number =
+      Number(stored);
+
+    if (
+      Number.isFinite(number)
+    ) {
+
+      return number;
+
+    }
 
   }
 
-  const style =
-    document.createElement(
-      "style"
-    );
-
-  style.id =
-    "wise-asset-meta-style";
-
-  style.textContent = `
-
-    .wise-asset-meta {
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-      gap: 10px;
-
-      margin: 8px 0 0;
-
-      padding: 0 2px;
-
-      color:
-        var(--muted, #aaa49a);
-
-      font-size: 10px;
-
-      line-height: 1.4;
-
-      letter-spacing: .2px;
-
-    }
-
-    .wise-asset-meta span {
-
-      white-space: nowrap;
-
-    }
-
-    .wise-asset-meta strong {
-
-      color:
-        var(--ink, #f5f0e7);
-
-      font-weight: 700;
-
-    }
-
-    .wise-asset-meta .meta-size {
-
-      text-align: left;
-
-    }
-
-    .wise-asset-meta .meta-downloads {
-
-      text-align: right;
-
-    }
-
-    @media (max-width: 600px) {
-
-      .wise-asset-meta {
-
-        font-size: 9px;
-
-        gap: 6px;
-
-      }
-
-    }
-
-  `;
-
-  document.head.appendChild(
-    style
+  return Number(
+    item.downloads || 0
   );
 
 }
 
-function updateAssetMeta(
-  card,
-  item
+/* =======================================================
+SAVE DOWNLOAD COUNTER
+======================================================= */
+
+function saveDownloadCount(
+  item,
+  count
 ) {
 
-  if (
-    !card ||
-    !item
-  ) {
-
+  if (!item || !item.id) {
     return;
-
   }
 
-  const sizeElement =
-    card.querySelector(
-      ".meta-size"
-    );
+  localStorage.setItem(
+    `wiseDownloads:${item.id}`,
+    String(count)
+  );
 
-  const countElement =
-    card.querySelector(
-      ".meta-downloads"
-    );
+}
+
+/* =======================================================
+CREATE DOWNLOAD INFO
+======================================================= */
+
+function createDownloadInfo(
+  item
+) {
 
   const dictionary =
-    translations[
-      currentLanguage
-    ] ||
+    translations[currentLanguage] ||
     translations.ht;
 
-  if (sizeElement) {
+  const info =
+    document.createElement(
+      "div"
+    );
 
-    sizeElement.innerHTML =
-      `${dictionary.size}: <strong>${
-        item.displaySize ||
-        item.size ||
-        "—"
-      }</strong>`;
+  info.className =
+    "download-info";
 
-  }
+  info.style.textAlign =
+    "center";
 
-  if (countElement) {
+  info.style.width =
+    "100%";
 
-    countElement.innerHTML =
-      `${dictionary.downloads}: <strong>${
-        getStoredDownloadCount(item)
-      }</strong>`;
+  info.style.marginTop =
+    "8px";
 
-  }
+  info.style.lineHeight =
+    "1.5";
+
+  const sizeLine =
+    document.createElement(
+      "div"
+    );
+
+  sizeLine.className =
+    "download-size";
+
+  sizeLine.innerHTML =
+    `${dictionary.size}: <strong class="download-size-value">—</strong>`;
+
+  const counterLine =
+    document.createElement(
+      "div"
+    );
+
+  counterLine.className =
+    "download-counter";
+
+  counterLine.innerHTML =
+    `${dictionary.downloads}: <strong class="download-count-value">${getDownloadCount(item)}</strong>`;
+
+  info.appendChild(
+    sizeLine
+  );
+
+  info.appendChild(
+    counterLine
+  );
+
+  getAssetSize(item)
+    .then(size => {
+
+      const value =
+        info.querySelector(
+          ".download-size-value"
+        );
+
+      if (value) {
+
+        value.textContent =
+          size;
+
+      }
+
+    });
+
+  return info;
 
 }
 
-async function loadAssetSize(
-  card,
+/* =======================================================
+INCREMENT DOWNLOAD
+======================================================= */
+
+function incrementDownloadCount(
   item
 ) {
 
-  if (
-    !card ||
-    !item ||
-    !item.download
-  ) {
-
+  if (!item) {
     return;
+  }
+
+  const current =
+    getDownloadCount(item);
+
+  const next =
+    current + 1;
+
+  saveDownloadCount(
+    item,
+    next
+  );
+
+  return next;
+
+}
+
+/* =======================================================
+UPDATE DOWNLOAD INFO
+======================================================= */
+
+function updateDownloadInfo(
+  info,
+  item
+) {
+
+  if (!info || !item) {
+    return;
+  }
+
+  const dictionary =
+    translations[currentLanguage] ||
+    translations.ht;
+
+  const sizeLine =
+    info.querySelector(
+      ".download-size"
+    );
+
+  const counterLine =
+    info.querySelector(
+      ".download-counter"
+    );
+
+  const sizeValue =
+    info.querySelector(
+      ".download-size-value"
+    );
+
+  const countValue =
+    info.querySelector(
+      ".download-count-value"
+    );
+
+  if (sizeLine) {
+
+    sizeLine.innerHTML =
+      `${dictionary.size}: <strong class="download-size-value">${sizeValue?.textContent || "—"}</strong>`;
 
   }
 
-  const bytes =
-    await detectFileSize(
-      item.download
-    );
+  if (counterLine) {
 
-  if (bytes) {
-
-    item.displaySize =
-      formatFileSize(bytes);
-
-    updateAssetMeta(
-      card,
-      item
-    );
+    counterLine.innerHTML =
+      `${dictionary.downloads}: <strong class="download-count-value">${getDownloadCount(item)}</strong>`;
 
   }
 
 }
-
-injectAssetMetaStyle();
 
 /* =======================================================
 WORKER ERROR MESSAGE
@@ -1773,9 +1812,7 @@ async function startCheckout(
 ) {
 
   const dictionary =
-    translations[
-      currentLanguage
-    ] ||
+    translations[currentLanguage] ||
     translations.ht;
 
   if (!item) {
@@ -1829,12 +1866,15 @@ async function startCheckout(
       await fetch(
         API.checkout,
         {
+
           method:
             "POST",
 
           headers: {
+
             "Content-Type":
               "application/json"
+
           },
 
           body:
@@ -1902,10 +1942,7 @@ async function startCheckout(
 
       alert(
         `${dictionary.checkoutReady}\n\n` +
-        `Order: ${
-          data.orderId ||
-          "N/A"
-        }`
+        `Order: ${data.orderId || "N/A"}`
       );
 
       return data;
@@ -2015,9 +2052,9 @@ function createPSDCard(
     description
   );
 
-  /* ===================================================
+  /* =====================================================
      PAID PSD
-  =================================================== */
+  ===================================================== */
 
   if (paid) {
 
@@ -2074,11 +2111,22 @@ function createPSDCard(
       buy
     );
 
+    /* PAID PSD INFO */
+
+    const downloadInfo =
+      createDownloadInfo(
+        item
+      );
+
+    card.appendChild(
+      downloadInfo
+    );
+
   } else {
 
-    /* =================================================
+    /* ===================================================
        FREE PSD
-    ================================================= */
+    =================================================== */
 
     const download =
       document.createElement(
@@ -2099,9 +2147,14 @@ function createPSDCard(
         currentLanguage
       ].downloadFree;
 
+    const downloadInfo =
+      createDownloadInfo(
+        item
+      );
+
     download.addEventListener(
       "click",
-      () => {
+      async () => {
 
         if (
           item.download &&
@@ -2130,6 +2183,23 @@ function createPSDCard(
 
           link.remove();
 
+          const newCount =
+            incrementDownloadCount(
+              item
+            );
+
+          const countElement =
+            downloadInfo.querySelector(
+              ".download-count-value"
+            );
+
+          if (countElement) {
+
+            countElement.textContent =
+              newCount;
+
+          }
+
           showDownloadModal();
 
         } else {
@@ -2147,6 +2217,12 @@ function createPSDCard(
 
     card.appendChild(
       download
+    );
+
+    /* INFO ALWAYS UNDER DOWNLOAD BUTTON */
+
+    card.appendChild(
+      downloadInfo
     );
 
   }
@@ -2175,9 +2251,6 @@ function createAssetCard(
   card.dataset.assetType =
     asset.type ||
     "png";
-
-  card.dataset.assetId =
-    getAssetKey(asset);
 
   const image =
     document.createElement(
@@ -2231,9 +2304,9 @@ function createAssetCard(
     description
   );
 
-  /* ===================================================
+  /* =====================================================
      PAID ASSET
-  =================================================== */
+  ===================================================== */
 
   if (paid) {
 
@@ -2290,11 +2363,22 @@ function createAssetCard(
       buy
     );
 
+    /* PAID ASSET INFO */
+
+    const downloadInfo =
+      createDownloadInfo(
+        asset
+      );
+
+    card.appendChild(
+      downloadInfo
+    );
+
   } else {
 
-    /* =================================================
+    /* ===================================================
        FREE ASSET
-    ================================================= */
+    =================================================== */
 
     const download =
       document.createElement(
@@ -2315,37 +2399,19 @@ function createAssetCard(
         currentLanguage
       ].downloadFree;
 
+    const downloadInfo =
+      createDownloadInfo(
+        asset
+      );
+
     download.addEventListener(
       "click",
-      () => {
+      async () => {
 
         if (
           asset.download &&
           asset.download !== "#"
         ) {
-
-          const nextCount =
-            incrementDownloadCount(
-              asset
-            );
-
-          const countElement =
-            card.querySelector(
-              ".meta-downloads"
-            );
-
-          if (countElement) {
-
-            const dictionary =
-              translations[
-                currentLanguage
-              ] ||
-              translations.ht;
-
-            countElement.innerHTML =
-              `${dictionary.downloads}: <strong>${nextCount}</strong>`;
-
-          }
 
           const link =
             document.createElement(
@@ -2369,6 +2435,23 @@ function createAssetCard(
 
           link.remove();
 
+          const newCount =
+            incrementDownloadCount(
+              asset
+            );
+
+          const countElement =
+            downloadInfo.querySelector(
+              ".download-count-value"
+            );
+
+          if (countElement) {
+
+            countElement.textContent =
+              newCount;
+
+          }
+
           showDownloadModal();
 
         } else {
@@ -2388,55 +2471,10 @@ function createAssetCard(
       download
     );
 
-    /* ===============================================
-       SIZE + DOWNLOADS
-       DIRECTLY UNDER DOWNLOAD BUTTON
-    =============================================== */
-
-    const meta =
-      document.createElement(
-        "div"
-      );
-
-    meta.className =
-      "wise-asset-meta";
-
-    const dictionary =
-      translations[
-        currentLanguage
-      ] ||
-      translations.ht;
-
-    meta.innerHTML = `
-
-      <span class="meta-size">
-
-        ${dictionary.size}:
-
-        <strong>
-          ${
-            asset.displaySize ||
-            asset.size ||
-            "—"
-          }
-        </strong>
-
-      </span>
-
-      <span class="meta-downloads">
-
-        ${dictionary.downloads}:
-
-        <strong>
-          ${getStoredDownloadCount(asset)}
-        </strong>
-
-      </span>
-
-    `;
+    /* INFO ALWAYS UNDER DOWNLOAD BUTTON */
 
     card.appendChild(
-      meta
+      downloadInfo
     );
 
   }
@@ -2485,38 +2523,36 @@ function updateAllButtonLanguages() {
 
   document
     .querySelectorAll(
-      ".wise-asset-meta"
+      ".download-info"
     )
     .forEach(
-      meta => {
+      info => {
 
-        const card =
-          meta.closest(
+        const itemId =
+          info.closest(
             ".asset-card"
-          );
+          )?.dataset.itemId;
 
-        if (!card) {
+        if (!itemId) {
           return;
         }
 
-        const assetId =
-          card.dataset.assetId;
-
-        const asset =
+        const item =
           [
             ...freeAssets,
-            ...paidAssets
+            ...paidAssets,
+            ...freePSD,
+            ...paidPSD
           ].find(
-            item =>
-              getAssetKey(item) ===
-              assetId
+            entry =>
+              entry.id === itemId
           );
 
-        if (asset) {
+        if (item) {
 
-          updateAssetMeta(
-            card,
-            asset
+          updateDownloadInfo(
+            info,
+            item
           );
 
         }
@@ -2546,11 +2582,17 @@ function renderPSD(
   items.forEach(
     item => {
 
-      grid.appendChild(
+      const card =
         createPSDCard(
           item,
           paid
-        )
+        );
+
+      card.dataset.itemId =
+        item.id;
+
+      grid.appendChild(
+        card
       );
 
     }
@@ -2597,18 +2639,12 @@ function renderAssets(
           paid
         );
 
+      card.dataset.itemId =
+        asset.id;
+
       grid.appendChild(
         card
       );
-
-      if (!paid) {
-
-        loadAssetSize(
-          card,
-          asset
-        );
-
-      }
 
     }
   );
@@ -2679,6 +2715,7 @@ freeAssetButtons.forEach(
       event => {
 
         event.preventDefault();
+
         event.stopPropagation();
 
         const selectedType =
@@ -2747,6 +2784,7 @@ paidAssetButtons.forEach(
       event => {
 
         event.preventDefault();
+
         event.stopPropagation();
 
         const selectedType =
