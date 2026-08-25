@@ -2769,3 +2769,209 @@ VERY SMALL PHONE
   color: #0c0c0c !important;
   border-color: #25D366 !important;
 }
+
+/* =========================================================
+   WISE.GRAPHIXDESIGN — TYPOGRAPHY CHEPH STYLE
+   Inter + Playfair Display
+   ========================================================= */
+
+/* GOOGLE FONTS */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,400;1,600&display=swap");
+
+
+/* =========================================================
+   GLOBAL FONT
+   ========================================================= */
+
+html,
+body {
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* =========================================================
+   INTER — TEXT / UI
+   ========================================================= */
+
+body,
+p,
+a,
+button,
+input,
+textarea,
+select,
+label,
+li,
+small,
+span {
+  font-family: "Inter", sans-serif;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+nav,
+.nav,
+.nav-link,
+.menu,
+.menu-link {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   MAIN HEADINGS — PLAYFAIR DISPLAY
+   ========================================================= */
+
+h1,
+h2,
+h3 {
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+
+/* =========================================================
+   H1
+   ========================================================= */
+
+h1 {
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+
+/* =========================================================
+   H2
+   ========================================================= */
+
+h2 {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+
+/* =========================================================
+   H3
+   ========================================================= */
+
+h3 {
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+
+/* =========================================================
+   H4 / H5 / H6
+   ========================================================= */
+
+h4,
+h5,
+h6 {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+
+/* =========================================================
+   BODY TEXT
+   ========================================================= */
+
+p {
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   STRONG / BOLD
+   ========================================================= */
+
+strong,
+b {
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+button,
+.btn,
+.button {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   SMALL LABELS / CATEGORIES
+   ========================================================= */
+
+.label,
+.badge,
+.category,
+.eyebrow,
+.section-label {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   ELEGANT / EDITORIAL TEXT
+   ========================================================= */
+
+.playfair,
+.editorial,
+.hero-accent,
+.title-accent {
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+
+/* =========================================================
+   PLAYFAIR ITALIC
+   ========================================================= */
+
+.playfair-italic,
+.editorial-italic {
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+
+/* =========================================================
+   WEIGHT SYSTEM
+   ========================================================= */
+
+.font-light {
+  font-weight: 300;
+}
+
+.font-regular {
+  font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-extrabold {
+  font-weight: 800;
+}
