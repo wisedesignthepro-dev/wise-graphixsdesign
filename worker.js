@@ -1,60 +1,53 @@
 /*
- * =========================================================
- * WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER FINAL
- * MONCASH SANDBOX + D1 + R2
- * DOWNLOAD COUNTER + FILE SIZE
- * =========================================================
- *
- * FRONTEND:
- * index.html
- * styles.css
- * brand.css
- * script.js
- * images/*
- *
- * API:
- * GET  /api/health
- * GET  /api/moncash-token
- * POST /api/checkout
- * GET  /api/payment-status
- * GET  /api/download
- *
- * NEW:
- * GET  /api/download-stats
- * POST /api/record-download
- *
- * PAYMENT:
- * MonCash Sandbox
- *
- * DATABASE:
- * Cloudflare D1
- * Binding:
- * DB
- *
- * STORAGE:
- * Cloudflare R2
- * Binding:
- * PAID_ASSETS
- *
- * ASSETS:
- * Cloudflare Pages/Worker Assets
- * Binding:
- * ASSETS
- *
- * SECRETS:
- * MONCASH_CLIENT_ID
- * MONCASH_CLIENT_SECRET
- *
- * NATCASH:
- * NOT CONFIGURED
- * =========================================================
- */
+=========================================================
+WISE.GRAPHIXDESIGN — CLOUDFLARE WORKER FINAL
+MONCASH SANDBOX + D1 + BACKBLAZE B2
+=========================================================
+
+FRONTEND:
+- index.html
+- styles.css
+- brand.css
+- script.js
+- images/*
+
+API:
+GET  /api/health
+GET  /api/moncash-token
+POST /api/checkout
+GET  /api/payment-status
+GET  /api/file-info
+GET  /api/download
+
+PAYMENT:
+MonCash Sandbox
+
+DATABASE:
+Cloudflare D1
+Binding:
+DB
+
+STORAGE:
+Backblaze B2 S3-Compatible API
+
+SECRETS:
+MONCASH_CLIENT_ID
+MONCASH_CLIENT_SECRET
+
+B2:
+B2_BUCKET_NAME
+B2_ENDPOINT
+B2_KEY_ID
+B2_APPLICATION_KEY
+
+NATCASH:
+PA KONFIGIRE POU KOUNYE A
+=========================================================
+*/
 
 export default {
   async fetch(request, env) {
-
     try {
-
       const url = new URL(request.url);
 
       /*
@@ -64,19 +57,11 @@ export default {
        */
 
       const securityHeaders = {
-
-        "X-Content-Type-Options":
-          "nosniff",
-
-        "X-Frame-Options":
-          "SAMEORIGIN",
-
-        "Referrer-Policy":
-          "strict-origin-when-cross-origin",
-
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
         "Permissions-Policy":
           "camera=(), microphone=(), geolocation=()"
-
       };
 
       /*
@@ -88,21 +73,10 @@ export default {
       const requestOrigin =
         request.headers.get("Origin");
 
-      /*
-       * Pa kite nenpòt Origin enkontrole.
-       *
-       * Si frontend lan sou menm Worker,
-       * url.origin ap itilize otomatikman.
-       */
-
       const corsOrigin =
-        requestOrigin &&
-        requestOrigin === url.origin
-          ? requestOrigin
-          : url.origin;
+        requestOrigin || url.origin;
 
       const corsHeaders = {
-
         "Access-Control-Allow-Origin":
           corsOrigin,
 
@@ -117,7 +91,6 @@ export default {
 
         "Vary":
           "Origin"
-
       };
 
       /*
@@ -126,21 +99,14 @@ export default {
        * =====================================================
        */
 
-      if (
-        request.method === "OPTIONS"
-      ) {
-
+      if (request.method === "OPTIONS") {
         return new Response(null, {
-
           status: 204,
-
           headers: {
             ...securityHeaders,
             ...corsHeaders
           }
-
         });
-
       }
 
       /*
@@ -149,10 +115,7 @@ export default {
        * =====================================================
        */
 
-      if (
-        url.pathname.startsWith("/api/")
-      ) {
-
+      if (url.pathname.startsWith("/api/")) {
         return handleAPI(
           request,
           env,
@@ -162,7 +125,6 @@ export default {
             ...corsHeaders
           }
         );
-
       }
 
       /*
@@ -172,7 +134,6 @@ export default {
        */
 
       if (!env.ASSETS) {
-
         return new Response(
           "ASSETS binding is not configured.",
           {
@@ -180,98 +141,59 @@ export default {
             headers: securityHeaders
           }
         );
-
       }
 
       const response =
         await env.ASSETS.fetch(request);
 
-      /*
-       * Ajoute security headers
-       * san modifye kontni sit la.
-       */
-
       const newHeaders =
-        new Headers(
-          response.headers
-        );
+        new Headers(response.headers);
 
       for (
         const [key, value]
-        of Object.entries(
-          securityHeaders
-        )
+        of Object.entries(securityHeaders)
       ) {
-
-        newHeaders.set(
-          key,
-          value
-        );
-
+        newHeaders.set(key, value);
       }
 
       return new Response(
         response.body,
         {
-
-          status:
-            response.status,
-
-          statusText:
-            response.statusText,
-
-          headers:
-            newHeaders
-
+          status: response.status,
+          statusText: response.statusText,
+          headers: newHeaders
         }
       );
 
     } catch (error) {
-
       return new Response(
-
         JSON.stringify({
-
           success: false,
-
-          error:
-            "Worker internal error.",
-
+          error: "Worker internal error.",
           message:
             error?.message ||
             "Unknown error"
-
         }),
-
         {
-
           status: 500,
-
           headers: {
-
             "Content-Type":
               "application/json; charset=UTF-8",
-
             "Cache-Control":
               "no-store"
-
           }
-
         }
-
       );
-
     }
-
   }
 };
 
 
 /*
- * =========================================================
- * API HANDLER
- * =========================================================
- */
+=========================================================
+API HANDLER
+=========================================================
+*/
 
 async function handleAPI(
   request,
@@ -279,7 +201,6 @@ async function handleAPI(
   url,
   headers
 ) {
-
 
   /*
    * =======================================================
@@ -293,9 +214,7 @@ async function handleAPI(
   ) {
 
     return jsonResponse(
-
       {
-
         success: true,
 
         service:
@@ -308,9 +227,7 @@ async function handleAPI(
           "Wise.graphixdesign",
 
         payment: {
-
           moncash: {
-
             clientId:
               Boolean(
                 env.MONCASH_CLIENT_ID
@@ -320,52 +237,33 @@ async function handleAPI(
               Boolean(
                 env.MONCASH_CLIENT_SECRET
               )
-
           },
 
           natcash:
             "not_configured"
-
         },
 
         database: {
-
           d1:
             env.DB
               ? "configured"
               : "not_configured"
-
         },
 
         storage: {
-
-          r2:
-            env.PAID_ASSETS
+          backblaze:
+            hasB2Config(env)
               ? "configured"
               : "not_configured"
-
-        },
-
-        downloads: {
-
-          statistics:
-            env.DB
-              ? "configured"
-              : "not_configured"
-
         },
 
         timestamp:
           new Date().toISOString()
-
       },
 
       200,
-
       headers
-
     );
-
   }
 
 
@@ -386,25 +284,15 @@ async function handleAPI(
     ) {
 
       return jsonResponse(
-
         {
-
           success: false,
-
-          status:
-            "credentials_missing",
-
+          status: "credentials_missing",
           message:
-            "MONCASH_CLIENT_ID oswa MONCASH_CLIENT_SECRET pa configured nan Cloudflare Secrets."
-
+            "MONCASH_CLIENT_ID oswa MONCASH_CLIENT_SECRET pa configured."
         },
-
         500,
-
         headers
-
       );
-
     }
 
     try {
@@ -413,639 +301,44 @@ async function handleAPI(
         await getMonCashToken(env);
 
       return jsonResponse(
-
         {
-
           success: true,
-
           status:
             "moncash_authenticated",
-
           provider:
             "MonCash Sandbox",
-
           message:
             "Worker la reyisi authenticate ak MonCash Sandbox.",
-
           tokenType:
             tokenData.token_type ||
             "bearer",
-
           expiresIn:
             tokenData.expires_in ||
             null,
-
           scope:
             tokenData.scope ||
             "read,write"
-
         },
-
         200,
-
         headers
-
       );
 
     } catch (error) {
 
       return jsonResponse(
-
         {
-
           success: false,
-
           status:
             error.code ||
             "moncash_auth_failed",
-
           message:
             error.message ||
             "MonCash authentication failed."
-
         },
-
         502,
-
         headers
-
       );
-
     }
-
-  }
-
-
-  /*
-   * =======================================================
-   * GET /api/download-stats
-   * =======================================================
-   *
-   * Egzanp:
-   *
-   * /api/download-stats?productId=flyer-01.psd
-   *
-   * Li retounen:
-   *
-   * downloadCount
-   * fileSize
-   * fileSizeLabel
-   * productType
-   *
-   */
-
-  if (
-    url.pathname === "/api/download-stats" &&
-    request.method === "GET"
-  ) {
-
-    const productId =
-      url.searchParams.get(
-        "productId"
-      );
-
-    if (!productId) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          error:
-            "productId is required."
-
-        },
-
-        400,
-
-        headers
-
-      );
-
-    }
-
-    const safeProductId =
-      sanitizeR2Key(
-        productId
-      );
-
-    if (!safeProductId) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          error:
-            "Invalid productId."
-
-        },
-
-        400,
-
-        headers
-
-      );
-
-    }
-
-    if (!env.DB) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          status:
-            "d1_not_configured",
-
-          message:
-            "D1 binding DB poko configured."
-
-        },
-
-        503,
-
-        headers
-
-      );
-
-    }
-
-    try {
-
-      const stats =
-        await getProductStats(
-          env,
-          safeProductId
-        );
-
-      /*
-       * Si pa gen stats ankò,
-       * kreye yon record default.
-       */
-
-      if (!stats) {
-
-        const now =
-          new Date().toISOString();
-
-        await env.DB.prepare(
-
-          `
-          INSERT OR IGNORE INTO product_stats (
-            product_id,
-            product_type,
-            download_count,
-            file_size,
-            created_at,
-            updated_at
-          )
-          VALUES (?, ?, 0, ?, ?, ?)
-          `
-
-        )
-        .bind(
-
-          safeProductId,
-
-          "psd_paid",
-
-          null,
-
-          now,
-
-          now
-
-        )
-        .run();
-
-        return jsonResponse(
-
-          {
-
-            success: true,
-
-            productId:
-              safeProductId,
-
-            productType:
-              "psd_paid",
-
-            downloadCount:
-              0,
-
-            fileSize:
-              null,
-
-            fileSizeLabel:
-              "Size unavailable"
-
-          },
-
-          200,
-
-          headers
-
-        );
-
-      }
-
-      /*
-       * Pou Paid R2,
-       * refresh file size dirèkteman nan R2.
-       */
-
-      if (
-        stats.product_type === "psd_paid" ||
-        stats.product_type === "asset_paid"
-      ) {
-
-        if (env.PAID_ASSETS) {
-
-          const object =
-            await env.PAID_ASSETS.get(
-              safeProductId
-            );
-
-          if (object) {
-
-            const actualSize =
-              Number(
-                object.size
-              );
-
-            if (
-              Number.isFinite(
-                actualSize
-              )
-            ) {
-
-              await updateProductFileSize(
-                env,
-                safeProductId,
-                actualSize
-              );
-
-              stats.file_size =
-                actualSize;
-
-            }
-
-          }
-
-        }
-
-      }
-
-      return jsonResponse(
-
-        {
-
-          success: true,
-
-          productId:
-            safeProductId,
-
-          productType:
-            stats.product_type,
-
-          downloadCount:
-            Number(
-              stats.download_count || 0
-            ),
-
-          fileSize:
-            stats.file_size !== null
-              ? Number(
-                  stats.file_size
-                )
-              : null,
-
-          fileSizeLabel:
-            formatFileSize(
-              stats.file_size
-            )
-
-        },
-
-        200,
-
-        headers
-
-      );
-
-    } catch (error) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          status:
-            "download_stats_error",
-
-          message:
-            error?.message ||
-            "Unable to retrieve download statistics."
-
-        },
-
-        500,
-
-        headers
-
-      );
-
-    }
-
-  }
-
-
-  /*
-   * =======================================================
-   * POST /api/record-download
-   * =======================================================
-   *
-   * Pou FREE PSD / FREE ASSET.
-   *
-   * Paid downloads yo pa bezwen rele endpoint sa a.
-   * Worker /api/download ap konte yo otomatikman.
-   *
-   * Body:
-   *
-   * {
-   *   "productId": "free-01.psd",
-   *   "productType": "psd_free",
-   *   "fileSize": 12345678
-   * }
-   *
-   */
-
-  if (
-    url.pathname === "/api/record-download" &&
-    request.method === "POST"
-  ) {
-
-    if (!env.DB) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          status:
-            "d1_not_configured",
-
-          message:
-            "D1 binding DB poko configured."
-
-        },
-
-        503,
-
-        headers
-
-      );
-
-    }
-
-    let body;
-
-    try {
-
-      body =
-        await request.json();
-
-    } catch {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          error:
-            "Invalid JSON request."
-
-        },
-
-        400,
-
-        headers
-
-      );
-
-    }
-
-    const productId =
-      body?.productId;
-
-    const productType =
-      normalizeProductType(
-        body?.productType
-      );
-
-    const requestedFileSize =
-      Number(
-        body?.fileSize
-      );
-
-    if (!productId) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          error:
-            "productId is required."
-
-        },
-
-        400,
-
-        headers
-
-      );
-
-    }
-
-    if (!productType) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          error:
-            "Valid productType is required.",
-
-          allowedTypes: [
-
-            "psd_free",
-            "psd_paid",
-            "asset_free",
-            "asset_paid"
-
-          ]
-
-        },
-
-        400,
-
-        headers
-
-      );
-
-    }
-
-    /*
-     * Paid yo pa dwe itilize endpoint sa a.
-     */
-
-    if (
-      productType === "psd_paid" ||
-      productType === "asset_paid"
-    ) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          status:
-            "paid_download_use_download_endpoint",
-
-          message:
-            "Paid products yo konte otomatikman apre payment verification."
-
-        },
-
-        403,
-
-        headers
-
-      );
-
-    }
-
-    const safeProductId =
-      sanitizeR2Key(
-        productId
-      );
-
-    if (!safeProductId) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          error:
-            "Invalid productId."
-
-        },
-
-        400,
-
-        headers
-
-      );
-
-    }
-
-    let fileSize =
-      null;
-
-    if (
-      Number.isFinite(
-        requestedFileSize
-      ) &&
-      requestedFileSize > 0
-    ) {
-
-      fileSize =
-        Math.floor(
-          requestedFileSize
-        );
-
-    }
-
-    try {
-
-      const result =
-        await incrementProductDownload(
-          env,
-          safeProductId,
-          productType,
-          fileSize
-        );
-
-      return jsonResponse(
-
-        {
-
-          success: true,
-
-          productId:
-            safeProductId,
-
-          productType,
-
-          downloadCount:
-            result.downloadCount,
-
-          fileSize:
-            result.fileSize,
-
-          fileSizeLabel:
-            formatFileSize(
-              result.fileSize
-            )
-
-        },
-
-        200,
-
-        headers
-
-      );
-
-    } catch (error) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          status:
-            "download_counter_error",
-
-          message:
-            error?.message ||
-            "Unable to record download."
-
-        },
-
-        500,
-
-        headers
-
-      );
-
-    }
-
   }
 
 
@@ -1063,26 +356,18 @@ async function handleAPI(
     let body;
 
     try {
-
       body =
         await request.json();
-
     } catch {
-
       return jsonResponse(
-
         {
           success: false,
           error:
             "Invalid JSON request."
         },
-
         400,
-
         headers
-
       );
-
     }
 
     const productId =
@@ -1105,48 +390,32 @@ async function handleAPI(
       ).toLowerCase();
 
     if (!productId) {
-
       return jsonResponse(
-
         {
           success: false,
           error:
             "productId is required."
         },
-
         400,
-
         headers
-
       );
-
     }
 
     if (
       normalizedPaymentMethod !==
       "moncash"
     ) {
-
       return jsonResponse(
-
         {
-
           success: false,
-
           error:
             "Payment method not available yet.",
-
           availableMethods:
             ["moncash"]
-
         },
-
         400,
-
         headers
-
       );
-
     }
 
     const amount =
@@ -1158,98 +427,60 @@ async function handleAPI(
       !Number.isFinite(amount) ||
       amount <= 0
     ) {
-
       return jsonResponse(
-
         {
-
           success: false,
-
           error:
             "A valid positive price is required."
-
         },
-
         400,
-
         headers
-
       );
-
     }
 
     if (
       amount > 100000000
     ) {
-
       return jsonResponse(
-
         {
-
           success: false,
-
           error:
             "Amount is too large."
-
         },
-
         400,
-
         headers
-
       );
-
     }
 
     if (!env.DB) {
-
       return jsonResponse(
-
         {
-
           success: false,
-
           status:
             "d1_not_configured",
-
           message:
             "D1 binding DB poko configured."
-
         },
-
         503,
-
         headers
-
       );
-
     }
 
     if (
       !env.MONCASH_CLIENT_ID ||
       !env.MONCASH_CLIENT_SECRET
     ) {
-
       return jsonResponse(
-
         {
-
           success: false,
-
           status:
             "credentials_missing",
-
           message:
-            "MonCash credentials yo poko configured nan Cloudflare Secrets."
-
+            "MonCash credentials yo poko configured."
         },
-
         500,
-
         headers
-
       );
-
     }
 
     const orderId =
@@ -1258,7 +489,6 @@ async function handleAPI(
     try {
 
       await env.DB.prepare(
-
         `
         INSERT INTO orders (
           order_id,
@@ -1271,57 +501,37 @@ async function handleAPI(
         )
         VALUES (?, ?, ?, ?, ?, ?, ?)
         `
-
       )
       .bind(
-
         orderId,
-
         String(productId),
-
         productName
           ? String(productName)
           : null,
-
         amount,
-
         normalizedPaymentMethod,
-
         "pending",
-
         new Date().toISOString()
-
       )
       .run();
 
     } catch (error) {
 
       return jsonResponse(
-
         {
-
           success: false,
-
           status:
             "d1_order_create_failed",
-
           orderId,
-
           message:
             "Worker la pa kapab kreye order la nan D1.",
-
           error:
             error?.message ||
             "D1 error"
-
         },
-
         500,
-
         headers
-
       );
-
     }
 
     try {
@@ -1337,16 +547,11 @@ async function handleAPI(
 
       const paymentResponse =
         await fetch(
-
           createPaymentUrl,
-
           {
-
-            method:
-              "POST",
+            method: "POST",
 
             headers: {
-
               "Authorization":
                 `Bearer ${accessToken}`,
 
@@ -1355,20 +560,14 @@ async function handleAPI(
 
               "Content-Type":
                 "application/json"
-
             },
 
             body:
               JSON.stringify({
-
                 amount,
-
                 orderId
-
               })
-
           }
-
         );
 
       const rawPayment =
@@ -1377,19 +576,15 @@ async function handleAPI(
       let paymentData;
 
       try {
-
         paymentData =
           JSON.parse(
             rawPayment
           );
-
       } catch {
-
         paymentData = {
           raw:
             rawPayment
         };
-
       }
 
       if (
@@ -1404,33 +599,21 @@ async function handleAPI(
         );
 
         return jsonResponse(
-
           {
-
             success: false,
-
             status:
               "create_payment_failed",
-
             httpStatus:
               paymentResponse.status,
-
             orderId,
-
             message:
               "MonCash pa t kapab kreye payment la.",
-
             moncashResponse:
               paymentData
-
           },
-
           502,
-
           headers
-
         );
-
       }
 
       const paymentToken =
@@ -1448,30 +631,19 @@ async function handleAPI(
         );
 
         return jsonResponse(
-
           {
-
             success: false,
-
             status:
               "payment_token_missing",
-
             orderId,
-
             message:
               "MonCash reponn men pa gen payment token.",
-
             moncashResponse:
               paymentData
-
           },
-
           502,
-
           headers
-
         );
-
       }
 
       const gatewayUrl =
@@ -1481,43 +653,30 @@ async function handleAPI(
         );
 
       return jsonResponse(
-
         {
-
           success: true,
-
           status:
             "payment_created",
-
           provider:
             "MonCash Sandbox",
-
           orderId,
 
           product: {
-
             id:
               productId,
-
             name:
               productName,
-
             price:
               amount
-
           },
 
           payment: {
-
             method:
               "moncash",
-
             status:
               "created",
-
             paymentTokenCreated:
               true
-
           },
 
           redirectUrl:
@@ -1527,14 +686,10 @@ async function handleAPI(
             gatewayUrl,
 
           message:
-            "Payment MonCash la kreye. Redireksyon kliyan an sou MonCash."
-
+            "Payment MonCash la kreye."
         },
-
         200,
-
         headers
-
       );
 
     } catch (error) {
@@ -1547,30 +702,19 @@ async function handleAPI(
       );
 
       return jsonResponse(
-
         {
-
           success: false,
-
           status:
             "moncash_checkout_error",
-
           orderId,
-
           message:
             error?.message ||
             "Worker la pa t kapab kreye payment MonCash la."
-
         },
-
         502,
-
         headers
-
       );
-
     }
-
   }
 
 
@@ -1599,75 +743,42 @@ async function handleAPI(
       !transactionId &&
       !orderId
     ) {
-
       return jsonResponse(
-
         {
-
           success: false,
-
           error:
             "transactionId or orderId is required."
-
         },
-
         400,
-
         headers
-
       );
-
     }
 
     if (!env.DB) {
-
       return jsonResponse(
-
         {
-
           success: false,
-
           status:
-            "d1_not_configured",
-
-          message:
-            "D1 binding DB poko configured."
-
+            "d1_not_configured"
         },
-
         503,
-
         headers
-
       );
-
     }
 
     if (
       !env.MONCASH_CLIENT_ID ||
       !env.MONCASH_CLIENT_SECRET
     ) {
-
       return jsonResponse(
-
         {
-
           success: false,
-
           status:
-            "credentials_missing",
-
-          message:
-            "MonCash credentials yo poko configured."
-
+            "credentials_missing"
         },
-
         500,
-
         headers
-
       );
-
     }
 
     try {
@@ -1683,218 +794,253 @@ async function handleAPI(
           );
 
         if (!dbOrder) {
-
           return jsonResponse(
-
             {
-
               success: false,
-
               status:
                 "order_not_found",
-
-              orderId,
-
-              message:
-                "Order sa a pa jwenn nan D1."
-
+              orderId
             },
-
             404,
-
             headers
-
           );
-
         }
-
       }
 
-      const tokenData =
-        await getMonCashToken(env);
-
-      const accessToken =
-        tokenData.access_token;
-
-      let endpoint;
-      let requestBody;
-
-      if (transactionId) {
-
-        endpoint =
-          "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment";
-
-        requestBody = {
-          transactionId
-        };
-
-      } else {
-
-        endpoint =
-          "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveOrderPayment";
-
-        requestBody = {
-          orderId
-        };
-
-      }
-
-      const verifyResponse =
-        await fetch(
-
-          endpoint,
-
+      const paymentResult =
+        await verifyMonCashPayment(
+          env,
           {
-
-            method:
-              "POST",
-
-            headers: {
-
-              "Authorization":
-                `Bearer ${accessToken}`,
-
-              "Accept":
-                "application/json",
-
-              "Content-Type":
-                "application/json"
-
-            },
-
-            body:
-              JSON.stringify(
-                requestBody
-              )
-
+            transactionId,
+            orderId
           }
-
         );
-
-      const rawVerify =
-        await verifyResponse.text();
-
-      let verifyData;
-
-      try {
-
-        verifyData =
-          JSON.parse(
-            rawVerify
-          );
-
-      } catch {
-
-        verifyData = {
-          raw:
-            rawVerify
-        };
-
-      }
-
-      const payment =
-        verifyData?.payment ||
-        null;
-
-      const paymentMessage =
-        String(
-          payment?.message ||
-          ""
-        ).toLowerCase();
-
-      const isPaid =
-        verifyResponse.ok &&
-        paymentMessage ===
-        "successful";
-
-      const finalTransactionId =
-        transactionId ||
-        payment?.transaction_id ||
-        payment?.transactionId ||
-        null;
 
       if (orderId) {
 
         await updateOrderStatus(
-
           env,
-
           orderId,
-
-          isPaid
+          paymentResult.paid
             ? "paid"
             : "pending",
-
-          finalTransactionId
-
+          paymentResult.transactionId
         );
-
       }
 
       return jsonResponse(
-
         {
-
           success: true,
 
           status:
-            isPaid
+            paymentResult.paid
               ? "paid"
               : "not_paid",
 
           paid:
-            isPaid,
+            paymentResult.paid,
 
           orderId:
-            orderId ||
-            null,
+            orderId || null,
 
           transactionId:
-            finalTransactionId,
+            paymentResult.transactionId,
 
-          payment,
+          payment:
+            paymentResult.payment,
 
           moncashResponse:
-            verifyData,
+            paymentResult.response,
 
           message:
-            isPaid
-              ? "Payment MonCash verifye avèk siksè epi D1 mete ajou."
+            paymentResult.paid
+              ? "Payment verifye avèk siksè."
               : "Payment la poko verifye kòm successful."
-
         },
-
         200,
-
         headers
-
       );
 
     } catch (error) {
 
       return jsonResponse(
-
         {
-
           success: false,
-
           status:
             "payment_verification_error",
-
           message:
             error?.message ||
-            "Worker la pa t kapab verifye payment la."
-
+            "Payment verification failed."
         },
-
         502,
-
         headers
+      );
+    }
+  }
 
+
+  /*
+   * =======================================================
+   * GET /api/file-info
+   * =======================================================
+   *
+   * Sa se nouvo API pou frontend lan.
+   *
+   * Egzanp:
+   *
+   * /api/file-info?productId=flyer-01.psd
+   *
+   * oswa:
+   *
+   * /api/file-info?productId=asset-01.png
+   */
+
+  if (
+    url.pathname === "/api/file-info" &&
+    request.method === "GET"
+  ) {
+
+    const productId =
+      url.searchParams.get(
+        "productId"
       );
 
+    if (!productId) {
+      return jsonResponse(
+        {
+          success: false,
+          error:
+            "productId is required."
+        },
+        400,
+        headers
+      );
     }
 
+    if (!env.DB) {
+      return jsonResponse(
+        {
+          success: false,
+          status:
+            "d1_not_configured"
+        },
+        503,
+        headers
+      );
+    }
+
+    if (!hasB2Config(env)) {
+      return jsonResponse(
+        {
+          success: false,
+          status:
+            "backblaze_not_configured"
+        },
+        503,
+        headers
+      );
+    }
+
+    try {
+
+      const file =
+        await getFileRecord(
+          env,
+          productId
+        );
+
+      if (!file) {
+        return jsonResponse(
+          {
+            success: false,
+            status:
+              "file_not_registered",
+            productId,
+            message:
+              "Fichye sa a poko anrejistre nan D1."
+          },
+          404,
+          headers
+        );
+      }
+
+      const metadata =
+        await b2HeadObject(
+          env,
+          file.object_key
+        );
+
+      if (!metadata.exists) {
+        return jsonResponse(
+          {
+            success: false,
+            status:
+              "file_not_found",
+            productId,
+            message:
+              "Fichye a pa jwenn nan Backblaze B2."
+          },
+          404,
+          headers
+        );
+      }
+
+      await updateFileSize(
+        env,
+        productId,
+        metadata.size
+      );
+
+      const latest =
+        await getFileRecord(
+          env,
+          productId
+        );
+
+      return jsonResponse(
+        {
+          success: true,
+
+          productId,
+
+          fileType:
+            latest.file_type,
+
+          accessType:
+            latest.access_type,
+
+          fileSize:
+            metadata.size,
+
+          fileSizeFormatted:
+            formatFileSize(
+              metadata.size
+            ),
+
+          downloadCount:
+            Number(
+              latest.download_count || 0
+            )
+        },
+        200,
+        headers
+      );
+
+    } catch (error) {
+
+      return jsonResponse(
+        {
+          success: false,
+          status:
+            "file_info_error",
+          message:
+            error?.message ||
+            "Unable to read file information."
+        },
+        502,
+        headers
+      );
+    }
   }
 
 
@@ -1903,14 +1049,13 @@ async function handleAPI(
    * GET /api/download
    * =======================================================
    *
-   * Paid PSD / Paid Asset.
+   * FREE:
+   * /api/download?productId=xxx
    *
-   * Payment must be successful.
+   * PAID:
+   * /api/download?productId=xxx&orderId=xxx
    *
-   * NEW:
-   * Lè download la reyisi,
-   * Worker la increment product_stats.
-   * File size pran nan R2.
+   * Paid yo verifye ak MonCash.
    */
 
   if (
@@ -1934,572 +1079,304 @@ async function handleAPI(
       );
 
     if (!productId) {
-
       return jsonResponse(
-
         {
-
           success: false,
-
           error:
             "productId is required."
-
         },
-
         400,
-
         headers
-
       );
-
-    }
-
-    if (!env.PAID_ASSETS) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          status:
-            "r2_not_configured",
-
-          message:
-            "PAID_ASSETS R2 binding poko configured."
-
-        },
-
-        503,
-
-        headers
-
-      );
-
     }
 
     if (!env.DB) {
-
       return jsonResponse(
-
         {
-
           success: false,
-
           status:
-            "d1_not_configured",
-
-          message:
-            "D1 binding DB poko configured."
-
+            "d1_not_configured"
         },
-
         503,
-
         headers
-
       );
-
     }
 
-    if (
-      !transactionId &&
-      !orderId
-    ) {
-
+    if (!hasB2Config(env)) {
       return jsonResponse(
-
         {
-
           success: false,
-
           status:
-            "payment_reference_missing",
-
-          error:
-            "transactionId or orderId is required.",
-
-          message:
-            "Payment verification nesesè anvan download."
-
+            "backblaze_not_configured"
         },
-
-        403,
-
+        503,
         headers
-
       );
-
     }
-
-    let dbOrder = null;
-
-    if (orderId) {
-
-      dbOrder =
-        await getOrderByOrderId(
-          env,
-          orderId
-        );
-
-      if (!dbOrder) {
-
-        return jsonResponse(
-
-          {
-
-            success: false,
-
-            status:
-              "order_not_found",
-
-            message:
-              "Order sa a pa jwenn nan D1."
-
-          },
-
-          404,
-
-          headers
-
-        );
-
-      }
-
-      if (
-        String(
-          dbOrder.product_id
-        ) !==
-        String(
-          productId
-        )
-      ) {
-
-        return jsonResponse(
-
-          {
-
-            success: false,
-
-            status:
-              "product_mismatch",
-
-            message:
-              "Product la pa koresponn ak order sa a."
-
-          },
-
-          403,
-
-          headers
-
-        );
-
-      }
-
-    }
-
-    let paymentCheck;
 
     try {
 
-      const tokenData =
-        await getMonCashToken(env);
-
-      const accessToken =
-        tokenData.access_token;
-
-      let endpoint;
-      let requestBody;
-
-      if (transactionId) {
-
-        endpoint =
-          "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment";
-
-        requestBody = {
-          transactionId
-        };
-
-      } else {
-
-        endpoint =
-          "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveOrderPayment";
-
-        requestBody = {
-          orderId
-        };
-
-      }
-
-      const verifyResponse =
-        await fetch(
-
-          endpoint,
-
-          {
-
-            method:
-              "POST",
-
-            headers: {
-
-              "Authorization":
-                `Bearer ${accessToken}`,
-
-              "Accept":
-                "application/json",
-
-              "Content-Type":
-                "application/json"
-
-            },
-
-            body:
-              JSON.stringify(
-                requestBody
-              )
-
-          }
-
+      const file =
+        await getFileRecord(
+          env,
+          productId
         );
 
-      const rawVerify =
-        await verifyResponse.text();
+      if (!file) {
+        return jsonResponse(
+          {
+            success: false,
+            status:
+              "file_not_registered",
+            message:
+              "Fichye sa a poko anrejistre nan D1."
+          },
+          404,
+          headers
+        );
+      }
 
-      let verifyData;
+      /*
+       * ===================================================
+       * PAID FILE
+       * ===================================================
+       */
 
-      try {
+      if (
+        file.access_type === "paid"
+      ) {
 
-        verifyData =
-          JSON.parse(
-            rawVerify
+        if (
+          !transactionId &&
+          !orderId
+        ) {
+          return jsonResponse(
+            {
+              success: false,
+              status:
+                "payment_reference_missing",
+              message:
+                "Payment verification nesesè."
+            },
+            403,
+            headers
+          );
+        }
+
+        const paymentResult =
+          await verifyMonCashPayment(
+            env,
+            {
+              transactionId,
+              orderId
+            }
           );
 
-      } catch {
+        if (!paymentResult.paid) {
+          return jsonResponse(
+            {
+              success: false,
+              status:
+                "payment_not_verified",
+              paid:
+                false,
+              productId,
+              orderId:
+                orderId || null,
+              transactionId:
+                paymentResult.transactionId,
+              message:
+                "Payment la poko verifye kòm successful."
+            },
+            403,
+            headers
+          );
+        }
 
-        verifyData = {
-          raw:
-            rawVerify
-        };
+        /*
+         * Si orderId disponib,
+         * verifye product la.
+         */
 
+        if (orderId) {
+
+          const dbOrder =
+            await getOrderByOrderId(
+              env,
+              orderId
+            );
+
+          if (!dbOrder) {
+            return jsonResponse(
+              {
+                success: false,
+                status:
+                  "order_not_found"
+              },
+              404,
+              headers
+            );
+          }
+
+          if (
+            String(
+              dbOrder.product_id
+            ) !==
+            String(
+              productId
+            )
+          ) {
+            return jsonResponse(
+              {
+                success: false,
+                status:
+                  "product_mismatch",
+                message:
+                  "Product la pa koresponn ak order la."
+              },
+              403,
+              headers
+            );
+          }
+
+          await updateOrderStatus(
+            env,
+            orderId,
+            "paid",
+            paymentResult.transactionId
+          );
+        }
       }
 
-      const payment =
-        verifyData?.payment ||
-        null;
 
-      const paymentMessage =
-        String(
-          payment?.message ||
-          ""
-        ).toLowerCase();
+      /*
+       * ===================================================
+       * GET FILE FROM BACKBLAZE
+       * ===================================================
+       */
 
-      const paid =
-        verifyResponse.ok &&
-        paymentMessage ===
-        "successful";
-
-      const finalTransactionId =
-        transactionId ||
-        payment?.transaction_id ||
-        payment?.transactionId ||
-        null;
-
-      paymentCheck = {
-
-        paid,
-
-        payment,
-
-        transactionId:
-          finalTransactionId,
-
-        response:
-          verifyData
-
-      };
-
-      if (orderId) {
-
-        await updateOrderStatus(
-
+      const b2Response =
+        await b2GetObject(
           env,
-
-          orderId,
-
-          paid
-            ? "paid"
-            : "pending",
-
-          finalTransactionId
-
+          file.object_key
         );
 
+      if (!b2Response.ok) {
+
+        return jsonResponse(
+          {
+            success: false,
+            status:
+              "file_not_found",
+            message:
+              "Fichye a pa jwenn nan Backblaze B2."
+          },
+          404,
+          headers
+        );
       }
+
+      const contentType =
+        b2Response.headers.get(
+          "Content-Type"
+        ) ||
+        "application/octet-stream";
+
+      const contentLength =
+        b2Response.headers.get(
+          "Content-Length"
+        );
+
+      /*
+       * Mete size nan D1.
+       */
+
+      if (contentLength) {
+
+        await updateFileSize(
+          env,
+          productId,
+          Number(
+            contentLength
+          )
+        );
+      }
+
+      /*
+       * Counter +1.
+       */
+
+      const updated =
+        await incrementDownloadCount(
+          env,
+          productId
+        );
+
+      const downloadHeaders =
+        new Headers(headers);
+
+      downloadHeaders.set(
+        "Content-Type",
+        contentType
+      );
+
+      if (contentLength) {
+        downloadHeaders.set(
+          "Content-Length",
+          contentLength
+        );
+      }
+
+      downloadHeaders.set(
+        "Content-Disposition",
+        `attachment; filename="${safeDownloadFilename(
+          file.object_key
+        )}"`
+      );
+
+      downloadHeaders.set(
+        "Cache-Control",
+        "private, no-store, max-age=0"
+      );
+
+      downloadHeaders.set(
+        "X-Payment-Verified",
+        file.access_type === "paid"
+          ? "true"
+          : "not_required"
+      );
+
+      downloadHeaders.set(
+        "X-Download-Count",
+        String(
+          updated.downloadCount
+        )
+      );
+
+      return new Response(
+        b2Response.body,
+        {
+          status: 200,
+          headers:
+            downloadHeaders
+        }
+      );
 
     } catch (error) {
 
       return jsonResponse(
-
         {
-
           success: false,
-
           status:
-            "payment_verification_error",
-
+            "download_error",
           message:
-            "Payment la pa t kapab verifye anvan download.",
-
-          error:
             error?.message ||
-            "Unknown error"
-
+            "Download failed."
         },
-
         502,
-
         headers
-
       );
-
     }
-
-    if (
-      !paymentCheck.paid
-    ) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          status:
-            "payment_not_verified",
-
-          paid:
-            false,
-
-          productId,
-
-          transactionId:
-            paymentCheck?.transactionId ||
-            null,
-
-          orderId:
-            orderId ||
-            null,
-
-          message:
-            "Payment la poko verifye kòm successful. Download la bloke."
-
-        },
-
-        403,
-
-        headers
-
-      );
-
-    }
-
-    if (orderId) {
-
-      const latestOrder =
-        await getOrderByOrderId(
-          env,
-          orderId
-        );
-
-      if (
-        !latestOrder ||
-        latestOrder.payment_status !==
-        "paid"
-      ) {
-
-        return jsonResponse(
-
-          {
-
-            success: false,
-
-            status:
-              "d1_payment_not_confirmed",
-
-            message:
-              "MonCash verifye payment la men D1 poko konfime li."
-
-          },
-
-          403,
-
-          headers
-
-        );
-
-      }
-
-    }
-
-    const safeProductId =
-      sanitizeR2Key(
-        productId
-      );
-
-    if (!safeProductId) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          error:
-            "Invalid productId."
-
-        },
-
-        400,
-
-        headers
-
-      );
-
-    }
-
-    const object =
-      await env.PAID_ASSETS.get(
-        safeProductId
-      );
-
-    if (!object) {
-
-      return jsonResponse(
-
-        {
-
-          success: false,
-
-          status:
-            "file_not_found",
-
-          productId,
-
-          message:
-            "Payment verifye, men fichye a pa jwenn nan R2."
-
-        },
-
-        404,
-
-        headers
-
-      );
-
-    }
-
-    /*
-     * =====================================================
-     * FILE SIZE
-     * =====================================================
-     */
-
-    const fileSize =
-      Number(
-        object.size
-      );
-
-    /*
-     * Detèmine kategori a.
-     *
-     * Si frontend lan bay productType nan URL pita,
-     * n ap ka sèvi avè l.
-     *
-     * Pou kounye a default paid PSD.
-     */
-
-    const requestedType =
-      normalizeProductType(
-        url.searchParams.get(
-          "productType"
-        )
-      );
-
-    const productType =
-      requestedType === "asset_paid"
-        ? "asset_paid"
-        : "psd_paid";
-
-    /*
-     * =====================================================
-     * COUNT SUCCESSFUL PAID DOWNLOAD
-     * =====================================================
-     *
-     * Counter la monte sèlman apre:
-     *
-     * 1. MonCash successful
-     * 2. D1 paid
-     * 3. R2 object jwenn
-     */
-
-    await incrementProductDownload(
-
-      env,
-
-      safeProductId,
-
-      productType,
-
-      Number.isFinite(fileSize)
-        ? fileSize
-        : null
-
-    );
-
-    const downloadHeaders = {
-
-      ...headers,
-
-      "Content-Type":
-        object.httpMetadata?.contentType ||
-        "application/octet-stream",
-
-      "Content-Disposition":
-        `attachment; filename="${safeDownloadFilename(
-          safeProductId
-        )}"`,
-
-      "Content-Length":
-        Number.isFinite(fileSize)
-          ? String(fileSize)
-          : undefined,
-
-      "Cache-Control":
-        "private, no-store, max-age=0",
-
-      "X-Payment-Verified":
-        "true"
-
-    };
-
-    return new Response(
-
-      object.body,
-
-      {
-
-        status:
-          200,
-
-        headers:
-          downloadHeaders
-
-      }
-
-    );
-
   }
 
 
@@ -2510,30 +1387,507 @@ async function handleAPI(
    */
 
   return jsonResponse(
-
     {
-
       success: false,
-
       error:
         "API route not found."
-
     },
-
     404,
-
     headers
-
   );
-
 }
 
 
 /*
- * =========================================================
- * D1 — GET ORDER
- * =========================================================
- */
+=========================================================
+BACKBLAZE CONFIG
+=========================================================
+*/
+
+function hasB2Config(env) {
+  return Boolean(
+    env.B2_BUCKET_NAME &&
+    env.B2_ENDPOINT &&
+    env.B2_KEY_ID &&
+    env.B2_APPLICATION_KEY
+  );
+}
+
+
+/*
+=========================================================
+BACKBLAZE S3 HEAD OBJECT
+=========================================================
+*/
+
+async function b2HeadObject(
+  env,
+  objectKey
+) {
+
+  const result =
+    await b2SignedRequest(
+      env,
+      "HEAD",
+      objectKey
+    );
+
+  if (
+    result.status === 404
+  ) {
+    return {
+      exists: false,
+      size: 0
+    };
+  }
+
+  if (!result.ok) {
+    throw new Error(
+      `Backblaze HEAD failed: HTTP ${result.status}`
+    );
+  }
+
+  return {
+    exists: true,
+
+    size:
+      Number(
+        result.headers.get(
+          "Content-Length"
+        ) || 0
+      )
+  };
+}
+
+
+/*
+=========================================================
+BACKBLAZE S3 GET OBJECT
+=========================================================
+*/
+
+async function b2GetObject(
+  env,
+  objectKey
+) {
+
+  return b2SignedRequest(
+    env,
+    "GET",
+    objectKey
+  );
+}
+
+
+/*
+=========================================================
+BACKBLAZE AWS SIGV4 REQUEST
+=========================================================
+*/
+
+async function b2SignedRequest(
+  env,
+  method,
+  objectKey
+) {
+
+  const endpoint =
+    String(
+      env.B2_ENDPOINT
+    )
+    .replace(
+      /\/+$/,
+      ""
+    );
+
+  const endpointUrl =
+    new URL(endpoint);
+
+  const host =
+    endpointUrl.host;
+
+  const region =
+    extractB2Region(
+      endpointUrl
+    );
+
+  const encodedKey =
+    encodeS3Path(
+      objectKey
+    );
+
+  const targetUrl =
+    `${endpoint}/${env.B2_BUCKET_NAME}/${encodedKey}`;
+
+  const now =
+    new Date();
+
+  const amzDate =
+    toAmzDate(now);
+
+  const dateStamp =
+    amzDate.slice(
+      0,
+      8
+    );
+
+  const service =
+    "s3";
+
+  const payloadHash =
+    await sha256Hex("");
+
+  const canonicalHeaders =
+    `host:${host}\n` +
+    `x-amz-content-sha256:${payloadHash}\n` +
+    `x-amz-date:${amzDate}\n`;
+
+  const signedHeaders =
+    "host;x-amz-content-sha256;x-amz-date";
+
+  const canonicalRequest =
+    [
+      method,
+      `/${env.B2_BUCKET_NAME}/${encodedKey}`,
+      "",
+      canonicalHeaders,
+      signedHeaders,
+      payloadHash
+    ].join("\n");
+
+  const credentialScope =
+    `${dateStamp}/${region}/${service}/aws4_request`;
+
+  const canonicalRequestHash =
+    await sha256Hex(
+      canonicalRequest
+    );
+
+  const stringToSign =
+    [
+      "AWS4-HMAC-SHA256",
+      amzDate,
+      credentialScope,
+      canonicalRequestHash
+    ].join("\n");
+
+  const signingKey =
+    await getSignatureKey(
+      env.B2_APPLICATION_KEY,
+      dateStamp,
+      region,
+      service
+    );
+
+  const signature =
+    await hmacHex(
+      signingKey,
+      stringToSign
+    );
+
+  const authorization =
+    `AWS4-HMAC-SHA256 Credential=${env.B2_KEY_ID}/${credentialScope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
+
+  return fetch(
+    targetUrl,
+    {
+      method,
+
+      headers: {
+        "Host":
+          host,
+
+        "x-amz-content-sha256":
+          payloadHash,
+
+        "x-amz-date":
+          amzDate,
+
+        "Authorization":
+          authorization
+      }
+    }
+  );
+}
+
+
+/*
+=========================================================
+AWS SIGNATURE HELPERS
+=========================================================
+*/
+
+async function sha256Hex(
+  value
+) {
+
+  const data =
+    new TextEncoder().encode(
+      value
+    );
+
+  const hash =
+    await crypto.subtle.digest(
+      "SHA-256",
+      data
+    );
+
+  return bytesToHex(
+    new Uint8Array(
+      hash
+    )
+  );
+}
+
+
+async function hmac(
+  key,
+  data
+) {
+
+  const cryptoKey =
+    await crypto.subtle.importKey(
+      "raw",
+      key,
+      {
+        name:
+          "HMAC",
+        hash:
+          "SHA-256"
+      },
+      false,
+      ["sign"]
+    );
+
+  return new Uint8Array(
+    await crypto.subtle.sign(
+      "HMAC",
+      cryptoKey,
+      new TextEncoder().encode(
+        data
+      )
+    )
+  );
+}
+
+
+async function hmacHex(
+  key,
+  data
+) {
+
+  return bytesToHex(
+    await hmac(
+      key,
+      data
+    )
+  );
+}
+
+
+async function getSignatureKey(
+  secret,
+  dateStamp,
+  region,
+  service
+) {
+
+  const kDate =
+    await hmac(
+      new TextEncoder().encode(
+        "AWS4" + secret
+      ),
+      dateStamp
+    );
+
+  const kRegion =
+    await hmac(
+      kDate,
+      region
+    );
+
+  const kService =
+    await hmac(
+      kRegion,
+      service
+    );
+
+  return hmac(
+    kService,
+    "aws4_request"
+  );
+}
+
+
+function bytesToHex(
+  bytes
+) {
+
+  return Array.from(
+    bytes
+  )
+  .map(
+    byte =>
+      byte
+        .toString(16)
+        .padStart(2, "0")
+  )
+  .join("");
+}
+
+
+/*
+=========================================================
+BACKBLAZE HELPERS
+=========================================================
+*/
+
+function extractB2Region(
+  endpointUrl
+) {
+
+  const host =
+    endpointUrl.hostname;
+
+  const match =
+    host.match(
+      /^s3\.([^.]+)\.backblazeb2\.com$/i
+    );
+
+  if (match) {
+    return match[1];
+  }
+
+  /*
+   * Si endpoint la gen yon lòt fòm,
+   * itilize region sa a kòm fallback.
+   */
+
+  return "us-west-004";
+}
+
+
+function encodeS3Path(
+  key
+) {
+
+  return String(
+    key
+  )
+  .split("/")
+  .map(
+    part =>
+      encodeURIComponent(
+        part
+      )
+  )
+  .join("/");
+}
+
+
+/*
+=========================================================
+D1 FILE RECORD
+=========================================================
+*/
+
+async function getFileRecord(
+  env,
+  productId
+) {
+
+  return (
+    await env.DB.prepare(
+      `
+      SELECT
+        product_id,
+        product_name,
+        file_type,
+        access_type,
+        object_key,
+        file_size,
+        download_count,
+        created_at,
+        updated_at
+      FROM files
+      WHERE product_id = ?
+      LIMIT 1
+      `
+    )
+    .bind(
+      String(productId)
+    )
+    .first()
+  ) || null;
+}
+
+
+async function updateFileSize(
+  env,
+  productId,
+  fileSize
+) {
+
+  await env.DB.prepare(
+    `
+    UPDATE files
+    SET
+      file_size = ?,
+      updated_at = ?
+    WHERE product_id = ?
+    `
+  )
+  .bind(
+    Number(fileSize) || 0,
+    new Date().toISOString(),
+    String(productId)
+  )
+  .run();
+}
+
+
+async function incrementDownloadCount(
+  env,
+  productId
+) {
+
+  await env.DB.prepare(
+    `
+    UPDATE files
+    SET
+      download_count =
+        download_count + 1,
+      updated_at = ?
+    WHERE product_id = ?
+    `
+  )
+  .bind(
+    new Date().toISOString(),
+    String(productId)
+  )
+  .run();
+
+  const file =
+    await getFileRecord(
+      env,
+      productId
+    );
+
+  return {
+    downloadCount:
+      Number(
+        file?.download_count ||
+        0
+      )
+  };
+}
+
+
+/*
+=========================================================
+D1 — GET ORDER
+=========================================================
+*/
 
 async function getOrderByOrderId(
   env,
@@ -2544,9 +1898,8 @@ async function getOrderByOrderId(
     return null;
   }
 
-  const result =
+  return (
     await env.DB.prepare(
-
       `
       SELECT
         id,
@@ -2563,22 +1916,20 @@ async function getOrderByOrderId(
       WHERE order_id = ?
       LIMIT 1
       `
-
     )
     .bind(
       orderId
     )
-    .first();
-
-  return result || null;
+    .first()
+  ) || null;
 }
 
 
 /*
- * =========================================================
- * D1 — UPDATE ORDER STATUS
- * =========================================================
- */
+=========================================================
+D1 — UPDATE ORDER STATUS
+=========================================================
+*/
 
 async function updateOrderStatus(
   env,
@@ -2587,68 +1938,54 @@ async function updateOrderStatus(
   transactionId
 ) {
 
-  if (
-    !env.DB ||
-    !orderId
-  ) {
+  if (!env.DB || !orderId) {
     return;
   }
 
-  if (
-    status === "paid"
-  ) {
+  if (status === "paid") {
 
     await env.DB.prepare(
-
       `
       UPDATE orders
       SET
         payment_status = ?,
-        transaction_id = COALESCE(?, transaction_id),
-        paid_at = COALESCE(
-          paid_at,
-          ?
-        )
+        transaction_id =
+          COALESCE(
+            ?,
+            transaction_id
+          ),
+        paid_at =
+          COALESCE(
+            paid_at,
+            ?
+          )
       WHERE order_id = ?
       `
-
     )
     .bind(
-
       "paid",
-
       transactionId || null,
-
       new Date().toISOString(),
-
       orderId
-
     )
     .run();
 
     return;
   }
 
-  if (
-    status === "failed"
-  ) {
+  if (status === "failed") {
 
     await env.DB.prepare(
-
       `
       UPDATE orders
       SET
         payment_status = ?
       WHERE order_id = ?
       `
-
     )
     .bind(
-
       "failed",
-
       orderId
-
     )
     .run();
 
@@ -2656,331 +1993,153 @@ async function updateOrderStatus(
   }
 
   await env.DB.prepare(
-
     `
     UPDATE orders
     SET
       payment_status = ?,
-      transaction_id = COALESCE(
-        ?,
-        transaction_id
-      )
+      transaction_id =
+        COALESCE(
+          ?,
+          transaction_id
+        )
     WHERE order_id = ?
     `
-
   )
   .bind(
-
     status,
-
     transactionId || null,
-
     orderId
-
   )
   .run();
-
 }
 
 
 /*
- * =========================================================
- * DOWNLOAD STATISTICS
- * =========================================================
- */
+=========================================================
+MONCASH PAYMENT VERIFICATION
+=========================================================
+*/
 
-async function getProductStats(
+async function verifyMonCashPayment(
   env,
-  productId
+  {
+    transactionId,
+    orderId
+  }
 ) {
 
-  const result =
-    await env.DB.prepare(
-
-      `
-      SELECT
-        id,
-        product_id,
-        product_type,
-        download_count,
-        file_size,
-        created_at,
-        updated_at
-      FROM product_stats
-      WHERE product_id = ?
-      LIMIT 1
-      `
-
-    )
-    .bind(
-      productId
-    )
-    .first();
-
-  return result || null;
-}
-
-
-/*
- * =========================================================
- * INCREMENT DOWNLOAD
- * =========================================================
- */
-
-async function incrementProductDownload(
-  env,
-  productId,
-  productType,
-  fileSize
-) {
-
-  if (!env.DB) {
-
-    throw new Error(
-      "D1 binding DB poko configured."
+  const tokenData =
+    await getMonCashToken(
+      env
     );
 
+  const accessToken =
+    tokenData.access_token;
+
+  let endpoint;
+  let requestBody;
+
+  if (transactionId) {
+
+    endpoint =
+      "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment";
+
+    requestBody = {
+      transactionId
+    };
+
+  } else {
+
+    endpoint =
+      "https://sandbox.moncashbutton.digicelgroup.com/Api/v1/RetrieveOrderPayment";
+
+    requestBody = {
+      orderId
+    };
   }
 
-  const normalizedType =
-    normalizeProductType(
-      productType
+  const verifyResponse =
+    await fetch(
+      endpoint,
+      {
+        method:
+          "POST",
+
+        headers: {
+          "Authorization":
+            `Bearer ${accessToken}`,
+
+          "Accept":
+            "application/json",
+
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(
+            requestBody
+          )
+      }
     );
 
-  if (!normalizedType) {
+  const rawVerify =
+    await verifyResponse.text();
 
-    throw new Error(
-      "Invalid product type."
-    );
+  let verifyData;
 
+  try {
+    verifyData =
+      JSON.parse(
+        rawVerify
+      );
+  } catch {
+    verifyData = {
+      raw:
+        rawVerify
+    };
   }
 
-  const now =
-    new Date().toISOString();
+  const payment =
+    verifyData?.payment ||
+    null;
 
-  /*
-   * Upsert + increment.
-   */
+  const paymentMessage =
+    String(
+      payment?.message ||
+      ""
+    ).toLowerCase();
 
-  await env.DB.prepare(
+  const paid =
+    verifyResponse.ok &&
+    paymentMessage ===
+      "successful";
 
-    `
-    INSERT INTO product_stats (
-      product_id,
-      product_type,
-      download_count,
-      file_size,
-      created_at,
-      updated_at
-    )
-    VALUES (?, ?, 1, ?, ?, ?)
-
-    ON CONFLICT(product_id)
-    DO UPDATE SET
-
-      product_type =
-        excluded.product_type,
-
-      download_count =
-        product_stats.download_count + 1,
-
-      file_size =
-        COALESCE(
-          excluded.file_size,
-          product_stats.file_size
-        ),
-
-      updated_at =
-        excluded.updated_at
-    `
-
-  )
-  .bind(
-
-    productId,
-
-    normalizedType,
-
-    fileSize,
-
-    now,
-
-    now
-
-  )
-  .run();
-
-  const stats =
-    await getProductStats(
-      env,
-      productId
-    );
+  const finalTransactionId =
+    transactionId ||
+    payment?.transaction_id ||
+    payment?.transactionId ||
+    null;
 
   return {
+    paid,
 
-    downloadCount:
-      Number(
-        stats?.download_count || 0
-      ),
+    payment,
 
-    fileSize:
-      stats?.file_size !== null &&
-      stats?.file_size !== undefined
-        ? Number(
-            stats.file_size
-          )
-        : null
+    transactionId:
+      finalTransactionId,
 
+    response:
+      verifyData
   };
-
 }
 
 
 /*
- * =========================================================
- * UPDATE FILE SIZE
- * =========================================================
- */
-
-async function updateProductFileSize(
-  env,
-  productId,
-  fileSize
-) {
-
-  if (
-    !env.DB ||
-    !Number.isFinite(fileSize)
-  ) {
-    return;
-  }
-
-  await env.DB.prepare(
-
-    `
-    UPDATE product_stats
-    SET
-      file_size = ?,
-      updated_at = ?
-    WHERE product_id = ?
-    `
-
-  )
-  .bind(
-
-    Math.floor(fileSize),
-
-    new Date().toISOString(),
-
-    productId
-
-  )
-  .run();
-
-}
-
-
-/*
- * =========================================================
- * PRODUCT TYPE
- * =========================================================
- */
-
-function normalizeProductType(
-  value
-) {
-
-  const type =
-    String(
-      value || ""
-    )
-    .trim()
-    .toLowerCase();
-
-  const allowed = [
-
-    "psd_free",
-    "psd_paid",
-    "asset_free",
-    "asset_paid"
-
-  ];
-
-  return allowed.includes(type)
-    ? type
-    : null;
-
-}
-
-
-/*
- * =========================================================
- * FILE SIZE FORMAT
- * =========================================================
- */
-
-function formatFileSize(
-  bytes
-) {
-
-  if (
-    bytes === null ||
-    bytes === undefined ||
-    !Number.isFinite(
-      Number(bytes)
-    ) ||
-    Number(bytes) < 0
-  ) {
-
-    return "Size unavailable";
-
-  }
-
-  const size =
-    Number(bytes);
-
-  if (
-    size < 1024
-  ) {
-
-    return `${size} B`;
-
-  }
-
-  if (
-    size < 1024 * 1024
-  ) {
-
-    return `${(
-      size / 1024
-    ).toFixed(1)} KB`;
-
-  }
-
-  if (
-    size < 1024 * 1024 * 1024
-  ) {
-
-    return `${(
-      size /
-      (1024 * 1024)
-    ).toFixed(1)} MB`;
-
-  }
-
-  return `${(
-    size /
-    (1024 * 1024 * 1024)
-  ).toFixed(2)} GB`;
-
-}
-
-
-/*
- * =========================================================
- * MONCASH TOKEN
- * =========================================================
- */
+=========================================================
+MONCASH TOKEN
+=========================================================
+*/
 
 async function getMonCashToken(
   env
@@ -3000,7 +2159,6 @@ async function getMonCashToken(
       "credentials_missing";
 
     throw error;
-
   }
 
   const tokenUrl =
@@ -3008,23 +2166,17 @@ async function getMonCashToken(
 
   const basicCredentials =
     btoa(
-
       `${env.MONCASH_CLIENT_ID}:${env.MONCASH_CLIENT_SECRET}`
-
     );
 
   const response =
     await fetch(
-
       tokenUrl,
-
       {
-
         method:
           "POST",
 
         headers: {
-
           "Authorization":
             `Basic ${basicCredentials}`,
 
@@ -3033,14 +2185,11 @@ async function getMonCashToken(
 
           "Content-Type":
             "application/x-www-form-urlencoded"
-
         },
 
         body:
           "scope=read,write&grant_type=client_credentials"
-
       }
-
     );
 
   const rawText =
@@ -3049,19 +2198,15 @@ async function getMonCashToken(
   let data;
 
   try {
-
     data =
       JSON.parse(
         rawText
       );
-
   } catch {
-
     data = {
       raw:
         rawText
     };
-
   }
 
   if (
@@ -3080,7 +2225,6 @@ async function getMonCashToken(
       data;
 
     throw error;
-
   }
 
   if (
@@ -3100,19 +2244,17 @@ async function getMonCashToken(
       data;
 
     throw error;
-
   }
 
   return data;
-
 }
 
 
 /*
- * =========================================================
- * CREATE ORDER ID
- * =========================================================
- */
+=========================================================
+CREATE ORDER ID
+=========================================================
+*/
 
 function createOrderId() {
 
@@ -3131,74 +2273,22 @@ function createOrderId() {
   return (
     `WGD-${Date.now()}-${random}`
   );
-
 }
 
 
 /*
- * =========================================================
- * SANITIZE R2 KEY
- * =========================================================
- */
-
-function sanitizeR2Key(
-  value
-) {
-
-  let key =
-    String(
-      value || ""
-    ).trim();
-
-  if (!key) {
-    return null;
-  }
-
-  if (
-    key.includes("..") ||
-    key.includes("\\") ||
-    key.startsWith("/")
-  ) {
-
-    return null;
-
-  }
-
-  if (
-    /[\u0000-\u001F\u007F]/.test(
-      key
-    )
-  ) {
-
-    return null;
-
-  }
-
-  if (
-    key.length > 500
-  ) {
-
-    return null;
-
-  }
-
-  return key;
-
-}
-
-
-/*
- * =========================================================
- * DOWNLOAD FILENAME
- * =========================================================
- */
+=========================================================
+DOWNLOAD FILENAME
+=========================================================
+*/
 
 function safeDownloadFilename(
   key
 ) {
 
   const parts =
-    key.split("/");
+    String(key)
+      .split("/");
 
   const filename =
     parts[
@@ -3210,15 +2300,49 @@ function safeDownloadFilename(
     /["\r\n\\]/g,
     "_"
   );
-
 }
 
 
 /*
- * =========================================================
- * JSON RESPONSE
- * =========================================================
- */
+=========================================================
+FILE SIZE
+=========================================================
+*/
+
+function formatFileSize(
+  bytes
+) {
+
+  const value =
+    Number(bytes) || 0;
+
+  if (value < 1024) {
+    return `${value} B`;
+  }
+
+  if (value < 1024 ** 2) {
+    return `${(
+      value / 1024
+    ).toFixed(1)} KB`;
+  }
+
+  if (value < 1024 ** 3) {
+    return `${(
+      value / (1024 ** 2)
+    ).toFixed(1)} MB`;
+  }
+
+  return `${(
+    value / (1024 ** 3)
+  ).toFixed(2)} GB`;
+}
+
+
+/*
+=========================================================
+JSON RESPONSE
+=========================================================
+*/
 
 function jsonResponse(
   data,
@@ -3228,7 +2352,6 @@ function jsonResponse(
 
   const responseHeaders =
     new Headers({
-
       "Content-Type":
         "application/json; charset=UTF-8",
 
@@ -3236,26 +2359,18 @@ function jsonResponse(
         "no-store",
 
       ...extraHeaders
-
     });
 
   return new Response(
-
     JSON.stringify(
       data,
       null,
       2
     ),
-
     {
-
       status,
-
       headers:
         responseHeaders
-
     }
-
   );
-
 }
