@@ -9,140 +9,117 @@ LANGUAGE
 LIGHTBOX
 SLIDESHOW
 DOWNLOAD MODAL
-DOWNLOAD SIZE + DOWNLOAD COUNTER
 CLOUDFLARE WORKER CHECKOUT
+SIZE + DOWNLOAD COUNTER
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* =======================================================
-  CONFIGURATION
-  ======================================================= */
+/* =======================================================
+CONFIGURATION
+======================================================= */
 
-  const API_BASE_URL = "";
+const API_BASE_URL = "";
 
-  const API = {
-    checkout: `${API_BASE_URL}/api/checkout`,
-    paymentStatus: `${API_BASE_URL}/api/payment-status`,
-    download: `${API_BASE_URL}/api/download`
-  };
+const API = {
+  checkout: `${API_BASE_URL}/api/checkout`,
+  paymentStatus: `${API_BASE_URL}/api/payment-status`,
+  download: `${API_BASE_URL}/api/download`
+};
 
+/* =======================================================
+MOBILE MENU
+======================================================= */
 
-  /* =======================================================
-  MOBILE MENU
-  ======================================================= */
+const menuButton =
+  document.getElementById("mb");
 
-  const menuButton =
-    document.getElementById("mb");
+const mainNav =
+  document.getElementById("main-nav");
 
-  const mainNav =
-    document.getElementById("main-nav");
+if (menuButton && mainNav) {
 
-  if (menuButton && mainNav) {
+  menuButton.addEventListener(
+    "click",
+    () => {
 
-    menuButton.addEventListener(
-      "click",
-      () => {
+      const isOpen =
+        mainNav.classList.toggle("open");
 
-        const isOpen =
-          mainNav.classList.toggle("open");
+      menuButton.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+      );
 
-        menuButton.setAttribute(
-          "aria-expanded",
-          String(isOpen)
-        );
+    }
+  );
 
-      }
-    );
+  mainNav
+    .querySelectorAll("a")
+    .forEach(link => {
 
-    mainNav
-      .querySelectorAll("a")
-      .forEach(link => {
+      link.addEventListener(
+        "click",
+        () => {
 
-        link.addEventListener(
-          "click",
-          () => {
+          mainNav.classList.remove("open");
 
-            mainNav.classList.remove("open");
+          menuButton.setAttribute(
+            "aria-expanded",
+            "false"
+          );
 
-            menuButton.setAttribute(
-              "aria-expanded",
-              "false"
-            );
+        }
+      );
 
-          }
-        );
+    });
 
-      });
+}
 
-  }
+/* =======================================================
+LANGUAGE MENU
+======================================================= */
 
+const languageButton =
+  document.getElementById("lb");
 
-  /* =======================================================
-  LANGUAGE MENU
-  ======================================================= */
+const languageMenu =
+  document.getElementById("lm");
 
-  const languageButton =
-    document.getElementById("lb");
+if (
+  languageButton &&
+  languageMenu
+) {
 
-  const languageMenu =
-    document.getElementById("lm");
+  languageButton.addEventListener(
+    "click",
+    event => {
 
-  if (
-    languageButton &&
-    languageMenu
-  ) {
+      event.stopPropagation();
 
-    languageButton.addEventListener(
-      "click",
-      event => {
+      const open =
+        languageMenu.classList.toggle("open");
 
-        event.stopPropagation();
+      languageButton.setAttribute(
+        "aria-expanded",
+        String(open)
+      );
 
-        const open =
-          languageMenu.classList.toggle("open");
+    }
+  );
 
-        languageButton.setAttribute(
-          "aria-expanded",
-          String(open)
-        );
+  languageMenu
+    .querySelectorAll("[data-lang]")
+    .forEach(button => {
 
-      }
-    );
+      button.addEventListener(
+        "click",
+        () => {
 
-    languageMenu
-      .querySelectorAll("[data-lang]")
-      .forEach(button => {
+          const language =
+            button.dataset.lang;
 
-        button.addEventListener(
-          "click",
-          () => {
-
-            const language =
-              button.dataset.lang;
-
-            setLanguage(language);
-
-            languageMenu.classList.remove("open");
-
-            languageButton.setAttribute(
-              "aria-expanded",
-              "false"
-            );
-
-          }
-        );
-
-      });
-
-    document.addEventListener(
-      "click",
-      event => {
-
-        if (
-          !languageMenu.contains(event.target) &&
-          !languageButton.contains(event.target)
-        ) {
+          setLanguage(language);
 
           languageMenu.classList.remove("open");
 
@@ -152,2439 +129,2277 @@ document.addEventListener("DOMContentLoaded", () => {
           );
 
         }
-
-      }
-    );
-
-  }
-
-
-  /* =======================================================
-  TRANSLATIONS
-  ======================================================= */
-
-  const translations = {
-
-    ht: {
-
-      navWork: "Travay mwen yo",
-
-      navStore: "Boutik PSD",
-
-      navFree: "Asset gratis",
-
-      navServices: "Sèvis",
-
-      heroEyebrow: "STIDYO DESIGN KREYATIF",
-
-      heroTitle:
-        "Design ki<br><em>fè moun sonje w.</em>",
-
-      heroText:
-        "Kreyasyon grafik premium, PSD editab ak resous dijital pou mak ak biznis ki vle kanpe apa.",
-
-      heroPrimary:
-        "Gade travay mwen ↗",
-
-      heroSecondary:
-        "Achte PSD →",
-
-      workEyebrow:
-        "01 / PORTFOLIO",
-
-      workTitle:
-        "Travay <em>mwen yo.</em>",
-
-      filterAll:
-        "Tout",
-
-      filterFlyers:
-        "Flyers",
-
-      filterCovers:
-        "Covers",
-
-      filterLabels:
-        "Étiquèt",
-
-      filterBranding:
-        "Branding",
-
-      storeEyebrow:
-        "02 / DIGITAL STORE",
-
-      storeTitle:
-        "Boutik <em>PSD.</em>",
-
-      freeEyebrow:
-        "03 / FREE RESOURCES",
-
-      freeTitle:
-        "Asset <em>gratis.</em>",
-
-      assetPNG:
-        "PNG",
-
-      assetBackground:
-        "Background",
-
-      assetTextures:
-        "Textures",
-
-      assetMockups:
-        "Mockups",
-
-      assetIntro:
-        "Klike sou yon kategori pou wè fichye yo, epi telechaje sa ou bezwen an.",
-
-      servicesEyebrow:
-        "04 / SERVICES",
-
-      servicesTitle:
-        "Sèvis pou <em>biznis.</em>",
-
-      service1:
-        "01 — Logo & Branding",
-
-      service2:
-        "02 — Flyer & Social Media",
-
-      service3:
-        "03 — Packaging & Étiquèt",
-
-      service4:
-        "04 — Motion Design",
-
-      portfolioFlyer:
-        "Flyer Event",
-
-      portfolioCover:
-        "Cover Design",
-
-      portfolioLabel:
-        "Product Label",
-
-      portfolioBrand:
-        "Brand Identity",
-
-      storeNote:
-        "— Estrikti checkout la pare pou koneksyon backend.",
-
-      footer:
-        "Design grafik · PSD · Asset dijital",
-
-      whatsapp:
-        "WhatsApp",
-
-      downloadFree:
-        "Telechaje gratis",
-
-      buyNow:
-        "Achte kounye a →",
-
-      paymentNotConnected:
-        "Sistèm peman an poko konekte.",
-
-      paymentError:
-        "Yon pwoblèm rive pandan koneksyon ak sistèm peman an.",
-
-      checkoutReady:
-        "Checkout la pare.",
-
-      addDownload:
-        "Ajoute chemen fichye download la nan script.js.",
-
-      paid:
-        "PAID",
-
-      fileSize:
-        "Size",
-
-      downloads:
-        "Telechajman",
-
-      downloadCount:
-        "Telechajman",
-
-      calculating:
-        "Ap kalkile..."
-
-    },
-
-
-    en: {
-
-      navWork:
-        "My Work",
-
-      navStore:
-        "PSD Store",
-
-      navFree:
-        "Free Assets",
-
-      navServices:
-        "Services",
-
-      heroEyebrow:
-        "CREATIVE DESIGN STUDIO",
-
-      heroTitle:
-        "Design that<br><em>makes you memorable.</em>",
-
-      heroText:
-        "Premium graphic design, editable PSD files and digital resources for brands and businesses that want to stand out.",
-
-      heroPrimary:
-        "View my work ↗",
-
-      heroSecondary:
-        "Buy PSD →",
-
-      workEyebrow:
-        "01 / PORTFOLIO",
-
-      workTitle:
-        "My <em>work.</em>",
-
-      filterAll:
-        "All",
-
-      filterFlyers:
-        "Flyers",
-
-      filterCovers:
-        "Covers",
-
-      filterLabels:
-        "Labels",
-
-      filterBranding:
-        "Branding",
-
-      storeEyebrow:
-        "02 / DIGITAL STORE",
-
-      storeTitle:
-        "PSD <em>Store.</em>",
-
-      freeEyebrow:
-        "03 / FREE RESOURCES",
-
-      freeTitle:
-        "Free <em>Assets.</em>",
-
-      assetPNG:
-        "PNG",
-
-      assetBackground:
-        "Backgrounds",
-
-      assetTextures:
-        "Textures",
-
-      assetMockups:
-        "Mockups",
-
-      assetIntro:
-        "Choose a category to view the files and download what you need.",
-
-      servicesEyebrow:
-        "04 / SERVICES",
-
-      servicesTitle:
-        "Services for <em>business.</em>",
-
-      service1:
-        "01 — Logo & Branding",
-
-      service2:
-        "02 — Flyer & Social Media",
-
-      service3:
-        "03 — Packaging & Labels",
-
-      service4:
-        "04 — Motion Design",
-
-      portfolioFlyer:
-        "Event Flyer",
-
-      portfolioCover:
-        "Cover Design",
-
-      portfolioLabel:
-        "Product Label",
-
-      portfolioBrand:
-        "Brand Identity",
-
-      storeNote:
-        "— Checkout structure ready for backend connection.",
-
-      footer:
-        "Graphic Design · PSD · Digital Assets",
-
-      whatsapp:
-        "WhatsApp",
-
-      downloadFree:
-        "Download free",
-
-      buyNow:
-        "Buy now →",
-
-      paymentNotConnected:
-        "Payment system is not connected yet.",
-
-      paymentError:
-        "A problem occurred while connecting to the payment system.",
-
-      checkoutReady:
-        "Checkout is ready.",
-
-      addDownload:
-        "Add the download file path in script.js.",
-
-      paid:
-        "PAID",
-
-      fileSize:
-        "Size",
-
-      downloads:
-        "Downloads",
-
-      downloadCount:
-        "Downloads",
-
-      calculating:
-        "Calculating..."
-
-    },
-
-
-    fr: {
-
-      navWork:
-        "Mes travaux",
-
-      navStore:
-        "Boutique PSD",
-
-      navFree:
-        "Assets gratuits",
-
-      navServices:
-        "Services",
-
-      heroEyebrow:
-        "STUDIO DE DESIGN CRÉATIF",
-
-      heroTitle:
-        "Un design qui<br><em>vous rend mémorable.</em>",
-
-      heroText:
-        "Créations graphiques premium, fichiers PSD modifiables et ressources digitales pour les marques et entreprises qui veulent se démarquer.",
-
-      heroPrimary:
-        "Voir mes travaux ↗",
-
-      heroSecondary:
-        "Acheter un PSD →",
-
-      workEyebrow:
-        "01 / PORTFOLIO",
-
-      workTitle:
-        "Mes <em>travaux.</em>",
-
-      filterAll:
-        "Tout",
-
-      filterFlyers:
-        "Flyers",
-
-      filterCovers:
-        "Covers",
-
-      filterLabels:
-        "Étiquettes",
-
-      filterBranding:
-        "Branding",
-
-      storeEyebrow:
-        "02 / BOUTIQUE DIGITALE",
-
-      storeTitle:
-        "Boutique <em>PSD.</em>",
-
-      freeEyebrow:
-        "03 / RESSOURCES GRATUITES",
-
-      freeTitle:
-        "Assets <em>gratuits.</em>",
-
-      assetPNG:
-        "PNG",
-
-      assetBackground:
-        "Arrière-plans",
-
-      assetTextures:
-        "Textures",
-
-      assetMockups:
-        "Mockups",
-
-      assetIntro:
-        "Choisissez une catégorie pour voir les fichiers et télécharger ce dont vous avez besoin.",
-
-      servicesEyebrow:
-        "04 / SERVICES",
-
-      servicesTitle:
-        "Services pour <em>entreprises.</em>",
-
-      service1:
-        "01 — Logo & Branding",
-
-      service2:
-        "02 — Flyer & Réseaux sociaux",
-
-      service3:
-        "03 — Packaging & Étiquettes",
-
-      service4:
-        "04 — Motion Design",
-
-      portfolioFlyer:
-        "Flyer événement",
-
-      portfolioCover:
-        "Cover Design",
-
-      portfolioLabel:
-        "Étiquette produit",
-
-      portfolioBrand:
-        "Identité de marque",
-
-      storeNote:
-        "— Structure checkout prête pour la connexion backend.",
-
-      footer:
-        "Design graphique · PSD · Assets digitaux",
-
-      whatsapp:
-        "WhatsApp",
-
-      downloadFree:
-        "Télécharger gratuitement",
-
-      buyNow:
-        "Acheter maintenant →",
-
-      paymentNotConnected:
-        "Le système de paiement n'est pas encore connecté.",
-
-      paymentError:
-        "Un problème est survenu lors de la connexion au système de paiement.",
-
-      checkoutReady:
-        "Le checkout est prêt.",
-
-      addDownload:
-        "Ajoutez le chemin du fichier dans script.js.",
-
-      paid:
-        "PAYANT",
-
-      fileSize:
-        "Taille",
-
-      downloads:
-        "Téléchargements",
-
-      downloadCount:
-        "Téléchargements",
-
-      calculating:
-        "Calcul..."
-
-    },
-
-
-    es: {
-
-      navWork:
-        "Mis trabajos",
-
-      navStore:
-        "Tienda PSD",
-
-      navFree:
-        "Assets gratis",
-
-      navServices:
-        "Servicios",
-
-      heroEyebrow:
-        "ESTUDIO DE DISEÑO CREATIVO",
-
-      heroTitle:
-        "Diseño que<br><em>te hace memorable.</em>",
-
-      heroText:
-        "Diseño gráfico premium, archivos PSD editables y recursos digitales para marcas y negocios que quieren destacar.",
-
-      heroPrimary:
-        "Ver mis trabajos ↗",
-
-      heroSecondary:
-        "Comprar PSD →",
-
-      workEyebrow:
-        "01 / PORTFOLIO",
-
-      workTitle:
-        "Mis <em>trabajos.</em>",
-
-      filterAll:
-        "Todo",
-
-      filterFlyers:
-        "Flyers",
-
-      filterCovers:
-        "Covers",
-
-      filterLabels:
-        "Etiquetas",
-
-      filterBranding:
-        "Branding",
-
-      storeEyebrow:
-        "02 / TIENDA DIGITAL",
-
-      storeTitle:
-        "Tienda <em>PSD.</em>",
-
-      freeEyebrow:
-        "03 / RECURSOS GRATIS",
-
-      freeTitle:
-        "Assets <em>gratis.</em>",
-
-      assetPNG:
-        "PNG",
-
-      assetBackground:
-        "Fondos",
-
-      assetTextures:
-        "Texturas",
-
-      assetMockups:
-        "Mockups",
-
-      assetIntro:
-        "Elige una categoría para ver los archivos y descargar lo que necesitas.",
-
-      servicesEyebrow:
-        "04 / SERVICIOS",
-
-      servicesTitle:
-        "Servicios para <em>negocios.</em>",
-
-      service1:
-        "01 — Logo & Branding",
-
-      service2:
-        "02 — Flyer & Redes Sociales",
-
-      service3:
-        "03 — Packaging & Etiquetas",
-
-      service4:
-        "04 — Motion Design",
-
-      portfolioFlyer:
-        "Flyer de evento",
-
-      portfolioCover:
-        "Diseño de Cover",
-
-      portfolioLabel:
-        "Etiqueta de producto",
-
-      portfolioBrand:
-        "Identidad de marca",
-
-      storeNote:
-        "— Estructura de checkout lista para conexión backend.",
-
-      footer:
-        "Diseño gráfico · PSD · Assets digitales",
-
-      whatsapp:
-        "WhatsApp",
-
-      downloadFree:
-        "Descargar gratis",
-
-      buyNow:
-        "Comprar ahora →",
-
-      paymentNotConnected:
-        "El sistema de pago aún no está conectado.",
-
-      paymentError:
-        "Se produjo un problema al conectar con el sistema de pago.",
-
-      checkoutReady:
-        "El checkout está listo.",
-
-      addDownload:
-        "Añade la ruta del archivo en script.js.",
-
-      paid:
-        "PAGO",
-
-      fileSize:
-        "Tamaño",
-
-      downloads:
-        "Descargas",
-
-      downloadCount:
-        "Descargas",
-
-      calculating:
-        "Calculando..."
-
-    }
-
-  };
-
-
-  /* =======================================================
-  CURRENT LANGUAGE
-  ======================================================= */
-
-  let currentLanguage =
-    localStorage.getItem(
-      "wiseLanguage"
-    ) || "ht";
-
-
-  /* =======================================================
-  LANGUAGE FUNCTION
-  ======================================================= */
-
-  function setLanguage(language) {
-
-    const dictionary =
-      translations[language] ||
-      translations.ht;
-
-    currentLanguage =
-      translations[language]
-        ? language
-        : "ht";
-
-    document.documentElement.lang =
-      currentLanguage;
-
-    document
-      .querySelectorAll("[data-i18n]")
-      .forEach(element => {
-
-        const key =
-          element.dataset.i18n;
-
-        if (
-          Object.prototype.hasOwnProperty.call(
-            dictionary,
-            key
-          )
-        ) {
-
-          element.textContent =
-            dictionary[key];
-
-        }
-
-      });
-
-    document
-      .querySelectorAll("[data-i18n-html]")
-      .forEach(element => {
-
-        const key =
-          element.dataset.i18nHtml;
-
-        if (
-          Object.prototype.hasOwnProperty.call(
-            dictionary,
-            key
-          )
-        ) {
-
-          element.innerHTML =
-            dictionary[key];
-
-        }
-
-      });
-
-    const selectedLanguage =
-      document.querySelector(
-        `[data-lang="${currentLanguage}"]`
       );
 
-    if (
-      selectedLanguage &&
-      languageButton
-    ) {
+    });
 
-      languageButton.innerHTML =
-        selectedLanguage.innerHTML +
-        ' <span aria-hidden="true">▾</span>';
+  document.addEventListener(
+    "click",
+    event => {
 
-    }
+      if (
+        !languageMenu.contains(event.target) &&
+        !languageButton.contains(event.target)
+      ) {
 
-    localStorage.setItem(
-      "wiseLanguage",
-      currentLanguage
-    );
+        languageMenu.classList.remove("open");
 
-    updateAllButtonLanguages();
-
-    updateDownloadModalLanguage();
-
-  }
-
-
-  /* =======================================================
-  HERO SLIDESHOW
-  ======================================================= */
-
-  const slides =
-    Array.from(
-      document.querySelectorAll(
-        ".hero-slideshow .slide"
-      )
-    );
-
-  const dots =
-    Array.from(
-      document.querySelectorAll(
-        ".slide-dots .dot"
-      )
-    );
-
-  let currentSlide = 0;
-
-  let slideshowTimer = null;
-
-
-  function showSlide(index) {
-
-    if (!slides.length) {
-      return;
-    }
-
-    currentSlide =
-      (index + slides.length) %
-      slides.length;
-
-    slides.forEach(
-      (slide, i) => {
-
-        slide.classList.toggle(
-          "active",
-          i === currentSlide
+        languageButton.setAttribute(
+          "aria-expanded",
+          "false"
         );
 
       }
-    );
-
-    dots.forEach(
-      (dot, i) => {
-
-        dot.classList.toggle(
-          "active",
-          i === currentSlide
-        );
-
-      }
-    );
-
-  }
-
-
-  function startSlideshow() {
-
-    if (
-      slides.length <= 1
-    ) {
-
-      return;
 
     }
+  );
 
-    clearInterval(
-      slideshowTimer
-    );
+}
 
-    slideshowTimer =
-      setInterval(
-        () => {
+/* =======================================================
+TRANSLATIONS
+======================================================= */
 
-          showSlide(
-            currentSlide + 1
-          );
+const translations = {
 
-        },
-        5000
-      );
+  ht: {
+
+    navWork: "Travay mwen yo",
+
+    navStore: "Boutik PSD",
+
+    navFree: "Asset gratis",
+
+    navServices: "Sèvis",
+
+    heroEyebrow:
+      "STIDYO DESIGN KREYATIF",
+
+    heroTitle:
+      "Design ki<br><em>fè moun sonje w.</em>",
+
+    heroText:
+      "Kreyasyon grafik premium, PSD editab ak resous dijital pou mak ak biznis ki vle kanpe apa.",
+
+    heroPrimary:
+      "Gade travay mwen ↗",
+
+    heroSecondary:
+      "Achte PSD →",
+
+    workEyebrow:
+      "01 / PORTFOLIO",
+
+    workTitle:
+      "Travay <em>mwen yo.</em>",
+
+    filterAll:
+      "Tout",
+
+    filterFlyers:
+      "Flyers",
+
+    filterCovers:
+      "Covers",
+
+    filterLabels:
+      "Étiquèt",
+
+    filterBranding:
+      "Branding",
+
+    storeEyebrow:
+      "02 / DIGITAL STORE",
+
+    storeTitle:
+      "Boutik <em>PSD.</em>",
+
+    freeEyebrow:
+      "03 / FREE RESOURCES",
+
+    freeTitle:
+      "Asset <em>gratis.</em>",
+
+    assetPNG:
+      "PNG",
+
+    assetBackground:
+      "Background",
+
+    assetTextures:
+      "Textures",
+
+    assetMockups:
+      "Mockups",
+
+    assetIntro:
+      "Klike sou yon kategori pou wè fichye yo, epi telechaje sa ou bezwen an.",
+
+    servicesEyebrow:
+      "04 / SERVICES",
+
+    servicesTitle:
+      "Sèvis pou <em>biznis.</em>",
+
+    service1:
+      "01 — Logo & Branding",
+
+    service2:
+      "02 — Flyer & Social Media",
+
+    service3:
+      "03 — Packaging & Étiquèt",
+
+    service4:
+      "04 — Motion Design",
+
+    portfolioFlyer:
+      "Flyer Event",
+
+    portfolioCover:
+      "Cover Design",
+
+    portfolioLabel:
+      "Product Label",
+
+    portfolioBrand:
+      "Brand Identity",
+
+    storeNote:
+      "— Estrikti checkout la pare pou koneksyon backend.",
+
+    footer:
+      "Design grafik · PSD · Asset dijital",
+
+    whatsapp:
+      "WhatsApp",
+
+    downloadFree:
+      "Telechaje gratis",
+
+    buyNow:
+      "Achte kounye a →",
+
+    paymentNotConnected:
+      "Sistèm peman an poko konekte.",
+
+    paymentError:
+      "Yon pwoblèm rive pandan koneksyon ak sistèm peman an.",
+
+    checkoutReady:
+      "Checkout la pare.",
+
+    addDownload:
+      "Ajoute chemen fichye download la nan script.js.",
+
+    paid:
+      "PAID",
+
+    size:
+      "Size",
+
+    downloads:
+      "Downloads"
+
+  },
+
+  en: {
+
+    navWork:
+      "My Work",
+
+    navStore:
+      "PSD Store",
+
+    navFree:
+      "Free Assets",
+
+    navServices:
+      "Services",
+
+    heroEyebrow:
+      "CREATIVE DESIGN STUDIO",
+
+    heroTitle:
+      "Design that<br><em>makes you memorable.</em>",
+
+    heroText:
+      "Premium graphic design, editable PSD files and digital resources for brands and businesses that want to stand out.",
+
+    heroPrimary:
+      "View my work ↗",
+
+    heroSecondary:
+      "Buy PSD →",
+
+    workEyebrow:
+      "01 / PORTFOLIO",
+
+    workTitle:
+      "My <em>work.</em>",
+
+    filterAll:
+      "All",
+
+    filterFlyers:
+      "Flyers",
+
+    filterCovers:
+      "Covers",
+
+    filterLabels:
+      "Labels",
+
+    filterBranding:
+      "Branding",
+
+    storeEyebrow:
+      "02 / DIGITAL STORE",
+
+    storeTitle:
+      "PSD <em>Store.</em>",
+
+    freeEyebrow:
+      "03 / FREE RESOURCES",
+
+    freeTitle:
+      "Free <em>Assets.</em>",
+
+    assetPNG:
+      "PNG",
+
+    assetBackground:
+      "Backgrounds",
+
+    assetTextures:
+      "Textures",
+
+    assetMockups:
+      "Mockups",
+
+    assetIntro:
+      "Choose a category to view the files and download what you need.",
+
+    servicesEyebrow:
+      "04 / SERVICES",
+
+    servicesTitle:
+      "Services for <em>business.</em>",
+
+    service1:
+      "01 — Logo & Branding",
+
+    service2:
+      "02 — Flyer & Social Media",
+
+    service3:
+      "03 — Packaging & Labels",
+
+    service4:
+      "04 — Motion Design",
+
+    portfolioFlyer:
+      "Event Flyer",
+
+    portfolioCover:
+      "Cover Design",
+
+    portfolioLabel:
+      "Product Label",
+
+    portfolioBrand:
+      "Brand Identity",
+
+    storeNote:
+      "— Checkout structure ready for backend connection.",
+
+    footer:
+      "Graphic Design · PSD · Digital Assets",
+
+    whatsapp:
+      "WhatsApp",
+
+    downloadFree:
+      "Download free",
+
+    buyNow:
+      "Buy now →",
+
+    paymentNotConnected:
+      "Payment system is not connected yet.",
+
+    paymentError:
+      "A problem occurred while connecting to the payment system.",
+
+    checkoutReady:
+      "Checkout is ready.",
+
+    addDownload:
+      "Add the download file path in script.js.",
+
+    paid:
+      "PAID",
+
+    size:
+      "Size",
+
+    downloads:
+      "Downloads"
+
+  },
+
+  fr: {
+
+    navWork:
+      "Mes travaux",
+
+    navStore:
+      "Boutique PSD",
+
+    navFree:
+      "Assets gratuits",
+
+    navServices:
+      "Services",
+
+    heroEyebrow:
+      "STUDIO DE DESIGN CRÉATIF",
+
+    heroTitle:
+      "Un design qui<br><em>vous rend mémorable.</em>",
+
+    heroText:
+      "Créations graphiques premium, fichiers PSD modifiables et ressources digitales pour les marques et entreprises qui veulent se démarquer.",
+
+    heroPrimary:
+      "Voir mes travaux ↗",
+
+    heroSecondary:
+      "Acheter un PSD →",
+
+    workEyebrow:
+      "01 / PORTFOLIO",
+
+    workTitle:
+      "Mes <em>travaux.</em>",
+
+    filterAll:
+      "Tout",
+
+    filterFlyers:
+      "Flyers",
+
+    filterCovers:
+      "Covers",
+
+    filterLabels:
+      "Étiquettes",
+
+    filterBranding:
+      "Branding",
+
+    storeEyebrow:
+      "02 / BOUTIQUE DIGITALE",
+
+    storeTitle:
+      "Boutique <em>PSD.</em>",
+
+    freeEyebrow:
+      "03 / RESSOURCES GRATUITES",
+
+    freeTitle:
+      "Assets <em>gratuits.</em>",
+
+    assetPNG:
+      "PNG",
+
+    assetBackground:
+      "Arrière-plans",
+
+    assetTextures:
+      "Textures",
+
+    assetMockups:
+      "Mockups",
+
+    assetIntro:
+      "Choisissez une catégorie pour voir les fichiers et télécharger ce dont vous avez besoin.",
+
+    servicesEyebrow:
+      "04 / SERVICES",
+
+    servicesTitle:
+      "Services pour <em>entreprises.</em>",
+
+    service1:
+      "01 — Logo & Branding",
+
+    service2:
+      "02 — Flyer & Réseaux sociaux",
+
+    service3:
+      "03 — Packaging & Étiquettes",
+
+    service4:
+      "04 — Motion Design",
+
+    portfolioFlyer:
+      "Flyer événement",
+
+    portfolioCover:
+      "Cover Design",
+
+    portfolioLabel:
+      "Étiquette produit",
+
+    portfolioBrand:
+      "Identité de marque",
+
+    storeNote:
+      "— Structure checkout prête pour la connexion backend.",
+
+    footer:
+      "Design graphique · PSD · Assets digitaux",
+
+    whatsapp:
+      "WhatsApp",
+
+    downloadFree:
+      "Télécharger gratuitement",
+
+    buyNow:
+      "Acheter maintenant →",
+
+    paymentNotConnected:
+      "Le système de paiement n'est pas encore connecté.",
+
+    paymentError:
+      "Un problème est survenu lors de la connexion au système de paiement.",
+
+    checkoutReady:
+      "Le checkout est prêt.",
+
+    addDownload:
+      "Ajoutez le chemin du fichier dans script.js.",
+
+    paid:
+      "PAYANT",
+
+    size:
+      "Taille",
+
+    downloads:
+      "Téléchargements"
+
+  },
+
+  es: {
+
+    navWork:
+      "Mis trabajos",
+
+    navStore:
+      "Tienda PSD",
+
+    navFree:
+      "Assets gratis",
+
+    navServices:
+      "Servicios",
+
+    heroEyebrow:
+      "ESTUDIO DE DISEÑO CREATIVO",
+
+    heroTitle:
+      "Diseño que<br><em>te hace memorable.</em>",
+
+    heroText:
+      "Diseño gráfico premium, archivos PSD editables y recursos digitales para marcas y negocios que quieren destacar.",
+
+    heroPrimary:
+      "Ver mis trabajos ↗",
+
+    heroSecondary:
+      "Comprar PSD →",
+
+    workEyebrow:
+      "01 / PORTFOLIO",
+
+    workTitle:
+      "Mis <em>trabajos.</em>",
+
+    filterAll:
+      "Todo",
+
+    filterFlyers:
+      "Flyers",
+
+    filterCovers:
+      "Covers",
+
+    filterLabels:
+      "Etiquetas",
+
+    filterBranding:
+      "Branding",
+
+    storeEyebrow:
+      "02 / TIENDA DIGITAL",
+
+    storeTitle:
+      "Tienda <em>PSD.</em>",
+
+    freeEyebrow:
+      "03 / RECURSOS GRATIS",
+
+    freeTitle:
+      "Assets <em>gratis.</em>",
+
+    assetPNG:
+      "PNG",
+
+    assetBackground:
+      "Fondos",
+
+    assetTextures:
+      "Texturas",
+
+    assetMockups:
+      "Mockups",
+
+    assetIntro:
+      "Elige una categoría para ver los archivos y descargar lo que necesitas.",
+
+    servicesEyebrow:
+      "04 / SERVICIOS",
+
+    servicesTitle:
+      "Servicios para <em>negocios.</em>",
+
+    service1:
+      "01 — Logo & Branding",
+
+    service2:
+      "02 — Flyer & Redes Sociales",
+
+    service3:
+      "03 — Packaging & Etiquetas",
+
+    service4:
+      "04 — Motion Design",
+
+    portfolioFlyer:
+      "Flyer de evento",
+
+    portfolioCover:
+      "Diseño de Cover",
+
+    portfolioLabel:
+      "Etiqueta de producto",
+
+    portfolioBrand:
+      "Identidad de marca",
+
+    storeNote:
+      "— Estructura de checkout lista para conexión backend.",
+
+    footer:
+      "Diseño gráfico · PSD · Assets digitales",
+
+    whatsapp:
+      "WhatsApp",
+
+    downloadFree:
+      "Descargar gratis",
+
+    buyNow:
+      "Comprar ahora →",
+
+    paymentNotConnected:
+      "El sistema de pago aún no está conectado.",
+
+    paymentError:
+      "Se produjo un problema al conectar con el sistema de pago.",
+
+    checkoutReady:
+      "El checkout está listo.",
+
+    addDownload:
+      "Añade la ruta del archivo en script.js.",
+
+    paid:
+      "PAGO",
+
+    size:
+      "Tamaño",
+
+    downloads:
+      "Descargas"
 
   }
 
+};
 
-  dots.forEach(
-    (dot, index) => {
+/* =======================================================
+CURRENT LANGUAGE
+======================================================= */
 
-      dot.addEventListener(
-        "click",
-        () => {
+let currentLanguage =
+  localStorage.getItem(
+    "wiseLanguage"
+  ) || "ht";
 
-          showSlide(index);
+/* =======================================================
+LANGUAGE FUNCTION
+======================================================= */
 
-          startSlideshow();
+function setLanguage(language) {
 
-        }
+  const dictionary =
+    translations[language] ||
+    translations.ht;
+
+  currentLanguage =
+    translations[language]
+      ? language
+      : "ht";
+
+  document.documentElement.lang =
+    currentLanguage;
+
+  document
+    .querySelectorAll("[data-i18n]")
+    .forEach(element => {
+
+      const key =
+        element.dataset.i18n;
+
+      if (
+        Object.prototype.hasOwnProperty.call(
+          dictionary,
+          key
+        )
+      ) {
+
+        element.textContent =
+          dictionary[key];
+
+      }
+
+    });
+
+  document
+    .querySelectorAll("[data-i18n-html]")
+    .forEach(element => {
+
+      const key =
+        element.dataset.i18nHtml;
+
+      if (
+        Object.prototype.hasOwnProperty.call(
+          dictionary,
+          key
+        )
+      ) {
+
+        element.innerHTML =
+          dictionary[key];
+
+      }
+
+    });
+
+  const selectedLanguage =
+    document.querySelector(
+      `[data-lang="${currentLanguage}"]`
+    );
+
+  if (
+    selectedLanguage &&
+    languageButton
+  ) {
+
+    languageButton.innerHTML =
+      selectedLanguage.innerHTML +
+      ' <span aria-hidden="true">▾</span>';
+
+  }
+
+  localStorage.setItem(
+    "wiseLanguage",
+    currentLanguage
+  );
+
+  updateAllButtonLanguages();
+
+}
+
+/* =======================================================
+HERO SLIDESHOW
+======================================================= */
+
+const slides =
+  Array.from(
+    document.querySelectorAll(
+      ".hero-slideshow .slide"
+    )
+  );
+
+const dots =
+  Array.from(
+    document.querySelectorAll(
+      ".slide-dots .dot"
+    )
+  );
+
+let currentSlide = 0;
+let slideshowTimer = null;
+
+function showSlide(index) {
+
+  if (!slides.length) {
+    return;
+  }
+
+  currentSlide =
+    (index + slides.length) %
+    slides.length;
+
+  slides.forEach(
+    (slide, i) => {
+
+      slide.classList.toggle(
+        "active",
+        i === currentSlide
       );
 
     }
   );
 
+  dots.forEach(
+    (dot, i) => {
 
-  showSlide(0);
+      dot.classList.toggle(
+        "active",
+        i === currentSlide
+      );
 
-  startSlideshow();
+    }
+  );
 
+}
 
-  /* =======================================================
-  PORTFOLIO FILTER
-  ======================================================= */
+function startSlideshow() {
 
-  const portfolioFilters =
-    document.querySelectorAll(
-      ".filters [data-filter]"
+  if (
+    slides.length <= 1
+  ) {
+
+    return;
+
+  }
+
+  clearInterval(
+    slideshowTimer
+  );
+
+  slideshowTimer =
+    setInterval(
+      () => {
+
+        showSlide(
+          currentSlide + 1
+        );
+
+      },
+      5000
     );
 
-  const portfolioCards =
-    document.querySelectorAll(
-      ".portfolio-grid .portfolio-card"
+}
+
+dots.forEach(
+  (dot, index) => {
+
+    dot.addEventListener(
+      "click",
+      () => {
+
+        showSlide(index);
+        startSlideshow();
+
+      }
     );
 
-  portfolioFilters.forEach(
-    button => {
+  }
+);
 
-      button.addEventListener(
-        "click",
-        () => {
+showSlide(0);
+startSlideshow();
 
-          const selectedFilter =
-            button.dataset.filter;
+/* =======================================================
+PORTFOLIO FILTER
+======================================================= */
 
-          portfolioFilters.forEach(
-            btn => {
+const portfolioFilters =
+  document.querySelectorAll(
+    ".filters [data-filter]"
+  );
 
-              btn.classList.remove(
-                "active"
+const portfolioCards =
+  document.querySelectorAll(
+    ".portfolio-grid .portfolio-card"
+  );
+
+portfolioFilters.forEach(
+  button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const selectedFilter =
+          button.dataset.filter;
+
+        portfolioFilters.forEach(
+          btn => {
+
+            btn.classList.remove(
+              "active"
+            );
+
+          }
+        );
+
+        button.classList.add(
+          "active"
+        );
+
+        portfolioCards.forEach(
+          card => {
+
+            const category =
+              card.dataset.category;
+
+            if (
+              selectedFilter === "all" ||
+              category === selectedFilter
+            ) {
+
+              card.classList.remove(
+                "portfolio-hidden"
+              );
+
+            } else {
+
+              card.classList.add(
+                "portfolio-hidden"
               );
 
             }
-          );
 
-          button.classList.add(
-            "active"
-          );
+          }
+        );
 
-          portfolioCards.forEach(
-            card => {
+      }
+    );
 
-              const category =
-                card.dataset.category;
+  }
+);
 
-              if (
-                selectedFilter === "all" ||
-                category === selectedFilter
-              ) {
+/* =======================================================
+FREE PSD
+======================================================= */
 
-                card.classList.remove(
-                  "portfolio-hidden"
-                );
+const freePSD = [
 
-              } else {
+  {
+    id:
+      "psd-free-01",
 
-                card.classList.add(
-                  "portfolio-hidden"
-                );
+    name:
+      "PSD Gratis 01",
 
-              }
+    description:
+      "PSD gratis pou modifye.",
 
-            }
-          );
+    image:
+      "images/psd/free/psd01.jpg",
 
+    download:
+      "psd-free/psd01.psd"
+  },
+
+  {
+    id:
+      "psd-free-02",
+
+    name:
+      "PSD Gratis 02",
+
+    description:
+      "PSD gratis pou modifye.",
+
+    image:
+      "images/psd/free/psd02.jpg",
+
+    download:
+      "psd-free/psd02.psd"
+  }
+
+];
+
+/* =======================================================
+PAID PSD
+======================================================= */
+
+const paidPSD = [
+
+  {
+    id:
+      "psd-paid-01",
+
+    name:
+      "Premium PSD 01",
+
+    description:
+      "PSD premium editab.",
+
+    image:
+      "images/psd/paid/psd01.jpg",
+
+    price:
+      5
+  },
+
+  {
+    id:
+      "psd-paid-02",
+
+    name:
+      "Premium PSD 02",
+
+    description:
+      "PSD premium editab.",
+
+    image:
+      "images/psd/paid/psd02.jpg",
+
+    price:
+      7
+  }
+
+];
+
+/* =======================================================
+FREE ASSETS
+======================================================= */
+
+const freeAssets = [
+
+  {
+    id:
+      "free-png-star-2",
+
+    type:
+      "png",
+
+    name:
+      "STAR 2",
+
+    description:
+      "PNG gratis",
+
+    image:
+      "images/asset-gratis/png/STAR%202.png",
+
+    download:
+      "images/asset-gratis/png/STAR%202.png"
+  },
+
+  {
+    id:
+      "free-background-01",
+
+    type:
+      "background",
+
+    name:
+      "Background 01",
+
+    description:
+      "Background gratis",
+
+    image:
+      "images/assets/free/background/background01.jpg",
+
+    download:
+      "assets/free/background/background01.jpg"
+  },
+
+  {
+    id:
+      "free-texture-01",
+
+    type:
+      "texture",
+
+    name:
+      "Texture 01",
+
+    description:
+      "Texture gratis",
+
+    image:
+      "images/assets/free/texture/texture01.jpg",
+
+    download:
+      "assets/free/texture/texture01.jpg"
+  },
+
+  {
+    id:
+      "free-mockup-01",
+
+    type:
+      "mockup",
+
+    name:
+      "Mockup 01",
+
+    description:
+      "Mockup gratis",
+
+    image:
+      "images/assets/free/mockup/mockup01.jpg",
+
+    download:
+      "assets/free/mockup/mockup01.jpg"
+  }
+
+];
+
+/* =======================================================
+PAID ASSETS
+======================================================= */
+
+const paidAssets = [
+
+  {
+    id:
+      "paid-png-01",
+
+    type:
+      "png",
+
+    name:
+      "Premium PNG 01",
+
+    description:
+      "PNG premium",
+
+    image:
+      "images/assets/paid/png/png01.png",
+
+    price:
+      5
+  },
+
+  {
+    id:
+      "paid-background-01",
+
+    type:
+      "background",
+
+    name:
+      "Premium Background 01",
+
+    description:
+      "Background premium",
+
+    image:
+      "images/assets/paid/background/background01.jpg",
+
+    price:
+      5
+  },
+
+  {
+    id:
+      "paid-texture-01",
+
+    type:
+      "texture",
+
+    name:
+      "Premium Texture 01",
+
+    description:
+      "Texture premium",
+
+    image:
+      "images/assets/paid/texture/texture01.jpg",
+
+    price:
+      5
+  },
+
+  {
+    id:
+      "paid-mockup-01",
+
+    type:
+      "mockup",
+
+    name:
+      "Premium Mockup 01",
+
+    description:
+      "Mockup premium",
+
+    image:
+      "images/assets/paid/mockup/mockup01.jpg",
+
+    price:
+      5
+  }
+
+];
+
+/* =======================================================
+GRIDS
+======================================================= */
+
+const freePSDGrid =
+  document.getElementById(
+    "free-psd-grid"
+  );
+
+const paidPSDGrid =
+  document.getElementById(
+    "paid-psd-grid"
+  );
+
+const freeAssetGrid =
+  document.getElementById(
+    "free-assets-grid"
+  );
+
+const paidAssetGrid =
+  document.getElementById(
+    "paid-assets-grid"
+  );
+
+const oldAssetGrid =
+  document.getElementById(
+    "asset-grid"
+  );
+
+/* =======================================================
+CURRENT ASSET TYPES
+======================================================= */
+
+let currentFreeAssetType =
+  "png";
+
+let currentPaidAssetType =
+  "png";
+
+/* =======================================================
+ASSET TYPE NAME
+======================================================= */
+
+function assetTypeName(type) {
+
+  const dictionary =
+    translations[currentLanguage] ||
+    translations.ht;
+
+  const names = {
+
+    png:
+      dictionary.assetPNG ||
+      "PNG",
+
+    background:
+      dictionary.assetBackground ||
+      "BACKGROUND",
+
+    texture:
+      dictionary.assetTextures ||
+      "TEXTURES",
+
+    mockup:
+      dictionary.assetMockups ||
+      "MOCKUP"
+
+  };
+
+  return (
+    names[type] ||
+    type
+  );
+
+}
+
+/* =======================================================
+SIZE + DOWNLOAD COUNTER
+======================================================= */
+
+const DOWNLOAD_COUNT_PREFIX =
+  "wiseAssetDownloads:";
+
+function getAssetKey(item) {
+
+  return String(
+    item.id ||
+    item.download ||
+    item.image ||
+    item.name ||
+    "asset"
+  ).trim();
+
+}
+
+function getStoredDownloadCount(item) {
+
+  const key =
+    DOWNLOAD_COUNT_PREFIX +
+    getAssetKey(item);
+
+  try {
+
+    const saved =
+      localStorage.getItem(key);
+
+    if (
+      saved !== null &&
+      !Number.isNaN(
+        Number(saved)
+      )
+    ) {
+
+      return Math.max(
+        0,
+        Number(saved)
+      );
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      "WISE DOWNLOAD COUNT READ ERROR:",
+      error
+    );
+
+  }
+
+  return Math.max(
+    0,
+    Number(item.downloads || 0)
+  );
+
+}
+
+function saveDownloadCount(
+  item,
+  count
+) {
+
+  const key =
+    DOWNLOAD_COUNT_PREFIX +
+    getAssetKey(item);
+
+  try {
+
+    localStorage.setItem(
+      key,
+      String(count)
+    );
+
+  } catch (error) {
+
+    console.warn(
+      "WISE DOWNLOAD COUNT SAVE ERROR:",
+      error
+    );
+
+  }
+
+}
+
+function incrementDownloadCount(
+  item
+) {
+
+  const next =
+    getStoredDownloadCount(item) + 1;
+
+  saveDownloadCount(
+    item,
+    next
+  );
+
+  return next;
+
+}
+
+function formatFileSize(bytes) {
+
+  const value =
+    Number(bytes);
+
+  if (
+    !Number.isFinite(value) ||
+    value <= 0
+  ) {
+
+    return "—";
+
+  }
+
+  const units = [
+    "B",
+    "KB",
+    "MB",
+    "GB",
+    "TB"
+  ];
+
+  const index =
+    Math.min(
+      Math.floor(
+        Math.log(value) /
+        Math.log(1024)
+      ),
+      units.length - 1
+    );
+
+  const size =
+    value /
+    Math.pow(
+      1024,
+      index
+    );
+
+  return `${
+    size >= 10 || index === 0
+      ? size.toFixed(0)
+      : size.toFixed(1)
+  } ${units[index]}`;
+
+}
+
+async function detectFileSize(
+  url
+) {
+
+  if (
+    !url ||
+    url === "#"
+  ) {
+
+    return null;
+
+  }
+
+  try {
+
+    const response =
+      await fetch(
+        url,
+        {
+          method:
+            "HEAD",
+
+          cache:
+            "no-store"
         }
+      );
+
+    const length =
+      response.headers.get(
+        "content-length"
+      );
+
+    if (
+      response.ok &&
+      length
+    ) {
+
+      return Number(
+        length
+      );
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      "WISE FILE SIZE ERROR:",
+      error
+    );
+
+  }
+
+  return null;
+
+}
+
+function injectAssetMetaStyle() {
+
+  if (
+    document.getElementById(
+      "wise-asset-meta-style"
+    )
+  ) {
+
+    return;
+
+  }
+
+  const style =
+    document.createElement(
+      "style"
+    );
+
+  style.id =
+    "wise-asset-meta-style";
+
+  style.textContent = `
+
+    .wise-asset-meta {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 10px;
+
+      margin: 8px 0 0;
+
+      padding: 0 2px;
+
+      color:
+        var(--muted, #aaa49a);
+
+      font-size: 10px;
+
+      line-height: 1.4;
+
+      letter-spacing: .2px;
+
+    }
+
+    .wise-asset-meta span {
+
+      white-space: nowrap;
+
+    }
+
+    .wise-asset-meta strong {
+
+      color:
+        var(--ink, #f5f0e7);
+
+      font-weight: 700;
+
+    }
+
+    .wise-asset-meta .meta-size {
+
+      text-align: left;
+
+    }
+
+    .wise-asset-meta .meta-downloads {
+
+      text-align: right;
+
+    }
+
+    @media (max-width: 600px) {
+
+      .wise-asset-meta {
+
+        font-size: 9px;
+
+        gap: 6px;
+
+      }
+
+    }
+
+  `;
+
+  document.head.appendChild(
+    style
+  );
+
+}
+
+function updateAssetMeta(
+  card,
+  item
+) {
+
+  if (
+    !card ||
+    !item
+  ) {
+
+    return;
+
+  }
+
+  const sizeElement =
+    card.querySelector(
+      ".meta-size"
+    );
+
+  const countElement =
+    card.querySelector(
+      ".meta-downloads"
+    );
+
+  const dictionary =
+    translations[
+      currentLanguage
+    ] ||
+    translations.ht;
+
+  if (sizeElement) {
+
+    sizeElement.innerHTML =
+      `${dictionary.size}: <strong>${
+        item.displaySize ||
+        item.size ||
+        "—"
+      }</strong>`;
+
+  }
+
+  if (countElement) {
+
+    countElement.innerHTML =
+      `${dictionary.downloads}: <strong>${
+        getStoredDownloadCount(item)
+      }</strong>`;
+
+  }
+
+}
+
+async function loadAssetSize(
+  card,
+  item
+) {
+
+  if (
+    !card ||
+    !item ||
+    !item.download
+  ) {
+
+    return;
+
+  }
+
+  const bytes =
+    await detectFileSize(
+      item.download
+    );
+
+  if (bytes) {
+
+    item.displaySize =
+      formatFileSize(bytes);
+
+    updateAssetMeta(
+      card,
+      item
+    );
+
+  }
+
+}
+
+injectAssetMetaStyle();
+
+/* =======================================================
+WORKER ERROR MESSAGE
+======================================================= */
+
+async function getWorkerResponse(
+  response
+) {
+
+  const text =
+    await response.text();
+
+  try {
+
+    return JSON.parse(
+      text
+    );
+
+  } catch {
+
+    return {
+
+      success:
+        false,
+
+      error:
+        text ||
+        "Invalid server response."
+
+    };
+
+  }
+
+}
+
+/* =======================================================
+PAID CHECKOUT — FINAL
+======================================================= */
+
+async function startCheckout(
+  item,
+  type
+) {
+
+  const dictionary =
+    translations[
+      currentLanguage
+    ] ||
+    translations.ht;
+
+  if (!item) {
+
+    alert(
+      dictionary.paymentError
+    );
+
+    return null;
+
+  }
+
+  const productId =
+    item.id ||
+    `${type}-${item.name}`
+      .toLowerCase()
+      .replace(
+        /[^a-z0-9]+/g,
+        "-"
+      )
+      .replace(
+        /^-+|-+$/g,
+        ""
+      );
+
+  const paymentMethod =
+    "moncash";
+
+  const buttons =
+    document.querySelectorAll(
+      '[data-asset-button="buy"]'
+    );
+
+  buttons.forEach(
+    button => {
+
+      button.disabled =
+        true;
+
+      button.setAttribute(
+        "aria-busy",
+        "true"
       );
 
     }
   );
 
+  try {
 
-  /* =======================================================
-  FREE PSD
-  ======================================================= */
+    const response =
+      await fetch(
+        API.checkout,
+        {
+          method:
+            "POST",
 
-  const freePSD = [
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
 
-    {
-      id:
-        "psd-free-01",
+          body:
+            JSON.stringify({
 
-      name:
-        "PSD Gratis 01",
+              productId:
+                productId,
 
-      description:
-        "PSD gratis pou modifye.",
+              productName:
+                item.name,
 
-      image:
-        "images/psd/free/psd01.jpg",
+              price:
+                Number(item.price),
 
-      download:
-        "psd-free/psd01.psd"
-    },
+              paymentMethod:
+                paymentMethod
 
-    {
-      id:
-        "psd-free-02",
+            })
 
-      name:
-        "PSD Gratis 02",
-
-      description:
-        "PSD gratis pou modifye.",
-
-      image:
-        "images/psd/free/psd02.jpg",
-
-      download:
-        "psd-free/psd02.psd"
-    }
-
-  ];
-
-
-  /* =======================================================
-  PAID PSD
-  ======================================================= */
-
-  const paidPSD = [
-
-    {
-      id:
-        "psd-paid-01",
-
-      name:
-        "Premium PSD 01",
-
-      description:
-        "PSD premium editab.",
-
-      image:
-        "images/psd/paid/psd01.jpg",
-
-      price:
-        5
-    },
-
-    {
-      id:
-        "psd-paid-02",
-
-      name:
-        "Premium PSD 02",
-
-      description:
-        "PSD premium editab.",
-
-      image:
-        "images/psd/paid/psd02.jpg",
-
-      price:
-        7
-    }
-
-  ];
-
-
-  /* =======================================================
-  FREE ASSETS
-  ======================================================= */
-
-  const freeAssets = [
-
-    {
-      id:
-        "free-png-star-2",
-
-      type:
-        "png",
-
-      name:
-        "STAR 2",
-
-      description:
-        "PNG gratis",
-
-      image:
-        "images/asset-gratis/png/STAR%202.png",
-
-      download:
-        "images/asset-gratis/png/STAR%202.png"
-    },
-
-    {
-      id:
-        "free-background-01",
-
-      type:
-        "background",
-
-      name:
-        "Background 01",
-
-      description:
-        "Background gratis",
-
-      image:
-        "images/assets/free/background/background01.jpg",
-
-      download:
-        "assets/free/background/background01.jpg"
-    },
-
-    {
-      id:
-        "free-texture-01",
-
-      type:
-        "texture",
-
-      name:
-        "Texture 01",
-
-      description:
-        "Texture gratis",
-
-      image:
-        "images/assets/free/texture/texture01.jpg",
-
-      download:
-        "assets/free/texture/texture01.jpg"
-    },
-
-    {
-      id:
-        "free-mockup-01",
-
-      type:
-        "mockup",
-
-      name:
-        "Mockup 01",
-
-      description:
-        "Mockup gratis",
-
-      image:
-        "images/assets/free/mockup/mockup01.jpg",
-
-      download:
-        "assets/free/mockup/mockup01.jpg"
-    }
-
-  ];
-
-
-  /* =======================================================
-  PAID ASSETS
-  ======================================================= */
-
-  const paidAssets = [
-
-    {
-      id:
-        "paid-png-01",
-
-      type:
-        "png",
-
-      name:
-        "Premium PNG 01",
-
-      description:
-        "PNG premium",
-
-      image:
-        "images/assets/paid/png/png01.png",
-
-      price:
-        5
-    },
-
-    {
-      id:
-        "paid-background-01",
-
-      type:
-        "background",
-
-      name:
-        "Premium Background 01",
-
-      description:
-        "Background premium",
-
-      image:
-        "images/assets/paid/background/background01.jpg",
-
-      price:
-        5
-    },
-
-    {
-      id:
-        "paid-texture-01",
-
-      type:
-        "texture",
-
-      name:
-        "Premium Texture 01",
-
-      description:
-        "Texture premium",
-
-      image:
-        "images/assets/paid/texture/texture01.jpg",
-
-      price:
-        5
-    },
-
-    {
-      id:
-        "paid-mockup-01",
-
-      type:
-        "mockup",
-
-      name:
-        "Premium Mockup 01",
-
-      description:
-        "Mockup premium",
-
-      image:
-        "images/assets/paid/mockup/mockup01.jpg",
-
-      price:
-        5
-    }
-
-  ];
-
-
-  /* =======================================================
-  GRIDS
-  ======================================================= */
-
-  const freePSDGrid =
-    document.getElementById(
-      "free-psd-grid"
-    );
-
-  const paidPSDGrid =
-    document.getElementById(
-      "paid-psd-grid"
-    );
-
-  const freeAssetGrid =
-    document.getElementById(
-      "free-assets-grid"
-    );
-
-  const paidAssetGrid =
-    document.getElementById(
-      "paid-assets-grid"
-    );
-
-  const oldAssetGrid =
-    document.getElementById(
-      "asset-grid"
-    );
-
-
-  /* =======================================================
-  CURRENT ASSET TYPES
-  ======================================================= */
-
-  let currentFreeAssetType =
-    "png";
-
-  let currentPaidAssetType =
-    "png";
-
-
-  /* =======================================================
-  ASSET TYPE NAME
-  ======================================================= */
-
-  function assetTypeName(type) {
-
-    const dictionary =
-      translations[currentLanguage] ||
-      translations.ht;
-
-    const names = {
-
-      png:
-        dictionary.assetPNG ||
-        "PNG",
-
-      background:
-        dictionary.assetBackground ||
-        "BACKGROUND",
-
-      texture:
-        dictionary.assetTextures ||
-        "TEXTURES",
-
-      mockup:
-        dictionary.assetMockups ||
-        "MOCKUP"
-
-    };
-
-    return (
-      names[type] ||
-      type
-    );
-
-  }
-
-
-  /* =======================================================
-  WORKER ERROR MESSAGE
-  ======================================================= */
-
-  async function getWorkerResponse(
-    response
-  ) {
-
-    const text =
-      await response.text();
-
-    try {
-
-      return JSON.parse(
-        text
+        }
       );
 
-    } catch {
+    const data =
+      await getWorkerResponse(
+        response
+      );
 
-      return {
+    console.log(
+      "WISE CHECKOUT RESPONSE:",
+      data
+    );
 
-        success:
-          false,
+    if (
+      !response.ok ||
+      !data.success
+    ) {
 
-        error:
-          text ||
-          "Invalid server response."
-
-      };
-
-    }
-
-  }
-
-
-  /* =======================================================
-  PAID CHECKOUT — FINAL
-  ======================================================= */
-
-  async function startCheckout(
-    item,
-    type
-  ) {
-
-    const dictionary =
-      translations[currentLanguage] ||
-      translations.ht;
-
-    if (!item) {
-
-      alert(
+      throw new Error(
+        data.message ||
+        data.error ||
         dictionary.paymentError
       );
 
-      return null;
+    }
+
+    const redirectUrl =
+      data.redirectUrl ||
+      data.payment?.redirectUrl ||
+      data.payment?.redirect_url;
+
+    if (redirectUrl) {
+
+      window.location.href =
+        redirectUrl;
+
+      return data;
 
     }
 
-    const productId =
-      item.id ||
-      `${type}-${item.name}`
-        .toLowerCase()
-        .replace(
-          /[^a-z0-9]+/g,
-          "-"
-        )
-        .replace(
-          /^-+|-+$/g,
-          ""
-        );
+    if (
+      data.payment &&
+      data.payment.status ===
+        "credentials_configured"
+    ) {
 
-    const paymentMethod =
-      "moncash";
-
-    const buttons =
-      document.querySelectorAll(
-        '[data-asset-button="buy"]'
+      alert(
+        `${dictionary.checkoutReady}\n\n` +
+        `Order: ${
+          data.orderId ||
+          "N/A"
+        }`
       );
+
+      return data;
+
+    }
+
+    throw new Error(
+      data.message ||
+      dictionary.paymentNotConnected
+    );
+
+  } catch (error) {
+
+    console.error(
+      "WISE CHECKOUT ERROR:",
+      error
+    );
+
+    alert(
+      error?.message ||
+      dictionary.paymentError
+    );
+
+    return null;
+
+  } finally {
 
     buttons.forEach(
       button => {
 
         button.disabled =
-          true;
+          false;
 
-        button.setAttribute(
-          "aria-busy",
-          "true"
+        button.removeAttribute(
+          "aria-busy"
         );
 
       }
     );
 
-    try {
-
-      const response =
-        await fetch(
-          API.checkout,
-          {
-
-            method:
-              "POST",
-
-            headers: {
-
-              "Content-Type":
-                "application/json"
-
-            },
-
-            body:
-              JSON.stringify({
-
-                productId:
-                  productId,
-
-                productName:
-                  item.name,
-
-                price:
-                  Number(item.price),
-
-                paymentMethod:
-                  paymentMethod
-
-              })
-
-          }
-        );
-
-      const data =
-        await getWorkerResponse(
-          response
-        );
-
-      console.log(
-        "WISE CHECKOUT RESPONSE:",
-        data
-      );
-
-      if (
-        !response.ok ||
-        !data.success
-      ) {
-
-        throw new Error(
-          data.message ||
-          data.error ||
-          dictionary.paymentError
-        );
-
-      }
-
-      const redirectUrl =
-        data.redirectUrl ||
-        data.payment?.redirectUrl ||
-        data.payment?.redirect_url;
-
-      if (redirectUrl) {
-
-        window.location.href =
-          redirectUrl;
-
-        return data;
-
-      }
-
-      if (
-        data.payment &&
-        data.payment.status ===
-          "credentials_configured"
-      ) {
-
-        alert(
-          `${dictionary.checkoutReady}\n\n` +
-          `Order: ${data.orderId || "N/A"}`
-        );
-
-        return data;
-
-      }
-
-      throw new Error(
-        data.message ||
-        dictionary.paymentNotConnected
-      );
-
-    } catch (error) {
-
-      console.error(
-        "WISE CHECKOUT ERROR:",
-        error
-      );
-
-      alert(
-        error?.message ||
-        dictionary.paymentError
-      );
-
-      return null;
-
-    } finally {
-
-      buttons.forEach(
-        button => {
-
-          button.disabled =
-            false;
-
-          button.removeAttribute(
-            "aria-busy"
-          );
-
-        }
-      );
-
-    }
-
   }
 
+}
 
-  /* =======================================================
-  DOWNLOAD INFORMATION
-  SIZE + COUNTER
-  ======================================================= */
+/* =======================================================
+CREATE PSD CARD
+======================================================= */
 
-  const DOWNLOAD_COUNT_PREFIX =
-    "wise_download_count_";
+function createPSDCard(
+  item,
+  paid = false
+) {
 
-
-  function getDownloadStorageKey(
-    item
-  ) {
-
-    return (
-      DOWNLOAD_COUNT_PREFIX +
-      (
-        item?.id ||
-        item?.download ||
-        item?.name ||
-        "unknown"
-      )
+  const card =
+    document.createElement(
+      "article"
     );
 
-  }
+  card.className =
+    "asset-card psd-card";
 
-
-  function getDownloadCount(
-    item
-  ) {
-
-    const key =
-      getDownloadStorageKey(
-        item
-      );
-
-    const count =
-      Number(
-        localStorage.getItem(
-          key
-        )
-      );
-
-    return Number.isFinite(count)
-      ? count
-      : 0;
-
-  }
-
-
-  function increaseDownloadCount(
-    item
-  ) {
-
-    const key =
-      getDownloadStorageKey(
-        item
-      );
-
-    const current =
-      getDownloadCount(
-        item
-      );
-
-    const next =
-      current + 1;
-
-    localStorage.setItem(
-      key,
-      String(next)
+  const image =
+    document.createElement(
+      "img"
     );
 
-    return next;
+  image.src =
+    item.image || "";
 
-  }
+  image.alt =
+    item.name ||
+    "PSD";
 
+  image.loading =
+    "lazy";
 
-  function formatFileSize(
-    bytes
-  ) {
+  image.className =
+    "asset-image";
 
-    if (
-      !Number.isFinite(bytes) ||
-      bytes <= 0
-    ) {
-
-      return "—";
-
-    }
-
-    const units = [
-      "B",
-      "KB",
-      "MB",
-      "GB"
-    ];
-
-    let size =
-      bytes;
-
-    let unitIndex =
-      0;
-
-    while (
-      size >= 1024 &&
-      unitIndex <
-        units.length - 1
-    ) {
-
-      size /=
-        1024;
-
-      unitIndex++;
-
-    }
-
-    if (
-      unitIndex === 0
-    ) {
-
-      return (
-        `${Math.round(size)} ${units[unitIndex]}`
-      );
-
-    }
-
-    return (
-      `${size.toFixed(2)} ${units[unitIndex]}`
+  const title =
+    document.createElement(
+      "h3"
     );
 
-  }
+  title.textContent =
+    item.name ||
+    "PSD";
 
-
-  async function getFileSize(
-    fileUrl
-  ) {
-
-    if (!fileUrl) {
-      return null;
-    }
-
-    try {
-
-      const response =
-        await fetch(
-          fileUrl,
-          {
-            method:
-              "HEAD",
-            cache:
-              "no-store"
-          }
-        );
-
-      if (!response.ok) {
-        return null;
-      }
-
-      const contentLength =
-        response.headers.get(
-          "content-length"
-        );
-
-      if (!contentLength) {
-        return null;
-      }
-
-      const bytes =
-        Number(
-          contentLength
-        );
-
-      if (
-        !Number.isFinite(bytes)
-      ) {
-
-        return null;
-
-      }
-
-      return bytes;
-
-    } catch (error) {
-
-      console.warn(
-        "Unable to detect file size:",
-        error
-      );
-
-      return null;
-
-    }
-
-  }
-
-
-  /* =======================================================
-  DOWNLOAD MODAL
-  ======================================================= */
-
-  const downloadModal =
-    document.getElementById(
-      "download-modal"
+  const description =
+    document.createElement(
+      "p"
     );
 
-  const modalClose =
-    document.getElementById(
-      "modal-close"
-    );
+  description.textContent =
+    item.description ||
+    "PSD";
 
+  card.appendChild(
+    image
+  );
 
-  /*
-   * These elements are created by JavaScript.
-   * Therefore you DO NOT need to modify your HTML.
-   */
+  card.appendChild(
+    title
+  );
 
-  let downloadInfoBox =
-    null;
+  card.appendChild(
+    description
+  );
 
-  let downloadInfoName =
-    null;
+  /* ===================================================
+     PAID PSD
+  =================================================== */
 
-  let downloadInfoSize =
-    null;
+  if (paid) {
 
-  let downloadInfoCount =
-    null;
-
-
-  function createDownloadInfoBox() {
-
-    if (!downloadModal) {
-      return;
-    }
-
-    if (downloadInfoBox) {
-      return;
-    }
-
-    downloadInfoBox =
+    const price =
       document.createElement(
-        "div"
+        "strong"
       );
 
-    downloadInfoBox.className =
-      "download-file-info";
+    price.className =
+      "asset-price";
 
-    downloadInfoBox.style.display =
-      "flex";
+    price.textContent =
+      item.price ||
+      translations[
+        currentLanguage
+      ].paid;
 
-    downloadInfoBox.style.flexDirection =
-      "column";
+    card.appendChild(
+      price
+    );
 
-    downloadInfoBox.style.alignItems =
-      "center";
-
-    downloadInfoBox.style.justifyContent =
-      "center";
-
-    downloadInfoBox.style.gap =
-      "5px";
-
-    downloadInfoBox.style.marginTop =
-      "12px";
-
-    downloadInfoBox.style.textAlign =
-      "center";
-
-    downloadInfoBox.style.fontSize =
-      "13px";
-
-    downloadInfoBox.style.lineHeight =
-      "1.4";
-
-    downloadInfoBox.style.opacity =
-      "0.8";
-
-    downloadInfoName =
+    const buy =
       document.createElement(
-        "div"
+        "button"
       );
 
-    downloadInfoName.className =
-      "download-file-name";
+    buy.type =
+      "button";
 
-    downloadInfoName.style.fontWeight =
-      "600";
+    buy.className =
+      "buy";
 
-    downloadInfoName.style.opacity =
-      "1";
+    buy.dataset.assetButton =
+      "buy";
 
-    downloadInfoSize =
-      document.createElement(
-        "div"
-      );
+    buy.textContent =
+      translations[
+        currentLanguage
+      ].buyNow;
 
-    downloadInfoSize.className =
-      "download-file-size";
-
-    downloadInfoCount =
-      document.createElement(
-        "div"
-      );
-
-    downloadInfoCount.className =
-      "download-file-count";
-
-    downloadInfoBox.appendChild(
-      downloadInfoName
-    );
-
-    downloadInfoBox.appendChild(
-      downloadInfoSize
-    );
-
-    downloadInfoBox.appendChild(
-      downloadInfoCount
-    );
-
-
-    /*
-     * We put the information directly
-     * under the download rectangle/content.
-     */
-
-    const modalContent =
-      downloadModal.querySelector(
-        ".download-modal-content, .modal-content, .download-box"
-      );
-
-    if (modalContent) {
-
-      modalContent.appendChild(
-        downloadInfoBox
-      );
-
-    } else {
-
-      downloadModal.appendChild(
-        downloadInfoBox
-      );
-
-    }
-
-  }
-
-
-  function updateDownloadModalLanguage() {
-
-    const dictionary =
-      translations[currentLanguage] ||
-      translations.ht;
-
-    if (!downloadInfoSize) {
-      return;
-    }
-
-    const item =
-      downloadModal?.__downloadItem;
-
-    if (!item) {
-      return;
-    }
-
-    const size =
-      downloadModal.__downloadSize;
-
-    const count =
-      getDownloadCount(
-        item
-      );
-
-    if (downloadInfoName) {
-
-      downloadInfoName.textContent =
-        item.name ||
-        "File";
-
-    }
-
-    downloadInfoSize.textContent =
-      `${dictionary.fileSize}: ` +
-      (
-        size !== null &&
-        size !== undefined
-          ? formatFileSize(size)
-          : dictionary.calculating
-      );
-
-    downloadInfoCount.textContent =
-      `${dictionary.downloads}: ${count}`;
-
-  }
-
-
-  async function showDownloadModal(
-    item = null
-  ) {
-
-    if (!downloadModal) {
-      return;
-    }
-
-    createDownloadInfoBox();
-
-    downloadModal.__downloadItem =
-      item;
-
-    downloadModal.__downloadSize =
-      null;
-
-    updateDownloadModalLanguage();
-
-    downloadModal.hidden =
-      false;
-
-    document.body.classList.add(
-      "lightbox-open"
-    );
-
-
-    /*
-     * Get the real file size.
-     */
-
-    if (
-      item &&
-      item.download
-    ) {
-
-      const size =
-        await getFileSize(
-          item.download
-        );
-
-      downloadModal.__downloadSize =
-        size;
-
-      updateDownloadModalLanguage();
-
-    }
-
-  }
-
-
-  function hideDownloadModal() {
-
-    if (!downloadModal) {
-      return;
-    }
-
-    downloadModal.hidden =
-      true;
-
-    downloadModal.__downloadItem =
-      null;
-
-    downloadModal.__downloadSize =
-      null;
-
-    document.body.classList.remove(
-      "lightbox-open"
-    );
-
-  }
-
-
-  if (modalClose) {
-
-    modalClose.addEventListener(
+    buy.addEventListener(
       "click",
-      hideDownloadModal
+      () => {
+
+        startCheckout(
+          item,
+          "psd"
+        );
+
+      }
     );
 
-  }
+    card.appendChild(
+      buy
+    );
 
+  } else {
 
-  if (downloadModal) {
+    /* =================================================
+       FREE PSD
+    ================================================= */
 
-    downloadModal.addEventListener(
+    const download =
+      document.createElement(
+        "button"
+      );
+
+    download.type =
+      "button";
+
+    download.className =
+      "download";
+
+    download.dataset.assetButton =
+      "download";
+
+    download.textContent =
+      translations[
+        currentLanguage
+      ].downloadFree;
+
+    download.addEventListener(
       "click",
-      event => {
+      () => {
 
         if (
-          event.target ===
-          downloadModal
+          item.download &&
+          item.download !== "#"
         ) {
 
-          hideDownloadModal();
+          const link =
+            document.createElement(
+              "a"
+            );
+
+          link.href =
+            item.download;
+
+          link.download =
+            "";
+
+          link.rel =
+            "noopener";
+
+          document.body.appendChild(
+            link
+          );
+
+          link.click();
+
+          link.remove();
+
+          showDownloadModal();
+
+        } else {
+
+          alert(
+            translations[
+              currentLanguage
+            ].addDownload
+          );
 
         }
 
       }
     );
 
-  }
-
-
-  /* =======================================================
-  CREATE PSD CARD
-  ======================================================= */
-
-  function createPSDCard(
-    item,
-    paid = false
-  ) {
-
-    const card =
-      document.createElement(
-        "article"
-      );
-
-    card.className =
-      "asset-card psd-card";
-
-
-    const image =
-      document.createElement(
-        "img"
-      );
-
-    image.src =
-      item.image || "";
-
-    image.alt =
-      item.name ||
-      "PSD";
-
-    image.loading =
-      "lazy";
-
-    image.className =
-      "asset-image";
-
     card.appendChild(
-      image
+      download
     );
-
-
-    const title =
-      document.createElement(
-        "h3"
-      );
-
-    title.textContent =
-      item.name ||
-      "PSD";
-
-    card.appendChild(
-      title
-    );
-
-
-    const description =
-      document.createElement(
-        "p"
-      );
-
-    description.textContent =
-      item.description ||
-      "PSD";
-
-    card.appendChild(
-      description
-    );
-
-
-    /* =====================================================
-    PAID PSD
-    ===================================================== */
-
-    if (paid) {
-
-      const price =
-        document.createElement(
-          "strong"
-        );
-
-      price.className =
-        "asset-price";
-
-      price.textContent =
-        item.price ||
-        translations[
-          currentLanguage
-        ].paid;
-
-      card.appendChild(
-        price
-      );
-
-
-      const buy =
-        document.createElement(
-          "button"
-        );
-
-      buy.type =
-        "button";
-
-      buy.className =
-        "buy";
-
-      buy.dataset.assetButton =
-        "buy";
-
-      buy.textContent =
-        translations[
-          currentLanguage
-        ].buyNow;
-
-      buy.addEventListener(
-        "click",
-        () => {
-
-          startCheckout(
-            item,
-            "psd"
-          );
-
-        }
-      );
-
-      card.appendChild(
-        buy
-      );
-
-    } else {
-
-      /* ===================================================
-      FREE PSD
-      =================================================== */
-
-      const download =
-        document.createElement(
-          "button"
-        );
-
-      download.type =
-        "button";
-
-      download.className =
-        "download";
-
-      download.dataset.assetButton =
-        "download";
-
-      download.textContent =
-        translations[
-          currentLanguage
-        ].downloadFree;
-
-      download.addEventListener(
-        "click",
-        async () => {
-
-          if (
-            item.download &&
-            item.download !== "#"
-          ) {
-
-            /*
-             * Increase counter BEFORE opening modal.
-             */
-
-            increaseDownloadCount(
-              item
-            );
-
-            /*
-             * Start browser download.
-             */
-
-            const link =
-              document.createElement(
-                "a"
-              );
-
-            link.href =
-              item.download;
-
-            link.download =
-              "";
-
-            link.rel =
-              "noopener";
-
-            document.body.appendChild(
-              link
-            );
-
-            link.click();
-
-            link.remove();
-
-
-            /*
-             * Show modal with
-             * size + download count.
-             */
-
-            await showDownloadModal(
-              item
-            );
-
-          } else {
-
-            alert(
-              translations[
-                currentLanguage
-              ].addDownload
-            );
-
-          }
-
-        }
-      );
-
-      card.appendChild(
-        download
-      );
-
-    }
-
-    return card;
 
   }
 
+  return card;
 
-  /* =======================================================
-  CREATE ASSET CARD
-  ======================================================= */
+}
 
-  function createAssetCard(
-    asset,
-    paid = false
-  ) {
+/* =======================================================
+CREATE ASSET CARD
+======================================================= */
 
-    const card =
-      document.createElement(
-        "article"
-      );
+function createAssetCard(
+  asset,
+  paid = false
+) {
 
-    card.className =
-      "asset-card";
-
-    card.dataset.assetType =
-      asset.type ||
-      "png";
-
-
-    const image =
-      document.createElement(
-        "img"
-      );
-
-    image.src =
-      asset.image || "";
-
-    image.alt =
-      asset.name ||
-      assetTypeName(
-        asset.type
-      );
-
-    image.loading =
-      "lazy";
-
-    image.className =
-      "asset-image";
-
-    card.appendChild(
-      image
+  const card =
+    document.createElement(
+      "article"
     );
 
+  card.className =
+    "asset-card";
 
-    const title =
-      document.createElement(
-        "h3"
-      );
+  card.dataset.assetType =
+    asset.type ||
+    "png";
 
-    title.textContent =
-      asset.name ||
-      "Digital Asset";
+  card.dataset.assetId =
+    getAssetKey(asset);
 
-    card.appendChild(
-      title
+  const image =
+    document.createElement(
+      "img"
     );
 
+  image.src =
+    asset.image || "";
 
-    const description =
-      document.createElement(
-        "p"
-      );
-
-    description.textContent =
-      asset.description ||
-      assetTypeName(
-        asset.type
-      );
-
-    card.appendChild(
-      description
+  image.alt =
+    asset.name ||
+    assetTypeName(
+      asset.type
     );
 
+  image.loading =
+    "lazy";
 
-    /* =====================================================
-    PAID ASSET
-    ===================================================== */
+  image.className =
+    "asset-image";
 
-    if (paid) {
+  const title =
+    document.createElement(
+      "h3"
+    );
 
-      const price =
-        document.createElement(
-          "strong"
-        );
+  title.textContent =
+    asset.name ||
+    "Digital Asset";
 
-      price.className =
-        "asset-price";
+  const description =
+    document.createElement(
+      "p"
+    );
 
-      price.textContent =
-        asset.price ||
-        translations[
-          currentLanguage
-        ].paid;
+  description.textContent =
+    asset.description ||
+    assetTypeName(
+      asset.type
+    );
 
-      card.appendChild(
-        price
+  card.appendChild(
+    image
+  );
+
+  card.appendChild(
+    title
+  );
+
+  card.appendChild(
+    description
+  );
+
+  /* ===================================================
+     PAID ASSET
+  =================================================== */
+
+  if (paid) {
+
+    const price =
+      document.createElement(
+        "strong"
       );
 
+    price.className =
+      "asset-price";
 
-      const buy =
-        document.createElement(
-          "button"
-        );
+    price.textContent =
+      asset.price ||
+      translations[
+        currentLanguage
+      ].paid;
 
-      buy.type =
-        "button";
+    card.appendChild(
+      price
+    );
 
-      buy.className =
-        "buy";
-
-      buy.dataset.assetButton =
-        "buy";
-
-      buy.textContent =
-        translations[
-          currentLanguage
-        ].buyNow;
-
-      buy.addEventListener(
-        "click",
-        () => {
-
-          startCheckout(
-            asset,
-            "asset"
-          );
-
-        }
+    const buy =
+      document.createElement(
+        "button"
       );
 
-      card.appendChild(
-        buy
-      );
+    buy.type =
+      "button";
 
-    } else {
+    buy.className =
+      "buy";
 
-      /* ===================================================
-      FREE ASSET
-      =================================================== */
+    buy.dataset.assetButton =
+      "buy";
 
-      const download =
-        document.createElement(
-          "button"
+    buy.textContent =
+      translations[
+        currentLanguage
+      ].buyNow;
+
+    buy.addEventListener(
+      "click",
+      () => {
+
+        startCheckout(
+          asset,
+          "asset"
         );
 
-      download.type =
-        "button";
+      }
+    );
 
-      download.className =
-        "download";
+    card.appendChild(
+      buy
+    );
 
-      download.dataset.assetButton =
-        "download";
+  } else {
 
-      download.textContent =
-        translations[
-          currentLanguage
-        ].downloadFree;
+    /* =================================================
+       FREE ASSET
+    ================================================= */
 
-      download.addEventListener(
-        "click",
-        async () => {
+    const download =
+      document.createElement(
+        "button"
+      );
 
-          if (
-            asset.download &&
-            asset.download !== "#"
-          ) {
+    download.type =
+      "button";
 
-            /*
-             * Increase download counter.
-             */
+    download.className =
+      "download";
 
-            increaseDownloadCount(
+    download.dataset.assetButton =
+      "download";
+
+    download.textContent =
+      translations[
+        currentLanguage
+      ].downloadFree;
+
+    download.addEventListener(
+      "click",
+      () => {
+
+        if (
+          asset.download &&
+          asset.download !== "#"
+        ) {
+
+          const nextCount =
+            incrementDownloadCount(
               asset
             );
 
-
-            /*
-             * Start browser download.
-             */
-
-            const link =
-              document.createElement(
-                "a"
-              );
-
-            link.href =
-              asset.download;
-
-            link.download =
-              "";
-
-            link.rel =
-              "noopener";
-
-            document.body.appendChild(
-              link
+          const countElement =
+            card.querySelector(
+              ".meta-downloads"
             );
 
-            link.click();
+          if (countElement) {
 
-            link.remove();
-
-
-            /*
-             * Show download modal.
-             */
-
-            await showDownloadModal(
-              asset
-            );
-
-          } else {
-
-            alert(
+            const dictionary =
               translations[
                 currentLanguage
-              ].addDownload
-            );
+              ] ||
+              translations.ht;
+
+            countElement.innerHTML =
+              `${dictionary.downloads}: <strong>${nextCount}</strong>`;
 
           }
 
+          const link =
+            document.createElement(
+              "a"
+            );
+
+          link.href =
+            asset.download;
+
+          link.download =
+            "";
+
+          link.rel =
+            "noopener";
+
+          document.body.appendChild(
+            link
+          );
+
+          link.click();
+
+          link.remove();
+
+          showDownloadModal();
+
+        } else {
+
+          alert(
+            translations[
+              currentLanguage
+            ].addDownload
+          );
+
         }
+
+      }
+    );
+
+    card.appendChild(
+      download
+    );
+
+    /* ===============================================
+       SIZE + DOWNLOADS
+       DIRECTLY UNDER DOWNLOAD BUTTON
+    =============================================== */
+
+    const meta =
+      document.createElement(
+        "div"
       );
 
-      card.appendChild(
-        download
-      );
-
-    }
-
-    return card;
-
-  }
-
-
-  /* =======================================================
-  UPDATE ALL BUTTON LANGUAGES
-  ======================================================= */
-
-  function updateAllButtonLanguages() {
+    meta.className =
+      "wise-asset-meta";
 
     const dictionary =
       translations[
@@ -2592,546 +2407,551 @@ document.addEventListener("DOMContentLoaded", () => {
       ] ||
       translations.ht;
 
+    meta.innerHTML = `
 
-    document
-      .querySelectorAll(
-        '[data-asset-button="download"]'
-      )
-      .forEach(
-        button => {
+      <span class="meta-size">
 
-          button.textContent =
-            dictionary.downloadFree;
+        ${dictionary.size}:
 
-        }
-      );
+        <strong>
+          ${
+            asset.displaySize ||
+            asset.size ||
+            "—"
+          }
+        </strong>
 
+      </span>
 
-    document
-      .querySelectorAll(
-        '[data-asset-button="buy"]'
-      )
-      .forEach(
-        button => {
+      <span class="meta-downloads">
 
-          button.textContent =
-            dictionary.buyNow;
+        ${dictionary.downloads}:
 
-        }
-      );
+        <strong>
+          ${getStoredDownloadCount(asset)}
+        </strong>
 
-  }
+      </span>
 
+    `;
 
-  /* =======================================================
-  RENDER PSD
-  ======================================================= */
-
-  function renderPSD(
-    items,
-    grid,
-    paid = false
-  ) {
-
-    if (!grid) {
-      return;
-    }
-
-    grid.innerHTML =
-      "";
-
-    items.forEach(
-      item => {
-
-        grid.appendChild(
-          createPSDCard(
-            item,
-            paid
-          )
-        );
-
-      }
+    card.appendChild(
+      meta
     );
 
   }
 
+  return card;
 
-  /* =======================================================
-  RENDER ASSETS
-  ======================================================= */
+}
 
-  function renderAssets(
-    assets,
-    grid,
-    paid = false,
-    type = null
-  ) {
+/* =======================================================
+UPDATE ALL BUTTON LANGUAGES
+======================================================= */
 
-    if (!grid) {
-      return;
-    }
+function updateAllButtonLanguages() {
 
-    grid.innerHTML =
-      "";
+  const dictionary =
+    translations[
+      currentLanguage
+    ] ||
+    translations.ht;
 
-    const filtered =
-      assets.filter(
-        asset => {
+  document
+    .querySelectorAll(
+      '[data-asset-button="download"]'
+    )
+    .forEach(
+      button => {
 
-          return (
-            !type ||
-            asset.type === type
+        button.textContent =
+          dictionary.downloadFree;
+
+      }
+    );
+
+  document
+    .querySelectorAll(
+      '[data-asset-button="buy"]'
+    )
+    .forEach(
+      button => {
+
+        button.textContent =
+          dictionary.buyNow;
+
+      }
+    );
+
+  document
+    .querySelectorAll(
+      ".wise-asset-meta"
+    )
+    .forEach(
+      meta => {
+
+        const card =
+          meta.closest(
+            ".asset-card"
+          );
+
+        if (!card) {
+          return;
+        }
+
+        const assetId =
+          card.dataset.assetId;
+
+        const asset =
+          [
+            ...freeAssets,
+            ...paidAssets
+          ].find(
+            item =>
+              getAssetKey(item) ===
+              assetId
+          );
+
+        if (asset) {
+
+          updateAssetMeta(
+            card,
+            asset
           );
 
         }
+
+      }
+    );
+
+}
+
+/* =======================================================
+RENDER PSD
+======================================================= */
+
+function renderPSD(
+  items,
+  grid,
+  paid = false
+) {
+
+  if (!grid) {
+    return;
+  }
+
+  grid.innerHTML =
+    "";
+
+  items.forEach(
+    item => {
+
+      grid.appendChild(
+        createPSDCard(
+          item,
+          paid
+        )
       );
 
-    filtered.forEach(
+    }
+  );
+
+}
+
+/* =======================================================
+RENDER ASSETS
+======================================================= */
+
+function renderAssets(
+  assets,
+  grid,
+  paid = false,
+  type = null
+) {
+
+  if (!grid) {
+    return;
+  }
+
+  grid.innerHTML =
+    "";
+
+  const filtered =
+    assets.filter(
       asset => {
 
-        grid.appendChild(
-          createAssetCard(
-            asset,
-            paid
-          )
+        return (
+          !type ||
+          asset.type === type
         );
 
       }
     );
 
-  }
+  filtered.forEach(
+    asset => {
 
+      const card =
+        createAssetCard(
+          asset,
+          paid
+        );
 
-  /* =======================================================
-  RENDER ALL
-  ======================================================= */
+      grid.appendChild(
+        card
+      );
 
-  function renderAllAssets() {
+      if (!paid) {
 
-    renderPSD(
-      freePSD,
-      freePSDGrid,
-      false
-    );
+        loadAssetSize(
+          card,
+          asset
+        );
 
-    renderPSD(
-      paidPSD,
-      paidPSDGrid,
-      true
-    );
+      }
+
+    }
+  );
+
+}
+
+/* =======================================================
+RENDER ALL
+======================================================= */
+
+function renderAllAssets() {
+
+  renderPSD(
+    freePSD,
+    freePSDGrid,
+    false
+  );
+
+  renderPSD(
+    paidPSD,
+    paidPSDGrid,
+    true
+  );
+
+  renderAssets(
+    freeAssets,
+    freeAssetGrid,
+    false,
+    currentFreeAssetType
+  );
+
+  renderAssets(
+    paidAssets,
+    paidAssetGrid,
+    true,
+    currentPaidAssetType
+  );
+
+  if (oldAssetGrid) {
 
     renderAssets(
       freeAssets,
-      freeAssetGrid,
+      oldAssetGrid,
       false,
       currentFreeAssetType
     );
 
-    renderAssets(
-      paidAssets,
-      paidAssetGrid,
-      true,
-      currentPaidAssetType
-    );
-
-    if (oldAssetGrid) {
-
-      renderAssets(
-        freeAssets,
-        oldAssetGrid,
-        false,
-        currentFreeAssetType
-      );
-
-    }
-
-    prepareImages();
-
   }
 
+  prepareImages();
 
-  /* =======================================================
-  FREE CATEGORY BUTTONS
-  ======================================================= */
+}
 
-  const freeAssetButtons =
-    document.querySelectorAll(
-      ".free-asset-types [data-asset-type]"
+/* =======================================================
+FREE CATEGORY BUTTONS
+======================================================= */
+
+const freeAssetButtons =
+  document.querySelectorAll(
+    ".free-asset-types [data-asset-type]"
+  );
+
+freeAssetButtons.forEach(
+  button => {
+
+    button.addEventListener(
+      "click",
+      event => {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const selectedType =
+          button.dataset.assetType;
+
+        if (!selectedType) {
+          return;
+        }
+
+        currentFreeAssetType =
+          selectedType;
+
+        freeAssetButtons.forEach(
+          btn => {
+
+            btn.classList.remove(
+              "active"
+            );
+
+            btn.setAttribute(
+              "aria-selected",
+              "false"
+            );
+
+          }
+        );
+
+        button.classList.add(
+          "active"
+        );
+
+        button.setAttribute(
+          "aria-selected",
+          "true"
+        );
+
+        renderAssets(
+          freeAssets,
+          freeAssetGrid,
+          false,
+          currentFreeAssetType
+        );
+
+        prepareImages();
+
+      }
     );
 
-  freeAssetButtons.forEach(
-    button => {
+  }
+);
 
-      button.addEventListener(
-        "click",
-        event => {
+/* =======================================================
+PAID CATEGORY BUTTONS
+======================================================= */
 
-          event.preventDefault();
-          event.stopPropagation();
+const paidAssetButtons =
+  document.querySelectorAll(
+    ".paid-asset-types [data-paid-asset-type]"
+  );
 
-          const selectedType =
-            button.dataset.assetType;
+paidAssetButtons.forEach(
+  button => {
 
-          if (!selectedType) {
-            return;
-          }
+    button.addEventListener(
+      "click",
+      event => {
 
-          currentFreeAssetType =
-            selectedType;
+        event.preventDefault();
+        event.stopPropagation();
 
-          freeAssetButtons.forEach(
-            btn => {
+        const selectedType =
+          button.dataset.paidAssetType;
 
-              btn.classList.remove(
-                "active"
-              );
-
-              btn.setAttribute(
-                "aria-selected",
-                "false"
-              );
-
-            }
-          );
-
-          button.classList.add(
-            "active"
-          );
-
-          button.setAttribute(
-            "aria-selected",
-            "true"
-          );
-
-          renderAssets(
-            freeAssets,
-            freeAssetGrid,
-            false,
-            currentFreeAssetType
-          );
-
-          prepareImages();
-
+        if (!selectedType) {
+          return;
         }
-      );
+
+        currentPaidAssetType =
+          selectedType;
+
+        paidAssetButtons.forEach(
+          btn => {
+
+            btn.classList.remove(
+              "active"
+            );
+
+            btn.setAttribute(
+              "aria-selected",
+              "false"
+            );
+
+          }
+        );
+
+        button.classList.add(
+          "active"
+        );
+
+        button.setAttribute(
+          "aria-selected",
+          "true"
+        );
+
+        renderAssets(
+          paidAssets,
+          paidAssetGrid,
+          true,
+          currentPaidAssetType
+        );
+
+        prepareImages();
+
+      }
+    );
+
+  }
+);
+
+/* =======================================================
+DOWNLOAD MODAL
+======================================================= */
+
+const downloadModal =
+  document.getElementById(
+    "download-modal"
+  );
+
+const modalClose =
+  document.getElementById(
+    "modal-close"
+  );
+
+function showDownloadModal() {
+
+  if (!downloadModal) {
+    return;
+  }
+
+  downloadModal.hidden =
+    false;
+
+  document.body.classList.add(
+    "lightbox-open"
+  );
+
+}
+
+function hideDownloadModal() {
+
+  if (!downloadModal) {
+    return;
+  }
+
+  downloadModal.hidden =
+    true;
+
+  document.body.classList.remove(
+    "lightbox-open"
+  );
+
+}
+
+if (modalClose) {
+
+  modalClose.addEventListener(
+    "click",
+    hideDownloadModal
+  );
+
+}
+
+if (downloadModal) {
+
+  downloadModal.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target ===
+        downloadModal
+      ) {
+
+        hideDownloadModal();
+
+      }
 
     }
   );
 
+}
 
-  /* =======================================================
-  PAID CATEGORY BUTTONS
-  ======================================================= */
+/* =======================================================
+IMAGE LIGHTBOX
+======================================================= */
 
-  const paidAssetButtons =
-    document.querySelectorAll(
-      ".paid-asset-types [data-paid-asset-type]"
-    );
-
-  paidAssetButtons.forEach(
-    button => {
-
-      button.addEventListener(
-        "click",
-        event => {
-
-          event.preventDefault();
-          event.stopPropagation();
-
-          const selectedType =
-            button.dataset.paidAssetType;
-
-          if (!selectedType) {
-            return;
-          }
-
-          currentPaidAssetType =
-            selectedType;
-
-          paidAssetButtons.forEach(
-            btn => {
-
-              btn.classList.remove(
-                "active"
-              );
-
-              btn.setAttribute(
-                "aria-selected",
-                "false"
-              );
-
-            }
-          );
-
-          button.classList.add(
-            "active"
-          );
-
-          button.setAttribute(
-            "aria-selected",
-            "true"
-          );
-
-          renderAssets(
-            paidAssets,
-            paidAssetGrid,
-            true,
-            currentPaidAssetType
-          );
-
-          prepareImages();
-
-        }
-      );
-
-    }
+const lightbox =
+  document.getElementById(
+    "image-lightbox"
   );
 
+const lightboxImage =
+  document.getElementById(
+    "lightbox-image"
+  );
 
-  /* =======================================================
-  IMAGE LIGHTBOX
-  ======================================================= */
+const lightboxClose =
+  document.getElementById(
+    "lightbox-close"
+  );
 
-  const lightbox =
-    document.getElementById(
-      "image-lightbox"
-    );
+const lightboxPrev =
+  document.getElementById(
+    "lightbox-prev"
+  );
 
-  const lightboxImage =
-    document.getElementById(
-      "lightbox-image"
-    );
+const lightboxNext =
+  document.getElementById(
+    "lightbox-next"
+  );
 
-  const lightboxClose =
-    document.getElementById(
-      "lightbox-close"
-    );
+const zoomIn =
+  document.getElementById(
+    "zoom-in"
+  );
 
-  const lightboxPrev =
-    document.getElementById(
-      "lightbox-prev"
-    );
+const zoomOut =
+  document.getElementById(
+    "zoom-out"
+  );
 
-  const lightboxNext =
-    document.getElementById(
-      "lightbox-next"
-    );
+const zoomReset =
+  document.getElementById(
+    "zoom-reset"
+  );
 
-  const zoomIn =
-    document.getElementById(
-      "zoom-in"
-    );
+let lightboxImages = [];
 
-  const zoomOut =
-    document.getElementById(
-      "zoom-out"
-    );
+let lightboxIndex = 0;
 
-  const zoomReset =
-    document.getElementById(
-      "zoom-reset"
-    );
+let zoomLevel = 1;
 
-  let lightboxImages = [];
+let moveX = 0;
 
-  let lightboxIndex = 0;
+let moveY = 0;
 
-  let zoomLevel = 1;
+/* =======================================================
+COLLECT LIGHTBOX IMAGES
+======================================================= */
 
-  let moveX = 0;
+function collectLightboxImages(
+  sourceImage = null
+) {
 
-  let moveY = 0;
-
-
-  /* =======================================================
-  COLLECT LIGHTBOX IMAGES
-  ======================================================= */
-
-  function collectLightboxImages(
-    sourceImage = null
+  if (
+    sourceImage &&
+    sourceImage.closest(
+      ".portfolio-card"
+    )
   ) {
 
-    if (
-      sourceImage &&
+    const portfolioCard =
       sourceImage.closest(
         ".portfolio-card"
-      )
-    ) {
+      );
 
-      const portfolioCard =
-        sourceImage.closest(
-          ".portfolio-card"
-        );
-
-      const category =
-        portfolioCard.dataset.category;
-
-      lightboxImages =
-        Array.from(
-          document.querySelectorAll(
-            `.portfolio-grid .portfolio-card[data-category="${category}"] img`
-          )
-        ).filter(
-          image => {
-
-            return (
-              image.src &&
-              image.id !==
-                "lightbox-image"
-            );
-
-          }
-        );
-
-      return;
-
-    }
-
-
-    if (
-      sourceImage &&
-      sourceImage.closest(
-        "#free-assets-grid"
-      )
-    ) {
-
-      const assetCard =
-        sourceImage.closest(
-          ".asset-card"
-        );
-
-      const assetType =
-        assetCard?.dataset.assetType;
-
-      if (assetType) {
-
-        lightboxImages =
-          Array.from(
-            document.querySelectorAll(
-              `#free-assets-grid .asset-card[data-asset-type="${assetType}"] img`
-            )
-          ).filter(
-            image => {
-
-              return (
-                image.src &&
-                image.id !==
-                  "lightbox-image"
-              );
-
-            }
-          );
-
-        return;
-
-      }
-
-    }
-
-
-    if (
-      sourceImage &&
-      sourceImage.closest(
-        "#paid-assets-grid"
-      )
-    ) {
-
-      const assetCard =
-        sourceImage.closest(
-          ".asset-card"
-        );
-
-      const assetType =
-        assetCard?.dataset.assetType;
-
-      if (assetType) {
-
-        lightboxImages =
-          Array.from(
-            document.querySelectorAll(
-              `#paid-assets-grid .asset-card[data-asset-type="${assetType}"] img`
-            )
-          ).filter(
-            image => {
-
-              return (
-                image.src &&
-                image.id !==
-                  "lightbox-image"
-              );
-
-            }
-          );
-
-        return;
-
-      }
-
-    }
-
-
-    if (
-      sourceImage &&
-      sourceImage.closest(
-        "#free-psd-grid"
-      )
-    ) {
-
-      lightboxImages =
-        Array.from(
-          document.querySelectorAll(
-            "#free-psd-grid .psd-card img"
-          )
-        ).filter(
-          image => {
-
-            return (
-              image.src &&
-              image.id !==
-                "lightbox-image"
-            );
-
-          }
-        );
-
-      return;
-
-    }
-
-
-    if (
-      sourceImage &&
-      sourceImage.closest(
-        "#paid-psd-grid"
-      )
-    ) {
-
-      lightboxImages =
-        Array.from(
-          document.querySelectorAll(
-            "#paid-psd-grid .psd-card img"
-          )
-        ).filter(
-          image => {
-
-            return (
-              image.src &&
-              image.id !==
-                "lightbox-image"
-            );
-
-          }
-        );
-
-      return;
-
-    }
-
+    const category =
+      portfolioCard.dataset.category;
 
     lightboxImages =
       Array.from(
         document.querySelectorAll(
-          ".portfolio-grid img, #free-assets-grid img, #paid-assets-grid img, #free-psd-grid img, #paid-psd-grid img"
+          `.portfolio-grid .portfolio-card[data-category="${category}"] img`
         )
       ).filter(
         image => {
@@ -3145,343 +2965,559 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       );
 
+    return;
+
   }
 
+  if (
+    sourceImage &&
+    sourceImage.closest(
+      "#free-assets-grid"
+    )
+  ) {
 
-  /* =======================================================
-  UPDATE ZOOM
-  ======================================================= */
+    const assetCard =
+      sourceImage.closest(
+        ".asset-card"
+      );
 
-  function updateZoom() {
+    const assetType =
+      assetCard?.dataset.assetType;
 
-    if (!lightboxImage) {
+    if (assetType) {
+
+      lightboxImages =
+        Array.from(
+          document.querySelectorAll(
+            `#free-assets-grid .asset-card[data-asset-type="${assetType}"] img`
+          )
+        ).filter(
+          image => {
+
+            return (
+              image.src &&
+              image.id !==
+                "lightbox-image"
+            );
+
+          }
+        );
+
       return;
+
     }
+
+  }
+
+  if (
+    sourceImage &&
+    sourceImage.closest(
+      "#paid-assets-grid"
+    )
+  ) {
+
+    const assetCard =
+      sourceImage.closest(
+        ".asset-card"
+      );
+
+    const assetType =
+      assetCard?.dataset.assetType;
+
+    if (assetType) {
+
+      lightboxImages =
+        Array.from(
+          document.querySelectorAll(
+            `#paid-assets-grid .asset-card[data-asset-type="${assetType}"] img`
+          )
+        ).filter(
+          image => {
+
+            return (
+              image.src &&
+              image.id !==
+                "lightbox-image"
+            );
+
+          }
+        );
+
+      return;
+
+    }
+
+  }
+
+  if (
+    sourceImage &&
+    sourceImage.closest(
+      "#free-psd-grid"
+    )
+  ) {
+
+    lightboxImages =
+      Array.from(
+        document.querySelectorAll(
+          "#free-psd-grid .psd-card img"
+        )
+      ).filter(
+        image => {
+
+          return (
+            image.src &&
+            image.id !==
+              "lightbox-image"
+          );
+
+        }
+      );
+
+    return;
+
+  }
+
+  if (
+    sourceImage &&
+    sourceImage.closest(
+      "#paid-psd-grid"
+    )
+  ) {
+
+    lightboxImages =
+      Array.from(
+        document.querySelectorAll(
+          "#paid-psd-grid .psd-card img"
+        )
+      ).filter(
+        image => {
+
+          return (
+            image.src &&
+            image.id !==
+              "lightbox-image"
+          );
+
+        }
+      );
+
+    return;
+
+  }
+
+  lightboxImages =
+    Array.from(
+      document.querySelectorAll(
+        ".portfolio-grid img, #free-assets-grid img, #paid-assets-grid img, #free-psd-grid img, #paid-psd-grid img"
+      )
+    ).filter(
+      image => {
+
+        return (
+          image.src &&
+          image.id !==
+            "lightbox-image"
+        );
+
+      }
+    );
+
+}
+
+/* =======================================================
+UPDATE ZOOM
+======================================================= */
+
+function updateZoom() {
+
+  if (!lightboxImage) {
+    return;
+  }
+
+  lightboxImage.style.transform =
+    `translate3d(${moveX}px, ${moveY}px, 0) scale(${zoomLevel})`;
+
+  if (zoomReset) {
+
+    zoomReset.textContent =
+      `${Math.round(
+        zoomLevel * 100
+      )}%`;
+
+  }
+
+}
+
+/* =======================================================
+OPEN LIGHTBOX
+======================================================= */
+
+function openLightbox(
+  index
+) {
+
+  if (
+    !lightbox ||
+    !lightboxImage ||
+    !lightboxImages.length
+  ) {
+
+    return;
+
+  }
+
+  lightboxIndex =
+    (
+      index +
+      lightboxImages.length
+    ) %
+    lightboxImages.length;
+
+  const source =
+    lightboxImages[
+      lightboxIndex
+    ];
+
+  lightboxImage.src =
+    source.currentSrc ||
+    source.src;
+
+  lightboxImage.alt =
+    source.alt ||
+    "";
+
+  zoomLevel = 1;
+
+  moveX = 0;
+
+  moveY = 0;
+
+  updateZoom();
+
+  lightbox.hidden =
+    false;
+
+  document.body.classList.add(
+    "lightbox-open"
+  );
+
+}
+
+/* =======================================================
+CLOSE LIGHTBOX
+======================================================= */
+
+function closeLightbox() {
+
+  if (!lightbox) {
+    return;
+  }
+
+  lightbox.hidden =
+    true;
+
+  document.body.classList.remove(
+    "lightbox-open"
+  );
+
+  if (lightboxImage) {
+
+    lightboxImage.src =
+      "";
 
     lightboxImage.style.transform =
-      `translate3d(${moveX}px, ${moveY}px, 0) scale(${zoomLevel})`;
-
-    if (zoomReset) {
-
-      zoomReset.textContent =
-        `${Math.round(
-          zoomLevel * 100
-        )}%`;
-
-    }
+      "";
 
   }
 
+}
 
-  /* =======================================================
-  OPEN LIGHTBOX
-  ======================================================= */
+/* =======================================================
+NEXT / PREVIOUS
+======================================================= */
 
-  function openLightbox(
-    index
-  ) {
+function nextImage() {
+
+  openLightbox(
+    lightboxIndex + 1
+  );
+
+}
+
+function previousImage() {
+
+  openLightbox(
+    lightboxIndex - 1
+  );
+
+}
+
+/* =======================================================
+ZOOM
+======================================================= */
+
+function zoomPlus() {
+
+  zoomLevel =
+    Math.min(
+      zoomLevel + 0.25,
+      4
+    );
+
+  updateZoom();
+
+}
+
+function zoomMinus() {
+
+  zoomLevel =
+    Math.max(
+      zoomLevel - 0.25,
+      0.5
+    );
+
+  updateZoom();
+
+}
+
+function resetZoom() {
+
+  zoomLevel = 1;
+
+  moveX = 0;
+
+  moveY = 0;
+
+  updateZoom();
+
+}
+
+/* =======================================================
+PREPARE IMAGES
+======================================================= */
+
+function prepareImages() {
+
+  const images =
+    document.querySelectorAll(
+      ".portfolio-grid img, #free-assets-grid img, #paid-assets-grid img, #free-psd-grid img, #paid-psd-grid img"
+    );
+
+  images.forEach(
+    image => {
+
+      if (
+        image.dataset.lightboxReady ===
+        "true"
+      ) {
+
+        return;
+
+      }
+
+      image.dataset.lightboxReady =
+        "true";
+
+      image.style.cursor =
+        "zoom-in";
+
+      image.addEventListener(
+        "click",
+        event => {
+
+          if (
+            event.target.closest(
+              "button, a"
+            )
+          ) {
+
+            return;
+
+          }
+
+          collectLightboxImages(
+            image
+          );
+
+          const newIndex =
+            lightboxImages.indexOf(
+              image
+            );
+
+          openLightbox(
+            newIndex >= 0
+              ? newIndex
+              : 0
+          );
+
+        }
+      );
+
+    }
+  );
+
+}
+
+/* =======================================================
+LIGHTBOX BUTTONS
+======================================================= */
+
+if (lightboxClose) {
+
+  lightboxClose.addEventListener(
+    "click",
+    closeLightbox
+  );
+
+}
+
+if (lightboxPrev) {
+
+  lightboxPrev.addEventListener(
+    "click",
+    previousImage
+  );
+
+}
+
+if (lightboxNext) {
+
+  lightboxNext.addEventListener(
+    "click",
+    nextImage
+  );
+
+}
+
+if (zoomIn) {
+
+  zoomIn.addEventListener(
+    "click",
+    zoomPlus
+  );
+
+}
+
+if (zoomOut) {
+
+  zoomOut.addEventListener(
+    "click",
+    zoomMinus
+  );
+
+}
+
+if (zoomReset) {
+
+  zoomReset.addEventListener(
+    "click",
+    resetZoom
+  );
+
+}
+
+if (lightbox) {
+
+  lightbox.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target ===
+        lightbox
+      ) {
+
+        closeLightbox();
+
+      }
+
+    }
+  );
+
+}
+
+/* =======================================================
+KEYBOARD CONTROLS
+======================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
 
     if (
       !lightbox ||
-      !lightboxImage ||
-      !lightboxImages.length
+      lightbox.hidden
     ) {
 
       return;
 
     }
 
-    lightboxIndex =
-      (
-        index +
-        lightboxImages.length
-      ) %
-      lightboxImages.length;
+    if (
+      event.key ===
+      "Escape"
+    ) {
 
-    const source =
-      lightboxImages[
-        lightboxIndex
-      ];
+      closeLightbox();
 
-    lightboxImage.src =
-      source.currentSrc ||
-      source.src;
-
-    lightboxImage.alt =
-      source.alt ||
-      "";
-
-    zoomLevel = 1;
-
-    moveX = 0;
-
-    moveY = 0;
-
-    updateZoom();
-
-    lightbox.hidden =
-      false;
-
-    document.body.classList.add(
-      "lightbox-open"
-    );
-
-  }
-
-
-  /* =======================================================
-  CLOSE LIGHTBOX
-  ======================================================= */
-
-  function closeLightbox() {
-
-    if (!lightbox) {
       return;
-    }
-
-    lightbox.hidden =
-      true;
-
-    document.body.classList.remove(
-      "lightbox-open"
-    );
-
-    if (lightboxImage) {
-
-      lightboxImage.src =
-        "";
-
-      lightboxImage.style.transform =
-        "";
 
     }
 
-  }
+    if (
+      event.key ===
+      "ArrowRight"
+    ) {
 
+      nextImage();
 
-  /* =======================================================
-  NEXT / PREVIOUS
-  ======================================================= */
+    }
 
-  function nextImage() {
+    if (
+      event.key ===
+      "ArrowLeft"
+    ) {
 
-    openLightbox(
-      lightboxIndex + 1
-    );
+      previousImage();
 
-  }
+    }
 
+    if (
+      event.key === "+" ||
+      event.key === "="
+    ) {
 
-  function previousImage() {
+      zoomPlus();
 
-    openLightbox(
-      lightboxIndex - 1
-    );
+    }
 
-  }
+    if (
+      event.key === "-"
+    ) {
 
+      zoomMinus();
 
-  /* =======================================================
-  ZOOM
-  ======================================================= */
+    }
 
-  function zoomPlus() {
+    if (
+      event.key === "0"
+    ) {
 
-    zoomLevel =
-      Math.min(
-        zoomLevel + 0.25,
-        4
-      );
+      resetZoom();
 
-    updateZoom();
-
-  }
-
-
-  function zoomMinus() {
-
-    zoomLevel =
-      Math.max(
-        zoomLevel - 0.25,
-        0.5
-      );
-
-    updateZoom();
+    }
 
   }
+);
 
+/* =======================================================
+MOUSE WHEEL ZOOM
+======================================================= */
 
-  function resetZoom() {
+if (lightboxImage) {
 
-    zoomLevel = 1;
-
-    moveX = 0;
-
-    moveY = 0;
-
-    updateZoom();
-
-  }
-
-
-  /* =======================================================
-  PREPARE IMAGES
-  ======================================================= */
-
-  function prepareImages() {
-
-    const images =
-      document.querySelectorAll(
-        ".portfolio-grid img, #free-assets-grid img, #paid-assets-grid img, #free-psd-grid img, #paid-psd-grid img"
-      );
-
-    images.forEach(
-      image => {
-
-        if (
-          image.dataset.lightboxReady ===
-          "true"
-        ) {
-
-          return;
-
-        }
-
-        image.dataset.lightboxReady =
-          "true";
-
-        image.style.cursor =
-          "zoom-in";
-
-        image.addEventListener(
-          "click",
-          event => {
-
-            if (
-              event.target.closest(
-                "button, a"
-              )
-            ) {
-
-              return;
-
-            }
-
-            collectLightboxImages(
-              image
-            );
-
-            const newIndex =
-              lightboxImages.indexOf(
-                image
-              );
-
-            openLightbox(
-              newIndex >= 0
-                ? newIndex
-                : 0
-            );
-
-          }
-        );
-
-      }
-    );
-
-  }
-
-
-  /* =======================================================
-  LIGHTBOX BUTTONS
-  ======================================================= */
-
-  if (lightboxClose) {
-
-    lightboxClose.addEventListener(
-      "click",
-      closeLightbox
-    );
-
-  }
-
-
-  if (lightboxPrev) {
-
-    lightboxPrev.addEventListener(
-      "click",
-      previousImage
-    );
-
-  }
-
-
-  if (lightboxNext) {
-
-    lightboxNext.addEventListener(
-      "click",
-      nextImage
-    );
-
-  }
-
-
-  if (zoomIn) {
-
-    zoomIn.addEventListener(
-      "click",
-      zoomPlus
-    );
-
-  }
-
-
-  if (zoomOut) {
-
-    zoomOut.addEventListener(
-      "click",
-      zoomMinus
-    );
-
-  }
-
-
-  if (zoomReset) {
-
-    zoomReset.addEventListener(
-      "click",
-      resetZoom
-    );
-
-  }
-
-
-  if (lightbox) {
-
-    lightbox.addEventListener(
-      "click",
-      event => {
-
-        if (
-          event.target ===
-          lightbox
-        ) {
-
-          closeLightbox();
-
-        }
-
-      }
-    );
-
-  }
-
-
-  /* =======================================================
-  KEYBOARD CONTROLS
-  ======================================================= */
-
-  document.addEventListener(
-    "keydown",
+  lightboxImage.addEventListener(
+    "wheel",
     event => {
 
       if (
@@ -3493,398 +3529,305 @@ document.addEventListener("DOMContentLoaded", () => {
 
       }
 
-      if (
-        event.key ===
-        "Escape"
-      ) {
-
-        closeLightbox();
-
-        return;
-
-      }
+      event.preventDefault();
 
       if (
-        event.key ===
-        "ArrowRight"
-      ) {
-
-        nextImage();
-
-      }
-
-      if (
-        event.key ===
-        "ArrowLeft"
-      ) {
-
-        previousImage();
-
-      }
-
-      if (
-        event.key === "+" ||
-        event.key === "="
+        event.deltaY < 0
       ) {
 
         zoomPlus();
 
-      }
-
-      if (
-        event.key === "-"
-      ) {
+      } else {
 
         zoomMinus();
 
       }
 
+    },
+    {
+      passive: false
+    }
+  );
+
+}
+
+/* =======================================================
+TOUCH / POINTER DRAG
+======================================================= */
+
+let dragging = false;
+
+let startX = 0;
+
+let startY = 0;
+
+if (lightboxImage) {
+
+  lightboxImage.addEventListener(
+    "pointerdown",
+    event => {
+
       if (
-        event.key === "0"
+        zoomLevel <= 1
       ) {
 
-        resetZoom();
+        return;
 
       }
+
+      dragging = true;
+
+      startX =
+        event.clientX -
+        moveX;
+
+      startY =
+        event.clientY -
+        moveY;
+
+      lightboxImage.classList.add(
+        "dragging"
+      );
+
+      if (
+        lightboxImage.setPointerCapture
+      ) {
+
+        lightboxImage.setPointerCapture(
+          event.pointerId
+        );
+
+      }
+
+      event.preventDefault();
 
     }
   );
 
-
-  /* =======================================================
-  MOUSE WHEEL ZOOM
-  ======================================================= */
-
-  if (lightboxImage) {
-
-    lightboxImage.addEventListener(
-      "wheel",
-      event => {
-
-        if (
-          !lightbox ||
-          lightbox.hidden
-        ) {
-
-          return;
-
-        }
-
-        event.preventDefault();
-
-        if (
-          event.deltaY < 0
-        ) {
-
-          zoomPlus();
-
-        } else {
-
-          zoomMinus();
-
-        }
-
-      },
-      {
-        passive: false
-      }
-    );
-
-  }
-
-
-  /* =======================================================
-  TOUCH / POINTER DRAG
-  ======================================================= */
-
-  let dragging = false;
-
-  let startX = 0;
-
-  let startY = 0;
-
-
-  if (lightboxImage) {
-
-    lightboxImage.addEventListener(
-      "pointerdown",
-      event => {
-
-        if (
-          zoomLevel <= 1
-        ) {
-
-          return;
-
-        }
-
-        dragging = true;
-
-        startX =
-          event.clientX -
-          moveX;
-
-        startY =
-          event.clientY -
-          moveY;
-
-        lightboxImage.classList.add(
-          "dragging"
-        );
-
-        if (
-          lightboxImage.setPointerCapture
-        ) {
-
-          lightboxImage.setPointerCapture(
-            event.pointerId
-          );
-
-        }
-
-        event.preventDefault();
-
-      }
-    );
-
-
-    lightboxImage.addEventListener(
-      "pointermove",
-      event => {
-
-        if (!dragging) {
-          return;
-        }
-
-        moveX =
-          event.clientX -
-          startX;
-
-        moveY =
-          event.clientY -
-          startY;
-
-        lightboxImage.style.transform =
-          `translate3d(${moveX}px, ${moveY}px, 0) scale(${zoomLevel})`;
-
-        event.preventDefault();
-
-      }
-    );
-
-
-    function stopDragging(
-      event
-    ) {
+  lightboxImage.addEventListener(
+    "pointermove",
+    event => {
 
       if (!dragging) {
         return;
       }
 
-      dragging = false;
+      moveX =
+        event.clientX -
+        startX;
 
-      lightboxImage.classList.remove(
-        "dragging"
+      moveY =
+        event.clientY -
+        startY;
+
+      lightboxImage.style.transform =
+        `translate3d(${moveX}px, ${moveY}px, 0) scale(${zoomLevel})`;
+
+      event.preventDefault();
+
+    }
+  );
+
+  function stopDragging(
+    event
+  ) {
+
+    if (!dragging) {
+      return;
+    }
+
+    dragging = false;
+
+    lightboxImage.classList.remove(
+      "dragging"
+    );
+
+    if (
+      event &&
+      lightboxImage.hasPointerCapture &&
+      lightboxImage.hasPointerCapture(
+        event.pointerId
+      )
+    ) {
+
+      lightboxImage.releasePointerCapture(
+        event.pointerId
       );
-
-      if (
-        event &&
-        lightboxImage.hasPointerCapture &&
-        lightboxImage.hasPointerCapture(
-          event.pointerId
-        )
-      ) {
-
-        lightboxImage.releasePointerCapture(
-          event.pointerId
-        );
-
-      }
 
     }
 
-
-    lightboxImage.addEventListener(
-      "pointerup",
-      stopDragging
-    );
-
-
-    lightboxImage.addEventListener(
-      "pointercancel",
-      stopDragging
-    );
-
-
-    lightboxImage.addEventListener(
-      "lostpointercapture",
-      stopDragging
-    );
-
   }
 
+  lightboxImage.addEventListener(
+    "pointerup",
+    stopDragging
+  );
 
-  /* =======================================================
-  REVEAL ANIMATION
-  ======================================================= */
+  lightboxImage.addEventListener(
+    "pointercancel",
+    stopDragging
+  );
 
-  const revealElements =
-    document.querySelectorAll(
-      ".reveal"
-    );
+  lightboxImage.addEventListener(
+    "lostpointercapture",
+    stopDragging
+  );
 
-  if (
-    "IntersectionObserver" in window
-  ) {
+}
 
-    const observer =
-      new IntersectionObserver(
-        entries => {
+/* =======================================================
+REVEAL ANIMATION
+======================================================= */
 
-          entries.forEach(
-            entry => {
+const revealElements =
+  document.querySelectorAll(
+    ".reveal"
+  );
 
-              if (
-                entry.isIntersecting
-              ) {
+if (
+  "IntersectionObserver" in window
+) {
 
-                entry.target.classList.add(
-                  "visible"
-                );
+  const observer =
+    new IntersectionObserver(
+      entries => {
 
-                observer.unobserve(
-                  entry.target
-                );
+        entries.forEach(
+          entry => {
 
-              }
+            if (
+              entry.isIntersecting
+            ) {
+
+              entry.target.classList.add(
+                "visible"
+              );
+
+              observer.unobserve(
+                entry.target
+              );
 
             }
-          );
 
-        },
-        {
-          threshold:
-            0.12
-        }
-      );
+          }
+        );
 
-    revealElements.forEach(
-      element =>
-        observer.observe(
-          element
-        )
-    );
-
-  } else {
-
-    revealElements.forEach(
-      element =>
-        element.classList.add(
-          "visible"
-        )
-    );
-
-  }
-
-
-  /* =======================================================
-  OBSERVE DYNAMIC IMAGES
-  ======================================================= */
-
-  const assetObserver =
-    new MutationObserver(
-      () => {
-
-        prepareImages();
-
-      }
-    );
-
-
-  if (freeAssetGrid) {
-
-    assetObserver.observe(
-      freeAssetGrid,
+      },
       {
-        childList: true,
-        subtree: true
+        threshold:
+          0.12
       }
     );
 
-  }
-
-
-  if (paidAssetGrid) {
-
-    assetObserver.observe(
-      paidAssetGrid,
-      {
-        childList: true,
-        subtree: true
-      }
-    );
-
-  }
-
-
-  if (freePSDGrid) {
-
-    assetObserver.observe(
-      freePSDGrid,
-      {
-        childList: true,
-        subtree: true
-      }
-    );
-
-  }
-
-
-  if (paidPSDGrid) {
-
-    assetObserver.observe(
-      paidPSDGrid,
-      {
-        childList: true,
-        subtree: true
-      }
-    );
-
-  }
-
-
-  if (oldAssetGrid) {
-
-    assetObserver.observe(
-      oldAssetGrid,
-      {
-        childList: true,
-        subtree: true
-      }
-    );
-
-  }
-
-
-  /* =======================================================
-  INITIALISATION
-  ======================================================= */
-
-  renderAllAssets();
-
-  prepareImages();
-
-  setLanguage(
-    currentLanguage
+  revealElements.forEach(
+    element =>
+      observer.observe(
+        element
+      )
   );
 
+} else {
 
-  /* =======================================================
-  CONSOLE CONFIRMATION
-  ======================================================= */
-
-  console.log(
-    "WISE.GRAPHIXDESIGN — script.js loaded successfully."
+  revealElements.forEach(
+    element =>
+      element.classList.add(
+        "visible"
+      )
   );
+
+}
+
+/* =======================================================
+OBSERVE DYNAMIC IMAGES
+======================================================= */
+
+const assetObserver =
+  new MutationObserver(
+    () => {
+
+      prepareImages();
+
+    }
+  );
+
+if (freeAssetGrid) {
+
+  assetObserver.observe(
+    freeAssetGrid,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
+
+}
+
+if (paidAssetGrid) {
+
+  assetObserver.observe(
+    paidAssetGrid,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
+
+}
+
+if (freePSDGrid) {
+
+  assetObserver.observe(
+    freePSDGrid,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
+
+}
+
+if (paidPSDGrid) {
+
+  assetObserver.observe(
+    paidPSDGrid,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
+
+}
+
+if (oldAssetGrid) {
+
+  assetObserver.observe(
+    oldAssetGrid,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
+
+}
+
+/* =======================================================
+INITIALISATION
+======================================================= */
+
+renderAllAssets();
+
+prepareImages();
+
+setLanguage(
+  currentLanguage
+);
+
+/* =======================================================
+CONSOLE CONFIRMATION
+======================================================= */
+
+console.log(
+  "WISE.GRAPHIXDESIGN — script.js loaded successfully."
+);
 
 });
