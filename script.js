@@ -1987,6 +1987,107 @@ async function startCheckout(
 
 }
 
+  /* =======================================================
+CURRENCY DISPLAY
+BASE PRICE = HTG
+======================================================= */
+
+const currencyRates = {
+  HTG: 1,
+  USD: 0.0076,
+  CAD: 0.0104,
+  EUR: 0.0065,
+  DOP: 0.29
+};
+
+const currencySymbols = {
+  HTG: "HTG",
+  USD: "USD",
+  CAD: "CAD",
+  EUR: "EUR",
+  DOP: "DOP"
+};
+
+function getVisitorCurrency() {
+
+  const savedCurrency =
+    localStorage.getItem(
+      "wiseCurrency"
+    );
+
+  if (
+    savedCurrency &&
+    currencyRates[savedCurrency]
+  ) {
+    return savedCurrency;
+  }
+
+  const language =
+    navigator.language ||
+    "";
+
+  if (
+    language.startsWith("en-US")
+  ) {
+    return "USD";
+  }
+
+  if (
+    language.startsWith("en-CA")
+  ) {
+    return "CAD";
+  }
+
+  if (
+    language.startsWith("fr-FR") ||
+    language.startsWith("fr-BE") ||
+    language.startsWith("fr-LU")
+  ) {
+    return "EUR";
+  }
+
+  if (
+    language.startsWith("es-DO")
+  ) {
+    return "DOP";
+  }
+
+  return "HTG";
+}
+
+function formatPrice(
+  htgPrice
+) {
+
+  const currency =
+    getVisitorCurrency();
+
+  const rate =
+    currencyRates[currency] ||
+    1;
+
+  const converted =
+    Number(htgPrice) * rate;
+
+  const formatted =
+    new Intl.NumberFormat(
+      navigator.language || "fr-HT",
+      {
+        minimumFractionDigits:
+          currency === "HTG"
+            ? 0
+            : 2,
+        maximumFractionDigits:
+          currency === "HTG"
+            ? 0
+            : 2
+      }
+    ).format(converted);
+
+  return `${formatted} ${
+    currencySymbols[currency]
+  }`;
+}
 /* =======================================================
 CREATE PSD CARD
 ======================================================= */
@@ -2067,10 +2168,9 @@ function createPSDCard(
       "asset-price";
 
     price.textContent =
-      item.price ||
-      translations[
-        currentLanguage
-      ].paid;
+  formatPrice(
+    item.price
+  );
 
     card.appendChild(
       price
@@ -2319,10 +2419,9 @@ function createAssetCard(
       "asset-price";
 
     price.textContent =
-      asset.price ||
-      translations[
-        currentLanguage
-      ].paid;
+  formatPrice(
+    asset.price
+  );
 
     card.appendChild(
       price
