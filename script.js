@@ -186,10 +186,10 @@ const translations = {
       "Kreyasyon grafik premium, PSD editab ak resous dijital pou mak ak biznis ki vle kanpe apa.",
 
     heroPrimary:
-      "Gade travay mwen ↗",
+      "Gade travay mwen",
 
     heroSecondary:
-      "Achte PSD →",
+      "Achte PSD",
 
     workEyebrow:
       "01 / PORTFOLIO",
@@ -282,7 +282,7 @@ const translations = {
       "Telechaje gratis",
 
     buyNow:
-      "Achte kounye a →",
+      "Achte kounye a",
 
     paymentNotConnected:
       "Sistèm peman an poko konekte.",
@@ -331,10 +331,10 @@ const translations = {
       "Premium graphic design, editable PSD files and digital resources for brands and businesses that want to stand out.",
 
     heroPrimary:
-      "View my work ↗",
+      "View my work",
 
     heroSecondary:
-      "Buy PSD →",
+      "Buy PSD",
 
     workEyebrow:
       "01 / PORTFOLIO",
@@ -427,7 +427,7 @@ const translations = {
       "Download free",
 
     buyNow:
-      "Buy now →",
+      "Buy now",
 
     paymentNotConnected:
       "Payment system is not connected yet.",
@@ -476,10 +476,10 @@ const translations = {
       "Créations graphiques premium, fichiers PSD modifiables et ressources digitales pour les marques et entreprises qui veulent se démarquer.",
 
     heroPrimary:
-      "Voir mes travaux ↗",
+      "Voir mes travaux",
 
     heroSecondary:
-      "Acheter un PSD →",
+      "Acheter un PSD",
 
     workEyebrow:
       "01 / PORTFOLIO",
@@ -572,7 +572,7 @@ const translations = {
       "Télécharger gratuitement",
 
     buyNow:
-      "Acheter maintenant →",
+      "Acheter maintenant",
 
     paymentNotConnected:
       "Le système de paiement n'est pas encore connecté.",
@@ -621,10 +621,10 @@ const translations = {
       "Diseño gráfico premium, archivos PSD editables y recursos digitales para marcas y negocios que quieren destacar.",
 
     heroPrimary:
-      "Ver mis trabajos ↗",
+      "Ver mis trabajos",
 
     heroSecondary:
-      "Comprar PSD →",
+      "Comprar PSD",
 
     workEyebrow:
       "01 / PORTFOLIO",
@@ -717,7 +717,7 @@ const translations = {
       "Descargar gratis",
 
     buyNow:
-      "Comprar ahora →",
+      "Comprar ahora",
 
     paymentNotConnected:
       "El sistema de pago aún no está conectado.",
