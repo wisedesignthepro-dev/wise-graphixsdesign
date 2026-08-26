@@ -3084,3 +3084,33 @@ PSD + ASSET — CENTER INFO ABOVE BUTTON
 
   text-align: center !important;
 }
+
+/* =========================================================
+PSD + ASSET — CENTER DOWNLOAD / BUY BUTTON
+========================================================= */
+
+.asset-card,
+.store-card,
+.psd-card,
+.product-card {
+  text-align: center !important;
+}
+
+/* BOUTON YO — TOUT BLOK LA SANTRE */
+.asset-card .download,
+.asset-card .buy,
+.store-card .download,
+.store-card .buy,
+.psd-card .download,
+.psd-card .buy,
+.product-card .download,
+.product-card .buy {
+  display: block !important;
+
+  width: fit-content !important;
+  min-width: 140px;
+
+  margin: 10px auto 12px !important;
+
+  text-align: center !important;
+}
