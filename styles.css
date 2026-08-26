@@ -3022,3 +3022,65 @@ PSD + ASSETS
   border-color: transparent !important;
   box-shadow: none !important;
 }
+/* =========================================================
+PSD + ASSET — CENTER INFO ABOVE BUTTON
+========================================================= */
+
+.asset-card,
+.store-card,
+.psd-card,
+.product-card {
+  text-align: center;
+}
+
+/* TIT */
+.asset-card h3,
+.store-card h3,
+.psd-card h3,
+.product-card h3 {
+  margin: 12px 0 6px !important;
+
+  text-align: center !important;
+}
+
+/* TOUT DESKRIPSYON */
+.asset-card p,
+.store-card p,
+.psd-card p,
+.product-card p {
+  margin: 0 0 8px !important;
+
+  text-align: center !important;
+}
+
+/* SIZE + DOWNLOAD COUNTER + PRICE */
+.asset-price,
+.size,
+.file-size,
+.download-count,
+.downloads,
+.price {
+  display: block;
+
+  margin: 0 0 10px !important;
+
+  text-align: center !important;
+}
+
+/* DOWNLOAD + ACHETE */
+.asset-card .download,
+.asset-card .buy,
+.store-card .download,
+.store-card .buy,
+.psd-card .download,
+.psd-card .buy,
+.product-card .download,
+.product-card .buy {
+  display: block;
+
+  width: 100%;
+
+  margin: 0 0 12px !important;
+
+  text-align: center !important;
+}
