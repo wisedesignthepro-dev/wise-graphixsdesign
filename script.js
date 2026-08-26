@@ -1072,7 +1072,7 @@ const paidPSD = [
       "PSD premium full editab.",
 
     image:
-      "images/psd/paid/PREMIUM-PSD-BACKGROUND-BLACK-LUXURY.jpg",
+      "images/psd/peye/PREMIUM-PSD-BACKGROUND-BLACK-LUXURY.jpg",
 
     price:
       2500
