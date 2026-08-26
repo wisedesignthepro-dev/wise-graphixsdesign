@@ -3134,3 +3134,39 @@ ACHETE KOUNYA — WHITE TEXT + NO ARROW
 .buy i {
   display: none !important;
 }
+/* =========================================================
+ACHETE KOUNYA — MENM STYLE AK TELECHAJE GRATIS
+========================================================= */
+
+.buy {
+  color: #ffffff !important;
+  background: var(--gold) !important;
+  border: 1px solid var(--gold) !important;
+}
+
+/* HOVER — MENM AK TELECHAJE GRATIS */
+.buy:hover {
+  background: var(--gold-light) !important;
+  border-color: var(--gold-light) !important;
+  color: #ffffff !important;
+}
+
+/* RETIRE FLECH / ICON KI KA VINI AK BUTTON NAN */
+.buy::before,
+.buy::after {
+  content: none !important;
+  display: none !important;
+}
+
+.buy svg,
+.buy i,
+.buy img {
+  display: none !important;
+}
+
+/* SI FLECH LA SE YON SPAN */
+.buy span::before,
+.buy span::after {
+  content: none !important;
+  display: none !important;
+}
