@@ -1064,7 +1064,7 @@ const paidPSD = [
     id: "psd-paid-01",
     name: "PREMIUM-PSD-BACKGROUND-BLACK-LUXURY",
     description: "PSD premium full editab.",
-    image: "images/psd/peye/PREMIUM-PSD-BACKGROUND-BLACK-LUXURY.jpg",
+    image: "images/psd-peye/PREMIUM-PSD-BACKGROUND-BLACK-LUXURY.jpg",
     price: 2500,
     size: "792 MB",
   },
