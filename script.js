@@ -1060,41 +1060,23 @@ PAID PSD
 ======================================================= */
 
 const paidPSD = [
-
   {
-    id:
-      "psd-paid-01",
-    name:
-      "PREMIUM-PSD-BACKGROUND-BLACK-LUXURY",
- description:
-      "PSD premium full editab.",
-    image:
-      "images/psd/peye/PREMIUM-PSD-BACKGROUND-BLACK-LUXURY.jpg",
- price:
-      2500
- size:
-  "792 MB",
+    id: "psd-paid-01",
+    name: "PREMIUM-PSD-BACKGROUND-BLACK-LUXURY",
+    description: "PSD premium full editab.",
+    image: "images/psd/peye/PREMIUM-PSD-BACKGROUND-BLACK-LUXURY.jpg",
+    price: 2500,
+    size: "792 MB",
   },
 
   {
-    id:
-      "psd-paid-02",
-
-    name:
-      "Premium PSD 02",
-
-    description:
-      "PSD premium editab.",
-
-    image:
-      "images/psd/paid/psd02.jpg",
-
-    price:
-      7
+    id: "psd-paid-02",
+    name: "Premium PSD 02",
+    description: "PSD premium editab.",
+    image: "images/psd/paid/psd02.jpg",
+    price: 7,
   }
-
 ];
-
 /* =======================================================
 FREE ASSETS
 ======================================================= */
