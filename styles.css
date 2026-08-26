@@ -2971,3 +2971,54 @@ button,
 .font-extrabold {
   font-weight: 800;
 }
+/* =========================================================
+WISE.GRAPHIXDESIGN — REMOVE ALL PRODUCT CARD BACKGROUNDS
+PSD + ASSETS
+========================================================= */
+
+.asset-card,
+.store-card,
+.psd-card,
+.product-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* IMAJ YO — PA GEN BACKGROUND DÈYÈ YO */
+
+.asset-card .asset-image,
+.asset-card img,
+.store-card img,
+.psd-card img,
+.product-card img {
+  background: transparent !important;
+}
+
+/* ENFÒMASYON YO — PA GEN REKTANG DÈYÈ YO */
+
+.asset-card h3,
+.asset-card p,
+.asset-price,
+.store-card h3,
+.store-card p,
+.store-card .price,
+.psd-card h3,
+.psd-card p,
+.psd-card .price,
+.product-card h3,
+.product-card p,
+.product-card .price {
+  background: transparent !important;
+}
+
+/* PA GEN BORDER CARD */
+
+.asset-card:hover,
+.store-card:hover,
+.psd-card:hover,
+.product-card:hover {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
