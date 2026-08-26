@@ -3114,3 +3114,23 @@ PSD + ASSET — CENTER DOWNLOAD / BUY BUTTON
 
   text-align: center !important;
 }
+
+/* =========================================================
+ACHETE KOUNYA — WHITE TEXT + NO ARROW
+========================================================= */
+
+.buy {
+  color: #ffffff !important;
+}
+
+/* Retire nenpòt ti flèch / icon */
+.buy::before,
+.buy::after {
+  content: none !important;
+  display: none !important;
+}
+
+.buy svg,
+.buy i {
+  display: none !important;
+}
