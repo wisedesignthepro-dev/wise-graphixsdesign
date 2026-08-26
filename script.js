@@ -1066,16 +1066,16 @@ const paidPSD = [
       "psd-paid-01",
 
     name:
-      "Premium PSD 01",
+      "PREMIUM-PSD-BACKGROUND-BLACK-LUXURY",
 
     description:
-      "PSD premium editab.",
+      "PSD premium full editab.",
 
     image:
-      "images/psd/paid/psd01.jpg",
+      "images/psd/paid/PREMIUM-PSD-BACKGROUND-BLACK-LUXURY.jpg",
 
     price:
-      5
+      2500
   },
 
   {
