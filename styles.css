@@ -940,17 +940,19 @@ PORTFOLIO — VERY SMALL PHONES
 }
 
 /* =========================================================
-   ASSET CARD
-   ========================================================= */
+ASSET CARD — NO BACKGROUND
+ENFÒMASYON YO SOU BACKGROUND SIT LA
+========================================================= */
 
 .asset-card {
   min-width: 0;
 
   overflow: hidden;
 
-  background: var(--panel);
+  background: transparent !important;
 
-  border: 1px solid var(--line);
+  border: 0 !important;
+  border-radius: 0 !important;
 
   transition:
     transform 0.25s ease,
@@ -960,12 +962,7 @@ PORTFOLIO — VERY SMALL PHONES
 .asset-card:hover {
   transform: translateY(-4px);
 
-  border-color: rgba(
-    216,
-    179,
-    106,
-    0.5
-  );
+  border-color: transparent !important;
 }
 
 .asset-image {
@@ -981,7 +978,7 @@ PORTFOLIO — VERY SMALL PHONES
 }
 
 .asset-card h3 {
-  margin: 12px 12px 5px;
+  margin: 12px 0 5px;
 
   color: var(--ink);
 
@@ -993,7 +990,7 @@ PORTFOLIO — VERY SMALL PHONES
 }
 
 .asset-card p {
-  margin: 0 12px 10px;
+  margin: 0 0 10px;
 
   color: var(--muted);
 
@@ -1005,7 +1002,7 @@ PORTFOLIO — VERY SMALL PHONES
 .asset-price {
   display: block;
 
-  margin: 0 12px 10px;
+  margin: 0 0 10px;
 
   color: var(--gold);
 
@@ -2769,7 +2766,6 @@ VERY SMALL PHONE
   color: #0c0c0c !important;
   border-color: #25D366 !important;
 }
-
 /* =========================================================
    WISE.GRAPHIXDESIGN — TYPOGRAPHY CHEPH STYLE
    Inter + Playfair Display
